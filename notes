@@ -14,6 +14,21 @@
    b. put the .gitignore to sari-sari
    c. remove the / in node_modules and build
    d. in source control, initialize repository
+   e. create the README.md in root
 
 3. create the header
-   a.
+a.
+
+   <BrowserRouter>
+  <div>
+    <header>
+      <Link to="/">sari-sari</Link>
+    </header>
+    <main>
+      <Routes>
+        {/* <Route path="/product/:slug" element={<ProductScreen />} /> */}
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </main>
+  </div>
+</BrowserRouter>;
