@@ -1,0 +1,19 @@
+1. App birth
+   a. npx create-react-app frontend
+   b. all frontend codes here and later on server side will be put in the backend folder
+   c. third folder will be store to manage the state
+   d. clean up. remove unnecessary files and imports in App.js
+   e. plan to use material-ui as a back up for UI
+   f. framer for animation
+   g. react-icons
+   h. Maybe react-spring
+   i. initially use index.css for styling
+
+2. put the project to github
+   a. remove .git in frontend >>> rm -rf .git
+   b. put the .gitignore to sari-sari
+   c. remove the / in node_modules and build
+   d. in source control, initialize repository
+
+3. create the header
+   a.
