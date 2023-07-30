@@ -1,34 +1,19 @@
-1. App birth
-   a. npx create-react-app frontend
-   b. all frontend codes here and later on server side will be put in the backend folder
-   c. third folder will be store to manage the state
-   d. clean up. remove unnecessary files and imports in App.js
-   e. plan to use material-ui as a back up for UI
-   f. framer for animation
-   g. react-icons
-   h. Maybe react-spring
-   i. initially use index.css for styling
+Libraries methods used
 
-2. put the project to github
-   a. remove .git in frontend >>> rm -rf .git
-   b. put the .gitignore to sari-sari
-   c. remove the / in node_modules and build
-   d. in source control, initialize repository
-   e. create the README.md in root
+1. App
+   1a. npm i react-router-dom
+   2a. https://reactrouter.com/en/main/start/tutorial
+2. header
+   2a. neomorphism
+   2b. create a state to chage the background color and do some animation to hide and show the header
+3. Home Screen
+   3a. use the <Link /> instead of <a /> from rrd
+4. Product Screen
+5. server.js
+   5a. npm i nodemon --save-dev - use to monitor the backend server and doens't require to stop and restart the server in every changes. --save-dev means this is to be use only during development and not in production mode
 
-3. create the header
-a.
+   5b. npm i axios
 
-   <BrowserRouter>
-  <div>
-    <header>
-      <Link to="/">sari-sari</Link>
-    </header>
-    <main>
-      <Routes>
-        {/* <Route path="/product/:slug" element={<ProductScreen />} /> */}
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </main>
-  </div>
-</BrowserRouter>;
+6. npm i use-reducer-logger --force >>> not used. brings trouble to the app
+
+7. https://mui.com/ - material UI started to use to improve the UI of the Product.jsx

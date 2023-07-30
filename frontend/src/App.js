@@ -1,19 +1,39 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import data from "./data";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
+import React from "react";
+import Container from "@mui/material/Container";
+import ProductPage from "./pages/ProductPage";
+import Box from "@mui/material/Box";
 
 function App() {
   return (
     <BrowserRouter>
-      <div>
+      <div className="app">
         <header>
-          <a href="/">sari-sari</a>
+          <Container>
+            <Link href="/">sari-sari</Link>
+          </Container>
         </header>
+
         <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
+          <Container>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/product/:desc" element={<ProductPage />} />
+            </Routes>
+          </Container>
         </main>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "1rem",
+            border: "1px solid red",
+          }}
+        >
+          SHERNOF
+        </Box>
       </div>
     </BrowserRouter>
   );
