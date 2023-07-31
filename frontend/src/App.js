@@ -4,6 +4,7 @@ import React from "react";
 import Container from "@mui/material/Container";
 import ProductPage from "./pages/ProductPage";
 import Box from "@mui/material/Box";
+import { Helmet } from "react-helmet-async";
 
 function App() {
   return (
@@ -11,7 +12,9 @@ function App() {
       <div className="app">
         <header>
           <Container>
-            <Link href="/">sari-sari</Link>
+            {/* <Helmet> */}
+            <Link to="/">sari-sari</Link>
+            {/* </Helmet> */}
           </Container>
         </header>
 

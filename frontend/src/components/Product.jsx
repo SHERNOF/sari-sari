@@ -18,15 +18,18 @@ export default function Product({ product }) {
             </Link>
           </CardMedia>
           <CardContent className="product-info">
-            <Link to={`/product/${product.desc}`}>
-              <p>{product.name}</p>
+            <Link
+              style={{ textDecoration: "none" }}
+              to={`/product/${product.desc}`}
+            >
+              <h3>{product.name}</h3>
             </Link>
-            <RatingComponent
-              numReviews={product.numReviews}
-              rating={product.rating}
-            ></RatingComponent>
+            <RatingComponent rating={product.rating}></RatingComponent>
+            <p style={{ marginTop: "-0.3rem" }}>
+              <strong>{product.numReviews} reviews</strong>
+            </p>
             <p>
-              <strong>{product.price}</strong>
+              <strong>${product.price}</strong>
             </p>
 
             <Button variant="contained">ADD TO CART</Button>

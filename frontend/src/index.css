@@ -47,3 +47,8 @@ main {
 footer {
   text-align: center;
 }
+
+li {
+  list-style: none;
+  margin-bottom: 0.3rem;
+}

@@ -2,6 +2,10 @@ import React, { useEffect, useReducer } from "react";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
 import Product from "../components/Product";
+import { Helmet } from "react-helmet-async";
+import Loading from "../components/Loading";
+import MessageBox from "../components/MessageBox";
+import { getError } from "../utils";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -31,19 +35,23 @@ export default function Home() {
         dispatch({ type: "FETCH_SUCCESS", payload: result.data });
         // setproducts(result.data);
       } catch (err) {
-        dispatch({ type: "FETCH_FAIL", payload: err.message });
+        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
       }
     };
     fetchData();
   }, []);
   return (
     <div>
+      <Helmet>
+        <title>sari-sari</title>
+      </Helmet>
+
       <h1>Product Selection</h1>
       <div className="products">
         {loading ? (
-          <div>LOADING...</div>
+          <Loading />
         ) : error ? (
-          <div>{error}</div>
+          <MessageBox severity="error">{error}</MessageBox>
         ) : (
           <Grid container spacing={2}>
             {products.map((product) => (

@@ -110,9 +110,12 @@
    4a. utilize the Material UI for the responsiveness and UI components 4. create the rating component to define it conditionally
 
 5. Improve the ProductPage.jsx
+   Plans
    5a. display the image, details and action part by using the { desc } = params as reference
    5b. Put the logic of displaying its existence (available or not available)
-   5c. use the same reducer from the <Home /> and modified it to suit for a single oprodcut display
+
+   Execute
+   5c. use similar reducer from the <Home /> and modified it to suit for a single prodcut display
 
    5d. create the BE api axios.get(`/api/products/desc/${desc}`) using ${desc} again as the reference
 
@@ -142,4 +145,14 @@
    }
    };
 
-   5d. design the UI of the ProductPage.jsx
+   5d. design the UI of the ProductPage.jsx using the state
+   5e. display the product name in the page title by using npm i react-helmet-async. then wrap the whole <HelmetProvider><App /><HelmetProvider /> in the index.js
+   5f. wrap the <Helmet><h3>{product.name}</h3></Helmet> and change h3 to title <Helmet><title>{product.name}</title></Helmet>
+   5g. in the <Home />; <Helmet><title>sari-sari</title>; this is to display sari-sari upon clicking the header button sari-sari
+
+   5h. Create Loading Component
+   5h1. create the spinner Loading.jsx component >>> this is to replace the <Loading... />
+   5j. create the message component
+   5j1. use the <Alert /> from mui <Alert severity={props.severity}>{props.children}</Alert>; in the <MessageBox>. Set the dynamic variant. Implement in the {error} of the <ProductPage /> and <Home />. Pass the severity as props and props.children to display the error message
+   5k. create the utils.js to handle the error message
+   5k1. define the function getError() to capture the custom error message from BE. Implement this in BE and pass the (err) as the parameter dispatch({ type: "FETCH_FAIL", payload: err.message }); >>> dispatch({ type: "FETCH_FAIL", payload: getError(err) });
