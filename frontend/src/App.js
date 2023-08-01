@@ -1,20 +1,49 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import React from "react";
+import React, { useContext } from "react";
 import Container from "@mui/material/Container";
 import ProductPage from "./pages/ProductPage";
 import Box from "@mui/material/Box";
-import { Helmet } from "react-helmet-async";
+import Badge from '@mui/material/Badge';
+import { Store } from "./store";
+import Stack from '@mui/material/Stack';
+
+const shapeStyles = { bgcolor: 'primary.main', width: 40, height: 40 };
+const shapeCircleStyles = { borderRadius: '50%' };
+  const circle = (
+    <Box component="span" sx={{ ...shapeStyles, ...shapeCircleStyles }} />
+  );
+
+  function notificationsLabel(count) {
+    if (count === 0) {
+      return 'no notifications';
+    }
+    if (count > 99) {
+      return 'more than 99 notifications';
+    }
+    return `${count} notifications`;
+  }
+  
 
 function App() {
+  const { state } = useContext(Store);
+  const { cart } = state
+
   return (
     <BrowserRouter>
       <div className="app">
-        <header>
-          <Container>
-            {/* <Helmet> */}
+        <header >
+          <Container style={{display:'flex'}}>
             <Link to="/">sari-sari</Link>
-            {/* </Helmet> */}
+            <div style={{marginLeft:'2rem'}}>
+              <Link to='/cart'>
+                {cart.cartItems.length > 0 && (
+                  <Stack>
+                 <Badge badgeContent={cart.cartItems.length} color="secondary">cart</Badge>
+                 </Stack>
+                )}
+              </Link>
+            </div>
           </Container>
         </header>
 

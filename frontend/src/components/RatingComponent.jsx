@@ -2,8 +2,6 @@ import React from "react";
 import Rating from "@mui/material/Rating";
 
 export default function RatingComponent({ rating }) {
-  // const { rating } = props;
-  console.log(rating);
   return (
     <div>
       <Rating

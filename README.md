@@ -156,3 +156,79 @@
    5j1. use the <Alert /> from mui <Alert severity={props.severity}>{props.children}</Alert>; in the <MessageBox>. Set the dynamic variant. Implement in the {error} of the <ProductPage /> and <Home />. Pass the severity as props and props.children to display the error message
    5k. create the utils.js to handle the error message
    5k1. define the function getError() to capture the custom error message from BE. Implement this in BE and pass the (err) as the parameter dispatch({ type: "FETCH_FAIL", payload: err.message }); >>> dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+
+
+6. Create the Cart Page
+
+   a. Setup the context >>> this is to save the cart items in the global state and use in the needed components
+      a1. create the store.js inside the src
+      a2. define the function StoreProvider
+      a3. define the initialState which is the cart and its first  attribute is the cartItems. cartItems by default is an empty array as it has no item yet in the cart
+      a4. define the reducer. first reducer is the CART_ADD_ITEM
+   b. define the CART_ADD_ITEM reducer
+      b1. return all values in the field and add new item to the cart. return all the previous values in the cart and add the new item to the cartItems
+      b2. in the cartItems, retain the previous item in the cart cartItems:[...state.cart.cartItems] and add the new one as the action.payload
+       case 'CART_ADD_ITEM':
+        // Add to cart
+        return {
+            ...state, 
+            cart:{
+                ...state.cart, 
+                cartItems:[...state.cart.cartItems, action.payload],
+            },
+        }
+
+      c. wrap the <App /> by the <Store.Provider />
+      d. In the <ProductPage /> set the onClick={addToCartHandler} to 
+         the submit <Button />. This is the function that will add item to cart
+         d1. dispatch the CART_ADD_ITEM from the contex. With const {state, dispatch: ctxDispatch} = useContext(), there's now an access to the state
+         d2. concatanate the product and add 1 to its quantity everytime there's an add to cart action
+         
+         ctxDispatch({
+            type: 'CART_ADD_ITEM',
+            payload: {...product, quanitty : 1}
+         })
+         
+         e. in the <App />, header, add the badge to display the quantity in the cart. put the context in the <App />. deconstruct { cart } = state. pass the Store as the parameter of useContext(Store)
+
+         f. Complete the add functionality
+         f1. Check if there's existing item in the cart
+            f11. add _id:1 to the data.js. this will be the format of _id in mongodb
+
+            f12. in the <ProductPage />, check if there's an existing item in the cart const existItem = cart.cartItems.find((x)=>{x._id === product._id})
+
+            const quantity = existItem ? existItem.quantity + 1 : 1
+
+            DESTRUCTURE const { cart } = state. make the function as async
+
+
+
+         f2. check stock count in BE
+
+            put a check if the countInStock is < quanity
+
+            if(data.countInStock < quantity)(
+               window.alert('{Product not found...')
+            )
+
+            at server.js,
+
+            app.get("/api/products/desc/:id", (req, res) => {
+            const product = data.products.find((x) => x._id === req.params._id);
+            if (product) {
+               res.send(product);
+            } else {
+               res.status(404).send({ message: "Product not found..." });
+            }
+            });
+
+
+            at Store.js, the plan is to add items to the cart in terms of quantity if there's a similar item already. and add the item as new if the existItem doesn't exist
+
+
+
+
+
+
+
+

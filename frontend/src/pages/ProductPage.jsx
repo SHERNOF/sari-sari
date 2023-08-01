@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
-import React, { useEffect, useReducer } from "react";
+import React, { useContext, useEffect, useReducer } from "react";
 import { useParams } from "react-router-dom";
 import RatingComponent from "../components/RatingComponent";
 import Card from "@mui/material/Card";
@@ -16,6 +16,7 @@ import { Helmet } from "react-helmet-async";
 import Loading from "../components/Loading";
 import MessageBox from "../components/MessageBox";
 import { getError } from "../utils";
+import { Store } from "../store";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -40,7 +41,6 @@ export default function ProductPage() {
     product: [],
   });
 
-  console.log(product);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,6 +55,25 @@ export default function ProductPage() {
     };
     fetchData();
   }, [desc]);
+
+  const {state, dispatch: ctxDispatch} = useContext(Store)
+  const { cart } = state
+  const addToCartHandler = async () => {
+    const existItem = cart.cartItems.find((x) => x._id === product._id)
+    const quantity = existItem ? existItem.quantity + 1 : 1
+    
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    if(data.countInStock < quantity){
+      window.alert('Product not found...')
+      return;
+    }
+    ctxDispatch({
+      type: 'CART_ADD_ITEM',
+      payload: {...product, quanitty : 1}
+    })
+    
+  }
+
 
   return (
     <Box sx={{ marginTop: "2rem" }}>
@@ -144,7 +163,7 @@ export default function ProductPage() {
                     <Grid md={12} xs={12}>
                       <div style={{ display: "grid" }}>
                         {product.countInStock > 0 && (
-                          <Button color="success" variant="contained">
+                          <Button onClick={addToCartHandler} color="success" variant="contained">
                             ADD TO CART
                           </Button>
                         )}
