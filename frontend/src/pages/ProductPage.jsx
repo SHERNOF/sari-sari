@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
 import React, { useContext, useEffect, useReducer } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import RatingComponent from "../components/RatingComponent";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -32,6 +32,7 @@ const reducer = (state, action) => {
 };
 
 export default function ProductPage() {
+  const navigate = useNavigate();
   const params = useParams();
   const { desc } = params;
 
@@ -40,7 +41,6 @@ export default function ProductPage() {
     error: "",
     product: [],
   });
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,24 +56,23 @@ export default function ProductPage() {
     fetchData();
   }, [desc]);
 
-  const {state, dispatch: ctxDispatch} = useContext(Store)
-  const { cart } = state
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { cart } = state;
   const addToCartHandler = async () => {
-    const existItem = cart.cartItems.find((x) => x._id === product._id)
-    const quantity = existItem ? existItem.quantity + 1 : 1
-    
+    const existItem = cart.cartItems.find((x) => x._id === product._id);
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+
     const { data } = await axios.get(`/api/products/${product._id}`);
-    if(data.countInStock < quantity){
-      window.alert('Product not found...')
+    if (data.countInStock < quantity) {
+      window.alert("Product not found...");
       return;
     }
     ctxDispatch({
-      type: 'CART_ADD_ITEM',
-      payload: {...product, quanitty : 1}
-    })
-    
-  }
-
+      type: "CART_ADD_ITEM",
+      payload: { ...product, quantity },
+    });
+    navigate("/cart");
+  };
 
   return (
     <Box sx={{ marginTop: "2rem" }}>
@@ -160,10 +159,14 @@ export default function ProductPage() {
                   </ListItem>
                   <Divider />
                   <ListItem>
-                    <Grid md={12} xs={12}>
+                    <Grid item md={12} xs={12}>
                       <div style={{ display: "grid" }}>
                         {product.countInStock > 0 && (
-                          <Button onClick={addToCartHandler} color="success" variant="contained">
+                          <Button
+                            onClick={addToCartHandler}
+                            color="success"
+                            variant="contained"
+                          >
                             ADD TO CART
                           </Button>
                         )}

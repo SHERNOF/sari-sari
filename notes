@@ -1,8 +1,9 @@
 Libraries methods used
 
 1. App
-   1a. npm i react-router-dom
-   2a. https://reactrouter.com/en/main/start/tutorial
+   a1. npm i react-router-dom
+   a2. https://reactrouter.com/en/main/start/tutorial
+   a3. use of reduce() to display the total quantity in the cart
 2. header
    2a. neomorphism
    2b. create a state to chage the background color and do some animation to hide and show the header
@@ -18,3 +19,4 @@ Libraries methods used
 
 7. https://mui.com/ - material UI started to use to improve the UI of the Product.jsx
 8. npm i react-helmet-async
+9. material ui icons >>> npm install @mui/icons-material @mui/material @emotion/styled @emotion/react
