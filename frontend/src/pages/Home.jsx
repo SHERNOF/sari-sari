@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet-async";
 import Loading from "../components/Loading";
 import MessageBox from "../components/MessageBox";
 import { getError } from "../utils";
+import SignInPage from "./SignInPage";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -47,6 +48,7 @@ export default function Home() {
       </Helmet>
 
       <h1>Product Selection</h1>
+
       <div className="products">
         {loading ? (
           <Loading />

@@ -8,22 +8,7 @@ import Badge from "@mui/material/Badge";
 import { Store } from "./store";
 import Stack from "@mui/material/Stack";
 import CartPage from "./pages/CartPage";
-
-const shapeStyles = { bgcolor: "primary.main", width: 40, height: 40 };
-const shapeCircleStyles = { borderRadius: "50%" };
-const circle = (
-  <Box component="span" sx={{ ...shapeStyles, ...shapeCircleStyles }} />
-);
-
-function notificationsLabel(count) {
-  if (count === 0) {
-    return "no notifications";
-  }
-  if (count > 99) {
-    return "more than 99 notifications";
-  }
-  return `${count} notifications`;
-}
+import SignInPage from "./pages/SignInPage";
 
 function App() {
   const { state } = useContext(Store);
@@ -63,6 +48,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/product/:desc" element={<ProductPage />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/signin" element={<SignInPage />} />
             </Routes>
           </Container>
         </main>

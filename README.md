@@ -420,8 +420,177 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
         navigate('/api/signin?redirect=/shipping), /signin? is a check method if the user is authenticated. if the user is authenticated, the page will be redirected to shipping
 
-7. Sign In Page
+7.  Sign In Page
 
-   this will continue the functionality of the Proceed to Check Out button to re-direct to <SignInPage />.
+    this will continue the functionality of the Proceed to Check Out button in the <CartPage /> to re-direct to <SignInPage /> if the user is not yet signed in. This will check the auth of the user.
 
-   this will have the option to ask the user to register if not yet a registered user
+    Plan
+
+    7a. Create the sign in form at <SignInPage />
+
+    7a1. <Link to={`/signup?redirect=${redirect}`}>Create your account</Link> >>> redirect is a mvariable that will fetch its value from the url. the redirect value here is /shipping from <CartPage/> >>> navigate("/api/signin?redirect=/shipping");
+
+    to get this value, use, useLocation(). this is a hook from react-router-dom and store its value as { search }
+
+    instantiate const redirectInUrl = new URLSearchParams(search).get('redirect')
+
+    and get the value of 'redirect' from the query string. store the value of the found data in const redirect = redirectInUrl ? redirectInUrl : '/'
+
+    7a1. add email and password buttons
+    7a2. add sign in button
+    7a3. add the link for customers that is not yet registered
+    7a4. Implement <SignInPage /> in <App />
+    7a5. Implement the form validation
+
+    7b. Connection to mongoDB
+    7b1. create atlas mongoDB account
+
+         - create cluster for new account >>> setup the password and ip address 0.0.0.0/0
+
+         - create database inside the existing cluster
+
+         - create the connection URI
+             - click connect and copy the cponnection string. Supply the password
+             - mongodb+srv://shernof:GodisGood78*@cluster0.ilwymnp.mongodb.net/
+             - create and paste the MONGODB_URI in .env
+
+    7b2. npm i mongoose
+    7b3. npm i dotenv
+    7b4. connect to mongoDB
+
+        - import the mongoose and dotenv in the server.js
+        - run dotenv.config() to fetch the variables insisde the .env
+        - mongoose.connect(process.env.MONGODB_URI).then(() => {console.log('connected to db)}).catch(()=>{console.log(err.message)}) >>>> will connect to db
+
+        optional mongoDB local.download the GUI at https://www.mongodb.com/try/download/compass
+        change the MONGODB_URI to MONGODB_URI=mongodb://localhost/sari-sari
+
+        encountered connection issue with compass ECONNREFUSED 127.0.0.1:27017
+        solved by : https://www.mongodb.com/try/download/community
+        install the community server
+        remain unsolved
+
+    7C. Generate sample products by creating the seedRoute and replace the BE api to db connection
+
+        7c1. create Product model Schema
+
+            - create productModel.js in backend/models folder
+            - const productSchema = new mongoose.Schema(
+                {
+                    name: { type: String, required: true, unique: true },
+                    desc: { type: String, required: true, unique: true },
+                    image: { type: String, required: true },
+                    brand: { type: String, required: true },
+                    category: { type: String, required: true },
+                    detailedDescription: { type: String, required: true },
+                    category: { type: Number, required: true },
+                    rating: { type: Number, required: true },
+                    countInStock: { type: Number, required: true },
+                    numReviews: { type: Number, required: true },
+                },
+                {
+                    timestamps: true,
+                }
+                );
+
+                const Product = monggose.model("Product", productSchema);
+                export default Product;
+
+            - this will bring the type of data specified in data.js
+
+        7c2. create seedRoute
+
+             - create a routes folder inside the backend folder and create seedRoutes.js
+             - import express from "express";
+                import Product from "../models/productModels.js";
+                import data from "../data.js";
+
+                const seedRouter = express.Router();
+
+                seedRouter.get("/", async (req, res) => {
+                await Product.remove();
+                const createdProducts = await Product.insertMany(data.products);
+                res.send({ createdProducts });
+                });
+                export default seedRouter
+             - seedRouter is ab object from express.Router()
+             - above will remove first all the data in db and replace with the latest data from data.js
+             - use the seedRouter in server.js
+             - remove _id in data.js as taht will be assign by mongoDB
+             - issue encountered using remove(). replace it with deleteMany()
+
+        7c3. Fetch the products from database
+
+            - create the productRouter.js and define the route
+
+            - import express, { application } from "express";
+                import Product from "../../frontend/src/components/Product";
+
+                const productRouter = express.Router();
+                application.get("/", async (req, res) => {
+                const products = await Product.find();
+                res.send(products);
+                });
+
+            - use the prductRouter.js in the server.js
+
+            - replace
+
+            app.get("/api/products", (req, res) => {
+                res.send(data.products);
+                });
+            by
+
+            app.use('/api/products', productRouter)
+
+            - move the
+                app.get("/api/products/desc/:desc", (req, res) => {
+                const product = data.products.find((x) => x.desc === req.params.desc);
+                    if (product) {
+                        res.send(product);
+                    } else {
+                        res.status(404).send({ message: "Product not found..." });
+                    }
+                });
+
+                app.get("/api/products/:id", (req, res) => {
+                const product = await Product.findById(req.params.id);
+                    if (product) {
+                        res.send(product);
+                    } else {
+                        res.status(404).send({ message: "Product not found..." });
+                    }
+                });
+
+                to productRouter.js and recode by
+
+                productRouter.get("/", async (req, res) => {
+                const product = await Product.findOne({ desc: req.params.desc });
+                    if (product) {
+                        res.send(product);
+                    } else {
+                        res.status(404).send({ message: "Product not found..." });
+                    }
+                });
+
+                productRouter.get("/", async (req, res) => {
+                const product = await Product.find((x) => x._id === req.params.id);
+                    if (product) {
+                        res.send(product);
+                    } else {
+                        res.status(404).send({ message: "Product not found..." });
+                    }
+                });
+
+                app.use productRouter in the server.js by
+
+                app.use("/api/products/desc/:desc", productRouter);
+                app.use("/api/products/_id", productRouter);
+
+
+                delete data.js and now the data is being fetch from db
+                findOne and findById are mongoDB commands
+
+        7c3. create User model
+        7c4. use routes created in server.js
+        7c5. seed sample produtcs
