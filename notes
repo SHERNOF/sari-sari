@@ -20,3 +20,6 @@ Libraries methods used
 7. https://mui.com/ - material UI started to use to improve the UI of the Product.jsx
 8. npm i react-helmet-async
 9. material ui icons >>> npm install @mui/icons-material @mui/material @emotion/styled @emotion/react
+10. npm i bcryptjs
+11. npm i express-async-handler
+12. npm i jsonwebtoken in be

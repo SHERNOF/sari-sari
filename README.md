@@ -422,175 +422,293 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
 7.  Sign In Page
 
-    this will continue the functionality of the Proceed to Check Out button in the <CartPage /> to re-direct to <SignInPage /> if the user is not yet signed in. This will check the auth of the user.
+        this will continue the functionality of the Proceed to Check Out button in the <CartPage /> to re-direct to <SignInPage /> if the user is not yet signed in. This will check the auth of the user.
 
-    Plan
+        Plan
 
-    7a. Create the sign in form at <SignInPage />
+        7a. Create the sign in form at <SignInPage />
 
-    7a1. <Link to={`/signup?redirect=${redirect}`}>Create your account</Link> >>> redirect is a mvariable that will fetch its value from the url. the redirect value here is /shipping from <CartPage/> >>> navigate("/api/signin?redirect=/shipping");
+        7a1. <Link to={`/signup?redirect=${redirect}`}>Create your account</Link> >>> redirect is a mvariable that will fetch its value from the url. the redirect value here is /shipping from <CartPage/> >>> navigate("/api/signin?redirect=/shipping");
 
-    to get this value, use, useLocation(). this is a hook from react-router-dom and store its value as { search }
+        to get this value, use, useLocation(). this is a hook from react-router-dom and store its value as { search }
 
-    instantiate const redirectInUrl = new URLSearchParams(search).get('redirect')
+        instantiate const redirectInUrl = new URLSearchParams(search).get('redirect')
 
-    and get the value of 'redirect' from the query string. store the value of the found data in const redirect = redirectInUrl ? redirectInUrl : '/'
+        and get the value of 'redirect' from the query string. store the value of the found data in const redirect = redirectInUrl ? redirectInUrl : '/'
 
-    7a1. add email and password buttons
-    7a2. add sign in button
-    7a3. add the link for customers that is not yet registered
-    7a4. Implement <SignInPage /> in <App />
-    7a5. Implement the form validation
+        7a1. add email and password buttons
+        7a2. add sign in button
+        7a3. add the link for customers that is not yet registered
+        7a4. Implement <SignInPage /> in <App />
+        7a5. Implement the form validation
 
-    7b. Connection to mongoDB
-    7b1. create atlas mongoDB account
+        7b. Connection to mongoDB
+        7b1. create atlas mongoDB account
 
-         - create cluster for new account >>> setup the password and ip address 0.0.0.0/0
+             - create cluster for new account >>> setup the password and ip address 0.0.0.0/0
 
-         - create database inside the existing cluster
+             - create database inside the existing cluster
 
-         - create the connection URI
-             - click connect and copy the cponnection string. Supply the password
-             - mongodb+srv://shernof:GodisGood78*@cluster0.ilwymnp.mongodb.net/
-             - create and paste the MONGODB_URI in .env
+             - create the connection URI
+                 - click connect and copy the cponnection string. Supply the password
+                 - mongodb+srv://shernof:GodisGood78*@cluster0.ilwymnp.mongodb.net/
+                 - create and paste the MONGODB_URI in .env
 
-    7b2. npm i mongoose
-    7b3. npm i dotenv
-    7b4. connect to mongoDB
+        7b2. npm i mongoose
+        7b3. npm i dotenv
+        7b4. connect to mongoDB
 
-        - import the mongoose and dotenv in the server.js
-        - run dotenv.config() to fetch the variables insisde the .env
-        - mongoose.connect(process.env.MONGODB_URI).then(() => {console.log('connected to db)}).catch(()=>{console.log(err.message)}) >>>> will connect to db
+            - import the mongoose and dotenv in the server.js
+            - run dotenv.config() to fetch the variables insisde the .env
+            - mongoose.connect(process.env.MONGODB_URI).then(() => {console.log('connected to db)}).catch(()=>{console.log(err.message)}) >>>> will connect to db
 
-        optional mongoDB local.download the GUI at https://www.mongodb.com/try/download/compass
-        change the MONGODB_URI to MONGODB_URI=mongodb://localhost/sari-sari
+            optional mongoDB local.download the GUI at https://www.mongodb.com/try/download/compass
+            change the MONGODB_URI to MONGODB_URI=mongodb://localhost/sari-sari
 
-        encountered connection issue with compass ECONNREFUSED 127.0.0.1:27017
-        solved by : https://www.mongodb.com/try/download/community
-        install the community server
-        remain unsolved
+            encountered connection issue with compass ECONNREFUSED 127.0.0.1:27017
+            solved by : https://www.mongodb.com/try/download/community
+            install the community server
+            remain unsolved
 
-    7C. Generate sample products by creating the seedRoute and replace the BE api to db connection
+        7C. Generate sample products by creating the seedRoute and replace the BE api to db connection
 
-        7c1. create Product model Schema
+            7c1. create Product model Schema
 
-            - create productModel.js in backend/models folder
-            - const productSchema = new mongoose.Schema(
-                {
-                    name: { type: String, required: true, unique: true },
-                    desc: { type: String, required: true, unique: true },
-                    image: { type: String, required: true },
-                    brand: { type: String, required: true },
-                    category: { type: String, required: true },
-                    detailedDescription: { type: String, required: true },
-                    category: { type: Number, required: true },
-                    rating: { type: Number, required: true },
-                    countInStock: { type: Number, required: true },
-                    numReviews: { type: Number, required: true },
-                },
-                {
-                    timestamps: true,
+                - create productModel.js in backend/models folder
+                - const productSchema = new mongoose.Schema(
+                    {
+                        name: { type: String, required: true, unique: true },
+                        desc: { type: String, required: true, unique: true },
+                        image: { type: String, required: true },
+                        brand: { type: String, required: true },
+                        category: { type: String, required: true },
+                        detailedDescription: { type: String, required: true },
+                        category: { type: Number, required: true },
+                        rating: { type: Number, required: true },
+                        countInStock: { type: Number, required: true },
+                        numReviews: { type: Number, required: true },
+                    },
+                    {
+                        timestamps: true,
+                    }
+                    );
+
+                    const Product = monggose.model("Product", productSchema);
+                    export default Product;
+
+                - this will bring the type of data specified in data.js
+
+            7c2. create seedRoute
+
+                 - create a routes folder inside the backend folder and create seedRoutes.js
+                 - import express from "express";
+                    import Product from "../models/productModels.js";
+                    import data from "../data.js";
+
+                    const seedRouter = express.Router();
+
+                    seedRouter.get("/", async (req, res) => {
+                    await Product.remove();
+                    const createdProducts = await Product.insertMany(data.products);
+                    res.send({ createdProducts });
+                    });
+                    export default seedRouter
+                 - seedRouter is ab object from express.Router()
+                 - above will remove first all the data in db and replace with the latest data from data.js
+                 - use the seedRouter in server.js
+                 - remove _id in data.js as taht will be assign by mongoDB
+                 - issue encountered using remove(). replace it with deleteMany()
+
+            7c3. Fetch the products from database
+
+                - create the productRouter.js and define the route
+
+                - import express, { application } from "express";
+                    import Product from "../../frontend/src/components/Product";
+
+                    const productRouter = express.Router();
+                    application.get("/", async (req, res) => {
+                    const products = await Product.find();
+                    res.send(products);
+                    });
+
+                - use the prductRouter.js in the server.js
+
+                - replace
+
+                app.get("/api/products", (req, res) => {
+                    res.send(data.products);
+                    });
+                by
+
+                app.use('/api/products', productRouter)
+
+                - move the
+                    app.get("/api/products/desc/:desc", (req, res) => {
+                    const product = data.products.find((x) => x.desc === req.params.desc);
+                        if (product) {
+                            res.send(product);
+                        } else {
+                            res.status(404).send({ message: "Product not found..." });
+                        }
+                    });
+
+                    app.get("/api/products/:id", (req, res) => {
+                    const product = await Product.findById(req.params.id);
+                        if (product) {
+                            res.send(product);
+                        } else {
+                            res.status(404).send({ message: "Product not found..." });
+                        }
+                    });
+
+                    to productRouter.js and recode by
+
+                    productRouter.get("/", async (req, res) => {
+                    const product = await Product.findOne({ desc: req.params.desc });
+                        if (product) {
+                            res.send(product);
+                        } else {
+                            res.status(404).send({ message: "Product not found..." });
+                        }
+                    });
+
+                    productRouter.get("/", async (req, res) => {
+                    const product = await Product.find((x) => x._id === req.params.id);
+                        if (product) {
+                            res.send(product);
+                        } else {
+                            res.status(404).send({ message: "Product not found..." });
+                        }
+                    });
+
+                    app.use productRouter in the server.js by
+
+                    app.use("/api/products/desc/:desc", productRouter);
+                    app.use("/api/products/_id", productRouter);
+
+
+                    delete data.js and now the data is being fetch from db
+                    findOne and findById are mongoDB commands
+
+        7d. Create Sample user
+
+            7d1. Create User model and create two types of user. 1 is admin and 1 is normal user
+            7d2. Create the userMoldels.js in the backend/models
+            7d3. in the seedRouter.js,
+                  await User.deleteMany();
+                const createdUsers = await User.insertMany(data.users);
+                res.send({ createdProducts, createdUsers });
+
+            7d4. create the users array in the data.js
+                - for the password use the utility bcrypt to encrypt the
+                password
+                - password: bcrypt.hasySync('123456)
+                - npm i bcrypt.js in backend
+                - open https://localhost:5000/seed to load the users in db
+
+        7e. Implement Signin API
+
+            7e1. create a sign in api via Postman. this post api will
+                use   to send the email and password of the user. if it exist in db then the server will send back the user information together with the JSON web token
+
+            7e2. create userRoutes.js in backend. use the npm i express-async-handler
+                 in BE. this package will enable to catch the error in the async function
+
+            7e3. define the error handler in server.js
+                app.use((err, req, res, next) => {
+                    res.status(500).send({ message: err.message });
+                });
+
+                err is an object that will be coming from the server
+
+            7e4. npm i jsonwebtoken. this is an authentication given by server if the
+                email and password is supplied correctly.
+
+            7e5. To use the jsonwebtoken create the utils.js in be
+                export const generateToken = (user) =>{
+                    return jwt.sign(user, process.env.JWT_SECRET,
+                    {expires:'30d'}
+                    )
                 }
+
+                DEFINE THE JWT_SECRET IN .ENV = JWT_SECRET=something secret
+
+            7e6. go back to userRoute.js and use the generateToken(user)
+
+                    userRouter.post(
+                    "/signin",
+                    expressAsyncHandler(async (req, res) => {
+                        const user = await User.findOne({ email: req.body.email });
+                        if (user) {
+                            if (bcrypt.compareSync(req.body.password, user.password)) {
+                                res.send({
+                                _id: user._id,
+                                name: user.name,
+                                email: user.email,
+                                isAdmin: user.isAdmin,
+                                token: generateToken(user),
+                                });
+                                return;
+                            }
+                        }
+                        res.status(401).send({ message: "Invalid email or password" });
+                    })
                 );
 
-                const Product = monggose.model("Product", productSchema);
-                export default Product;
+            7e7. define the user object in the generateToken at the utils.js instead of just user
 
-            - this will bring the type of data specified in data.js
+                import jwt from "jsonwebtoken";
 
-        7c2. create seedRoute
+                export const generateToken = (user) => {
+                return jwt.sign(
+                    {
+                        _id: user._id,
+                        name: user.name,
+                        email: user.email,
+                        isAdmin: user.isAdmin,
+                    },
+                    process.env.JWT_SECRET,
+                    { expiresIn: "30d" }
+                );
+                };
 
-             - create a routes folder inside the backend folder and create seedRoutes.js
-             - import express from "express";
-                import Product from "../models/productModels.js";
-                import data from "../data.js";
 
-                const seedRouter = express.Router();
+            7e8. implement app.use("/api/users", userRouter); imn server.js
 
-                seedRouter.get("/", async (req, res) => {
-                await Product.remove();
-                const createdProducts = await Product.insertMany(data.products);
-                res.send({ createdProducts });
+            7e9. add
+                app.use(express.json())
+                app.use(express.urlencoded({ extended: true }))
+
+                in the server.js. this will convert the post request from BE to json object
+
+            7e10. test the API in postman. See postman.jpeg from '../public/postman.jpg
+
+            7e11. the App can now do an authenticated request from the server
+
+    7f. Complete the <SignInPage />
+
+        7f1. this is to impleement the SignIn function. it will start from the <CardPage /> when the user
+            click the Proceed to Check Out button. the user will be directed to <SignInPage /> and be able to click the Sign In Button
+
+        7f2. it will display the user name and the log out button in the header
+
+        7f3. in the <SignInPage />, create the onSubmit={submitHandler}. this will be an async function
+
+            const [email, setemail] = useState("");
+            const [password, setpassword] = useState("");
+
+            const submitHandler = async (e) => {
+                e.preventDefault();
+
+                try {
+                const { data } = await axios.post("/api/users/signin", {
+                    email,
+                    password,
                 });
-                export default seedRouter
-             - seedRouter is ab object from express.Router()
-             - above will remove first all the data in db and replace with the latest data from data.js
-             - use the seedRouter in server.js
-             - remove _id in data.js as taht will be assign by mongoDB
-             - issue encountered using remove(). replace it with deleteMany()
+                } catch (err) {}
+            };
 
-        7c3. Fetch the products from database
-
-            - create the productRouter.js and define the route
-
-            - import express, { application } from "express";
-                import Product from "../../frontend/src/components/Product";
-
-                const productRouter = express.Router();
-                application.get("/", async (req, res) => {
-                const products = await Product.find();
-                res.send(products);
-                });
-
-            - use the prductRouter.js in the server.js
-
-            - replace
-
-            app.get("/api/products", (req, res) => {
-                res.send(data.products);
-                });
-            by
-
-            app.use('/api/products', productRouter)
-
-            - move the
-                app.get("/api/products/desc/:desc", (req, res) => {
-                const product = data.products.find((x) => x.desc === req.params.desc);
-                    if (product) {
-                        res.send(product);
-                    } else {
-                        res.status(404).send({ message: "Product not found..." });
-                    }
-                });
-
-                app.get("/api/products/:id", (req, res) => {
-                const product = await Product.findById(req.params.id);
-                    if (product) {
-                        res.send(product);
-                    } else {
-                        res.status(404).send({ message: "Product not found..." });
-                    }
-                });
-
-                to productRouter.js and recode by
-
-                productRouter.get("/", async (req, res) => {
-                const product = await Product.findOne({ desc: req.params.desc });
-                    if (product) {
-                        res.send(product);
-                    } else {
-                        res.status(404).send({ message: "Product not found..." });
-                    }
-                });
-
-                productRouter.get("/", async (req, res) => {
-                const product = await Product.find((x) => x._id === req.params.id);
-                    if (product) {
-                        res.send(product);
-                    } else {
-                        res.status(404).send({ message: "Product not found..." });
-                    }
-                });
-
-                app.use productRouter in the server.js by
-
-                app.use("/api/products/desc/:desc", productRouter);
-                app.use("/api/products/_id", productRouter);
-
-
-                delete data.js and now the data is being fetch from db
-                findOne and findById are mongoDB commands
-
-        7c3. create User model
-        7c4. use routes created in server.js
-        7c5. seed sample produtcs
+            use useState to define the email and password and use it to capture the alue from <input />
+            onChange={(e) => setemail(e.target.value)}
+            onChange={(e) => setpassword(e.target.value)}

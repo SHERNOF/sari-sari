@@ -1,16 +1,32 @@
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useLocation } from "react-router-dom";
 import Button from "../ui/button/Button";
 import FormElements from "../ui/formElements/FormElements";
 import Input from "../ui/input/Input";
 import Label from "../ui/label/Label";
+import axios from "axios";
 
 export default function SignInPage() {
   const { search } = useLocation();
   const redirectInUrl = new URLSearchParams(search).get("redirect");
   const redirect = redirectInUrl ? redirectInUrl : "/";
 
-  const signInHandler = () => {};
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+  console.log(email);
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      const { data } = await axios.post("/api/users/signin", {
+        email,
+        password,
+      });
+      console.log(data);
+    } catch (err) {}
+  };
 
   return (
     <div
@@ -18,7 +34,6 @@ export default function SignInPage() {
         maxWidth: "100%",
         display: "flex",
         flexDirection: "column",
-
         justifyContent: "center",
         alignItems: "center",
       }}
@@ -44,19 +59,26 @@ export default function SignInPage() {
           alignItems: "center",
           justifyContent: "center",
         }}
+        onSubmit={submitHandler}
       >
         <FormElements>
           <Label htmlFor="email">Email</Label>
-          <Input type="email" required></Input>
+          <input
+            type="email"
+            required
+            onChange={(e) => setemail(e.target.value)}
+          ></input>
         </FormElements>
         <FormElements>
           <Label htmlFor="password">Password</Label>
-          <Input required type="password"></Input>
+          <input
+            required
+            type="password"
+            onChange={(e) => setpassword(e.target.value)}
+          ></input>
         </FormElements>
         <FormElements>
-          <Button type="submit" onCLick={signInHandler}>
-            Sign In
-          </Button>
+          <Button type="submit">Sign In</Button>
         </FormElements>
         <div style={{ textAlign: "left", width: "100%" }}>
           New Customer?{" "}
