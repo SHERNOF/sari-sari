@@ -451,7 +451,8 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
              - create the connection URI
                  - click connect and copy the cponnection string. Supply the password
-                 - mongodb+srv://shernof:GodisGood78*@cluster0.ilwymnp.mongodb.net/
+                 - mongodb+srv://
+                 -shernof:{PW}}@cluster0.ilwymnp.mongodb.net/
                  - create and paste the MONGODB_URI in .env
 
         7b2. npm i mongoose
