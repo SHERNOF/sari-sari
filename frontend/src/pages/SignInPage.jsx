@@ -13,12 +13,11 @@ export default function SignInPage() {
   const redirect = redirectInUrl ? redirectInUrl : "/";
 
   const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
   console.log(email);
+  const [password, setpassword] = useState("");
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
     try {
       const { data } = await axios.post("/api/users/signin", {
         email,
@@ -26,6 +25,8 @@ export default function SignInPage() {
       });
       console.log(data);
     } catch (err) {}
+    setemail("");
+    setpassword("");
   };
 
   return (
@@ -63,19 +64,21 @@ export default function SignInPage() {
       >
         <FormElements>
           <Label htmlFor="email">Email</Label>
-          <input
+          <Input
             type="email"
             required
             onChange={(e) => setemail(e.target.value)}
-          ></input>
+            // value={email || ""}
+          ></Input>
         </FormElements>
         <FormElements>
           <Label htmlFor="password">Password</Label>
-          <input
+          <Input
             required
             type="password"
             onChange={(e) => setpassword(e.target.value)}
-          ></input>
+            // value={password || ""}
+          ></Input>
         </FormElements>
         <FormElements>
           <Button type="submit">Sign In</Button>
