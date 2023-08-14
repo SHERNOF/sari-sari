@@ -713,3 +713,24 @@ H. Finish off the <CartPage /> and add the followng functionalities
             use useState to define the email and password and use it to capture the alue from <input />
             onChange={(e) => setemail(e.target.value)}
             onChange={(e) => setpassword(e.target.value)}
+
+        7f4. Access the context to store the user information to store
+            const { state, dispatch: ctxDispatch } = useContext(Store)
+            ctxDispatch({ type: type: 'USER_SIGNIN', payload: data})
+
+            the payload will be the result of the information of the user sent by server from db
+
+            create the USER_SIGNIN in the store.js
+              case "USER_SIGNIN":{
+                return {...state, userInfo: action.payload}
+                }
+
+            save the userInfo in the
+            localStorage,setItem('userInfo', JSON.stringify(data))
+            use useNavigate() by using the redirect variable to redirect the user
+            navigate(redirect || '')
+
+        7f5. Show the user name if there's a successful sign in
+
+
+

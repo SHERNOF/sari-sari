@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "../ui/button/Button";
 import FormElements from "../ui/formElements/FormElements";
 import Input from "../ui/input/Input";
@@ -11,10 +11,15 @@ export default function SignInPage() {
   const { search } = useLocation();
   const redirectInUrl = new URLSearchParams(search).get("redirect");
   const redirect = redirectInUrl ? redirectInUrl : "/";
+  const navigate = useNavigate()
+
 
   const [email, setemail] = useState("");
   console.log(email);
   const [password, setpassword] = useState("");
+
+  const { state, dispatch: ctxDispatch } = useContext(Store)
+  
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -23,8 +28,13 @@ export default function SignInPage() {
         email,
         password,
       });
+      ctxDispatch({ type: 'USER_SIGNIN', payload: data})
+      localStorage,setItem('userInfo', JSON.stringify(data))
+      navigate(redirect || '')
       console.log(data);
-    } catch (err) {}
+    } catch (err) {
+      alert( 'Invalid email or password')
+    }
     setemail("");
     setpassword("");
   };
@@ -68,7 +78,7 @@ export default function SignInPage() {
             type="email"
             required
             onChange={(e) => setemail(e.target.value)}
-            // value={email || ""}
+            value={email || ""}
           ></Input>
         </FormElements>
         <FormElements>
@@ -77,7 +87,7 @@ export default function SignInPage() {
             required
             type="password"
             onChange={(e) => setpassword(e.target.value)}
-            // value={password || ""}
+            value={password || ""}
           ></Input>
         </FormElements>
         <FormElements>

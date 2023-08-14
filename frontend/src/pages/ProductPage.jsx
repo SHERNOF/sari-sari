@@ -53,7 +53,7 @@ export default function ProductPage() {
       }
     };
     fetchData();
-  }, [desc]);
+  }, []);
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart } = state;

@@ -7,7 +7,7 @@ productRouter.get("/", async (req, res) => {
   res.send(products);
 });
 
-productRouter.get("/", async (req, res) => {
+productRouter.get("/desc/:desc", async (req, res) => {
   const product = await Product.findOne({ desc: req.params.desc });
   if (product) {
     res.send(product);
@@ -16,7 +16,7 @@ productRouter.get("/", async (req, res) => {
   }
 });
 
-productRouter.get("/", async (req, res) => {
+productRouter.get("/:id", async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (product) {
     res.send(product);
