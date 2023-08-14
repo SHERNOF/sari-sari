@@ -9,29 +9,39 @@ import { Store } from "./store";
 import Stack from "@mui/material/Stack";
 import CartPage from "./pages/CartPage";
 import SignInPage from "./pages/SignInPage";
+import Dropdown from "./ui/dropdown/Dropdwon";
 
 function App() {
   const { state } = useContext(Store);
-  const { cart } = state;
+  const { cart, userInfo } = state;
 
   return (
     <BrowserRouter>
       <div className="app">
         <header>
-          <Container style={{ display: "flex" }}>
-            <Link to="/">sari-sari</Link>
-            <div style={{ marginLeft: "2rem" }}>
-              <Link to="/cart">
+          <Container
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Link to="/">sari-sari</Link>
+            </div>
+            <div
+              style={{
+                marginLeft: "2rem",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {userInfo ? <Dropdown /> : <Link to="/signin">Sign In</Link>}
+              <Link to="/cart" style={{ marginLeft: "2rem" }}>
                 {cart.cartItems.length > 0 && (
                   <Stack>
-                    {/* <Badge badgeContent={cart.cartItems.length} color="secondary">cart</Badge> */}
-
                     <Badge
                       badgeContent={cart.cartItems.reduce(
                         (a, c) => a + c.quantity,
                         0
                       )}
-                      color="secondary"
+                      color="primary"
                     >
                       cart
                     </Badge>

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "../ui/button/Button";
@@ -6,20 +6,20 @@ import FormElements from "../ui/formElements/FormElements";
 import Input from "../ui/input/Input";
 import Label from "../ui/label/Label";
 import axios from "axios";
+import { Store } from "../store";
 
 export default function SignInPage() {
   const { search } = useLocation();
   const redirectInUrl = new URLSearchParams(search).get("redirect");
   const redirect = redirectInUrl ? redirectInUrl : "/";
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   const [email, setemail] = useState("");
   console.log(email);
   const [password, setpassword] = useState("");
 
-  const { state, dispatch: ctxDispatch } = useContext(Store)
-  
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { userInfo } = state;
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -28,16 +28,21 @@ export default function SignInPage() {
         email,
         password,
       });
-      ctxDispatch({ type: 'USER_SIGNIN', payload: data})
-      localStorage,setItem('userInfo', JSON.stringify(data))
-      navigate(redirect || '')
+      ctxDispatch({ type: "USER_SIGNIN", payload: data });
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      navigate(redirect || "");
       console.log(data);
     } catch (err) {
-      alert( 'Invalid email or password')
+      alert("Invalid email or password");
     }
     setemail("");
     setpassword("");
   };
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [navigate, redirect, userInfo]);
 
   return (
     <div

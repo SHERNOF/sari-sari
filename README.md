@@ -715,6 +715,7 @@ H. Finish off the <CartPage /> and add the followng functionalities
             onChange={(e) => setpassword(e.target.value)}
 
         7f4. Access the context to store the user information to store
+
             const { state, dispatch: ctxDispatch } = useContext(Store)
             ctxDispatch({ type: type: 'USER_SIGNIN', payload: data})
 
@@ -727,10 +728,46 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
             save the userInfo in the
             localStorage,setItem('userInfo', JSON.stringify(data))
+
             use useNavigate() by using the redirect variable to redirect the user
-            navigate(redirect || '')
+            navigate(redirect || '') to the shipping page if signed in succesfully.
 
-        7f5. Show the user name if there's a successful sign in
+        7f5. Show the user name if there's a successful sign in in the header
 
+            - pick up the userInfo from the store
+            - in the <App />, { cart, userInfo } = state
+            - check if login using the userInfo
+            {
+                userInfo ? (
+                    <Dropdown>{userInfo.name}</Dropdown>
+                ) : (
+                    <Link to='/signin>
+                )
+            }
 
+            - add a divider in the <Dropdown/> to add the Sign Out and assign onClick={signOutHandler}
 
+              const signOutHandler = () => {
+                    ctxDispatch({ type: "USER_SIGNOUT" });
+                    localStorage.removeItem('userInfo')
+                };
+
+            create USER_SIGNOUT in the store
+            case ctxDispatch({ type: "USER_SIGNOUT}):
+            return { ...state, userInfo: null }
+
+            - set the value of userInfo in thw Store. which is similar to the checking of the cartItems
+
+             userInfo: localStorage.getItem("userInfo")
+            ? JSON.parse(localStorage.getItem("userInfo"))
+            : null,
+
+            - implement
+
+             useEffect(() => {
+            if (userInfo) {
+                navigate(redirect);
+                }
+            }, [navigate, redirect, userInfo]);
+
+            this is to solvw the issue of the <SignInPage /> to appear even if the user is signed in.
