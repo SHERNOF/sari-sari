@@ -14,6 +14,7 @@ import Dropdown from "./ui/dropdown/Dropdwon";
 function App() {
   const { state } = useContext(Store);
   const { cart, userInfo } = state;
+  
 
   return (
     <BrowserRouter>

@@ -262,6 +262,12 @@
 
             c. Check if there's 0 stock of the product and will not able to add it in the cart if 0
 
+
+
+
+<!-- ------------------------------------------------------------------------- -->
+
+
     g. Create the <CartPage /> - this is to create the <CartPage /> when the user click the Add to Cart button. it will show the list of items added by the useer. It should have a - + to decrease and increase the quantity of the item as well as to delete the item and the total price of each item. It also featured the "Proceed to Check Out" as well as the total price of all items inside the cart
 
     Plans:
@@ -419,6 +425,8 @@ H. Finish off the <CartPage /> and add the followng functionalities
         }
 
         navigate('/api/signin?redirect=/shipping), /signin? is a check method if the user is authenticated. if the user is authenticated, the page will be redirected to shipping
+
+<!--    The SignIn Page      -->
 
 7.  Sign In Page
 
@@ -770,4 +778,6 @@ H. Finish off the <CartPage /> and add the followng functionalities
                 }
             }, [navigate, redirect, userInfo]);
 
-            this is to solvw the issue of the <SignInPage /> to appear even if the user is signed in.
+            this is to solve the issue of the <SignInPage /> appearing even if the user is signed in.
+
+        7f6. replace the  alert("Invalid email or password"); of a toast

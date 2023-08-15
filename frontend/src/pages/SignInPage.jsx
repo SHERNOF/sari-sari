@@ -7,15 +7,31 @@ import Input from "../ui/input/Input";
 import Label from "../ui/label/Label";
 import axios from "axios";
 import { Store } from "../store";
+import Snackbar from '@mui/material/Snackbar';
+// import Toast from "../ui/toast/Toast";
 
 export default function SignInPage() {
   const { search } = useLocation();
   const redirectInUrl = new URLSearchParams(search).get("redirect");
   const redirect = redirectInUrl ? redirectInUrl : "/";
-  const navigate = useNavigate();
+  
+  const [open, setOpen] = useState(false);
+  console.log(open)
+  const handleClick = () => {
+    setOpen(true);
+    
+  };
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+
+  
 
   const [email, setemail] = useState("");
-  console.log(email);
   const [password, setpassword] = useState("");
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -33,11 +49,27 @@ export default function SignInPage() {
       navigate(redirect || "");
       console.log(data);
     } catch (err) {
-      alert("Invalid email or password");
+      // alert("Invalid email or password");
+      
+      
+      // <div>
+      <Snackbar
+      
+      open={open}
+      autoHideDuration={6000}
+      onClose={handleClose}
+      message="Test"
+      
+      // action={err}
+      />
+      {/* </div> */}
+
     }
     setemail("");
     setpassword("");
   };
+
+  const navigate = useNavigate();
   useEffect(() => {
     if (userInfo) {
       navigate(redirect);
@@ -103,6 +135,7 @@ export default function SignInPage() {
           <Link to={`/signup?redirect=${redirect}`}>Create your account</Link>
         </div>
       </form>
+      <Button onClick={handleClick}>Test</Button>
     </div>
   );
 }
