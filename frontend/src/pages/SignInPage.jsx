@@ -7,35 +7,22 @@ import Input from "../ui/input/Input";
 import Label from "../ui/label/Label";
 import axios from "axios";
 import { Store } from "../store";
-import Snackbar from '@mui/material/Snackbar';
+
 // import Toast from "../ui/toast/Toast";
 
 export default function SignInPage() {
   const { search } = useLocation();
   const redirectInUrl = new URLSearchParams(search).get("redirect");
   const redirect = redirectInUrl ? redirectInUrl : "/";
-  
-  const [open, setOpen] = useState(false);
-  console.log(open)
-  const handleClick = () => {
-    setOpen(true);
-    
-  };
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
-
-
-  
 
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { userInfo } = state;
+  const { userInfo, open } = state;
+  console.log(open);
+
+  // const [open, setOpen] = useState(false);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -48,22 +35,10 @@ export default function SignInPage() {
       localStorage.setItem("userInfo", JSON.stringify(data));
       navigate(redirect || "");
       console.log(data);
+      // setOpen(true);
     } catch (err) {
       // alert("Invalid email or password");
-      
-      
-      // <div>
-      <Snackbar
-      
-      open={open}
-      autoHideDuration={6000}
-      onClose={handleClose}
-      message="Test"
-      
-      // action={err}
-      />
-      {/* </div> */}
-
+      ctxDispatch({ type: "TOAST_OPEN", message: err });
     }
     setemail("");
     setpassword("");
@@ -135,7 +110,7 @@ export default function SignInPage() {
           <Link to={`/signup?redirect=${redirect}`}>Create your account</Link>
         </div>
       </form>
-      <Button onClick={handleClick}>Test</Button>
+      {/* <Button onClick={handleClick}>Test</Button> */}
     </div>
   );
 }

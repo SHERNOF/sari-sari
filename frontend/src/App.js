@@ -1,6 +1,6 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Container from "@mui/material/Container";
 import ProductPage from "./pages/ProductPage";
 import Box from "@mui/material/Box";
@@ -10,15 +10,30 @@ import Stack from "@mui/material/Stack";
 import CartPage from "./pages/CartPage";
 import SignInPage from "./pages/SignInPage";
 import Dropdown from "./ui/dropdown/Dropdwon";
+import Snackbar from "@mui/material/Snackbar";
 
 function App() {
-  const { state } = useContext(Store);
-  const { cart, userInfo } = state;
-  
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { cart, userInfo, open } = state;
+
+  const handleClose = (event, reason) => {
+    ctxDispatch({ type: "TOAST_CLOSE" });
+  };
 
   return (
     <BrowserRouter>
       <div className="app">
+        {open && (
+          <div>
+            <Snackbar
+              open={open}
+              autoHideDuration={1000}
+              onClose={handleClose}
+              message="Testing 123"
+            />
+          </div>
+        )}
+        ;
         <header>
           <Container
             style={{ display: "flex", justifyContent: "space-between" }}
@@ -52,7 +67,6 @@ function App() {
             </div>
           </Container>
         </header>
-
         <main>
           <Container>
             <Routes>
