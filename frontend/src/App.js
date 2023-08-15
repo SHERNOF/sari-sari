@@ -33,7 +33,7 @@ function App() {
             />
           </div>
         )}
-        ;
+
         <header>
           <Container
             style={{ display: "flex", justifyContent: "space-between" }}

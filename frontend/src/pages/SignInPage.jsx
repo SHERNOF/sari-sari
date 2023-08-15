@@ -19,10 +19,7 @@ export default function SignInPage() {
   const [password, setpassword] = useState("");
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { userInfo, open } = state;
-  console.log(open);
-
-  // const [open, setOpen] = useState(false);
+  const { userInfo } = state;
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -34,8 +31,6 @@ export default function SignInPage() {
       ctxDispatch({ type: "USER_SIGNIN", payload: data });
       localStorage.setItem("userInfo", JSON.stringify(data));
       navigate(redirect || "");
-      console.log(data);
-      // setOpen(true);
     } catch (err) {
       // alert("Invalid email or password");
       ctxDispatch({ type: "TOAST_OPEN", message: err });
