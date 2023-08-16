@@ -2,7 +2,11 @@ import { createContext, useReducer } from "react";
 
 export const Store = createContext();
 const initialState = {
-  open: false,
+  // snackBar: {
+  snackBarOpen: false,
+  snackBarType: "info",
+  snackBarMessage: "",
+  // },
   userInfo: localStorage.getItem("userInfo")
     ? JSON.parse(localStorage.getItem("userInfo"))
     : null,
@@ -49,15 +53,27 @@ function reducer(state, action) {
     }
     case "USER_SIGNOUT":
       return { ...state, userInfo: null };
-    case "TOAST_CLOSE":
-      return { ...state, open: false };
-    case "TOAST_OPEN":
-      return { ...state, open: true };
+    // case "TOAST_CLOSE":
+    //   return { ...state, snackBarOpen: false };
+    case "SET_SNACKBAR":
+      const { snackBarOpen, snackBarType, snackBarMessage } = action;
+      return { ...state, snackBarOpen, snackBarType, snackBarMessage };
 
     default:
       return state;
   }
 }
+
+export const setSnackbar = (
+  snackbarOpen,
+  snackbarType = "success",
+  snackbarMessage = ""
+) => ({
+  type: "SET_SNACKBAR",
+  snackbarOpen,
+  snackbarType,
+  snackbarMessage,
+});
 
 export function StoreProvider(props) {
   const [state, dispatch] = useReducer(reducer, initialState);

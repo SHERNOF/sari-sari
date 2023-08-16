@@ -6,7 +6,7 @@ import FormElements from "../ui/formElements/FormElements";
 import Input from "../ui/input/Input";
 import Label from "../ui/label/Label";
 import axios from "axios";
-import { Store } from "../store";
+import { setSnackbar, Store } from "../store";
 
 // import Toast from "../ui/toast/Toast";
 
@@ -19,7 +19,7 @@ export default function SignInPage() {
   const [password, setpassword] = useState("");
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { userInfo } = state;
+  const { userInfo, snackBarOpen } = state;
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -32,9 +32,10 @@ export default function SignInPage() {
       localStorage.setItem("userInfo", JSON.stringify(data));
       navigate(redirect || "");
     } catch (err) {
-      // alert("Invalid email or password");
-      ctxDispatch({ type: "TOAST_OPEN", message: err });
+      ctxDispatch(setSnackbar(true, "success", "Not Nice"));
+      console.log(snackBarOpen);
     }
+
     setemail("");
     setpassword("");
   };

@@ -10,30 +10,22 @@ import Stack from "@mui/material/Stack";
 import CartPage from "./pages/CartPage";
 import SignInPage from "./pages/SignInPage";
 import Dropdown from "./ui/dropdown/Dropdwon";
-import Snackbar from "@mui/material/Snackbar";
+import SnackBar from "./ui/snackbar/SnackBar";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { cart, userInfo, open } = state;
-
-  const handleClose = (event, reason) => {
-    ctxDispatch({ type: "TOAST_CLOSE" });
-  };
+  const { cart, userInfo, snackBarOpen, snackBarMessage, snackBarType } = state;
+  console.log(snackBarOpen);
 
   return (
     <BrowserRouter>
       <div className="app">
-        {open && (
-          <div>
-            <Snackbar
-              open={open}
-              autoHideDuration={1000}
-              onClose={handleClose}
-              message="Testing 123"
-            />
-          </div>
-        )}
-
+        <SnackBar
+        // open={snackBarOpen}
+        // autoHideDuration={1500}
+        // message={snackBarMessage}
+        // severity={snackBarType}
+        ></SnackBar>
         <header>
           <Container
             style={{ display: "flex", justifyContent: "space-between" }}
