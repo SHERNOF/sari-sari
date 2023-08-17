@@ -14,17 +14,13 @@ import SnackBar from "./ui/snackbar/SnackBar";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { cart, userInfo, snackBarOpen, snackBarMessage, snackBarType } = state;
-  console.log(snackBarOpen);
+  const { cart, userInfo } = state;
+  
 
   return (
     <BrowserRouter>
       <div className="app">
         <SnackBar
-        // open={snackBarOpen}
-        // autoHideDuration={1500}
-        // message={snackBarMessage}
-        // severity={snackBarType}
         ></SnackBar>
         <header>
           <Container

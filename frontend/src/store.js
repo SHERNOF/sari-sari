@@ -2,11 +2,9 @@ import { createContext, useReducer } from "react";
 
 export const Store = createContext();
 const initialState = {
-  // snackBar: {
-  snackBarOpen: true,
-  snackBarType: "info",
-  snackBarMessage: "",
-  // },
+  snackbarOpen: false,
+  snackbarType: "info",
+  snackbarMessage: "",
   userInfo: localStorage.getItem("userInfo")
     ? JSON.parse(localStorage.getItem("userInfo"))
     : null,
@@ -56,8 +54,8 @@ function reducer(state, action) {
     // case "TOAST_CLOSE":
     //   return { ...state, snackBarOpen: false };
     case "SET_SNACKBAR":
-      const { snackBarOpen, snackBarType, snackBarMessage } = action;
-      return { ...state, snackBarOpen, snackBarType, snackBarMessage };
+      const { snackbarOpen, snackbarType, snackbarMessage } = action;
+      return { ...state, snackbarOpen, snackbarType, snackbarMessage };
 
     default:
       return state;
