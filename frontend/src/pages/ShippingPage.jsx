@@ -64,6 +64,7 @@ export default function ShippingPage() {
           justifyContent: "center",
           flexDirection: "column",
           marginTop: "3rem",
+          maxWidth: "600px",
         }}
       >
         <FormControl
