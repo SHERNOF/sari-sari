@@ -56,7 +56,7 @@ export default function ShippingPage() {
       </Helmet>
       <h1 style={{ marginBottom: "3rem" }}>Shipping Address</h1>
       <Paper
-        elevation={3}
+        elevation={24}
         square
         sx={{
           display: "flex",
