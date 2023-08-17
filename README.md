@@ -262,11 +262,7 @@
 
             c. Check if there's 0 stock of the product and will not able to add it in the cart if 0
 
-
-
-
 <!-- ------------------------------------------------------------------------- -->
-
 
     g. Create the <CartPage /> - this is to create the <CartPage /> when the user click the Add to Cart button. it will show the list of items added by the useer. It should have a - + to decrease and increase the quantity of the item as well as to delete the item and the total price of each item. It also featured the "Proceed to Check Out" as well as the total price of all items inside the cart
 
@@ -781,3 +777,105 @@ H. Finish off the <CartPage /> and add the followng functionalities
             this is to solve the issue of the <SignInPage /> appearing even if the user is signed in.
 
         7f6. replace the  alert("Invalid email or password"); of a toast
+            - it took 3 days for the snack bar to be implemented in a reusable manner and not scalable as it was designed by MUI as single component implementation.
+
+            - Done to make it reusable
+                - put the state in the useContext to be accessible app wide
+                - Learned here to use the action
+                    export const setSnackbar = (
+                        snackbarOpen,
+                        snackbarType = "success",
+                        snackbarMessage = ""
+                            ) => ({
+                            type: "SET_SNACKBAR",
+                            snackbarOpen,
+                            snackbarType,
+                            snackbarMessage,
+                        });
+                and then implemented in the
+                    try{}catch(err){ctxDispatch(setSnackbar(true, "error", "Not Nice"));}
+                of the <SignInPage />
+
+                - then the <Snackbar /> is implemented in the global <App /> and visibility was called by the dispatch in each needed component
+
+                - credit below:
+
+                https://codesandbox.io/s/distracted-gauss-thc9b?file=/src/Snackbar.jsx:134-177
+
+                https://www.youtube.com/watch?v=CVnSrLZ_HaQ&t=928s
+
+8.  Checkout wizard
+
+    Features
+
+           - Create a <ShippingPage /> that a user will be redirected upon succesful login.
+           - After filling up the shipping information, the customer will be re-directed to <PaymentPage />
+           - Create a feature to save the shipping address in the local storage. this will enable to retain
+           the shipping address even after a refresh
+           - The cartItems and the shippingAddress will be cleared after sign out to reset data for new user
+
+    8a. Create <ShippingPage />
+
+           - create form inputs
+           - handle the save shipping address
+           - add checkout wizard bar
+
+           8a1. Create the <ShippingPage />
+               - assign the title via <Helmet><title>Shipping Address</title></Helmet>
+               - define the form
+
+                   - https://mui.com/material-ui/api/form-control/
+                   - https://mui.com/material-ui/react-text-field/#components
+
+           8a2. Implement the submitHandler
+
+               - ctxDispatch({
+                   type: 'SAVE_SHIPPING_ADDRESS',
+                   payload: {
+                        fullname,
+                        address,
+                        city,
+                        postalCode,
+                        country
+                        }
+                    })
+                    localStorage.setItem('shippingAddress',
+                    JSON.stringify({
+                    fullname,
+                    address,
+                    city,
+                    postalCode,
+                    country
+                    })
+                    )
+                      navigate('/payment)
+
+
+            8a3. Define 'SAVE_SHIPPING_ADDRESS' in the Store.js
+
+                    case 'SAVE_SHIPPING_ADDRESS':
+                    return {
+                        ...state,
+                        cart: {
+                            ...state.cart,
+                            shippingAddress: action.payload
+                        }
+                    }
+
+                    this reducer will only change the shippingAddress from the cart and capture the payload, add the shippingAddress in the cart
+
+                    shippingAddress: localStorage.getItem('shippingAddress')
+                    ? JSON.parse(localStorage.getItem('shippingAddress'))
+                    : {},
+
+                    At this stage the information from the form was captured but was not displayed in the form when refresh us done.
+
+                    to solve this get the const { cart: shippingAddress } = state
+                    then assign the value of each field from the data captured:
+
+                     const [fullname, setFullname] = useState(shippingAddress.fullName || ");
+                    const [address, setAddress] = useState(shippingAddress.address || ");
+                    const [city, setCity] = useState(shippingAddress.city || ");
+                    const [postalCode, setPostalCode] = useStateshippingAddress.postalCode || ");
+                    const [country, setCountry] = useStatecountry);
+

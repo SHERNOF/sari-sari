@@ -6,16 +6,9 @@ import FormElements from "../ui/formElements/FormElements";
 import Input from "../ui/input/Input";
 import Label from "../ui/label/Label";
 import axios from "axios";
-import {  Store } from "../store";
-// import { useDispatch } from "react-redux";
-import { setSnackbar } from "../redux/snackbar";
-
+import { setSnackbar, Store } from "../store";
 
 export default function SignInPage() {
-
-  // const dispatch = useDispatch();
-  
-
   const { search } = useLocation();
   const redirectInUrl = new URLSearchParams(search).get("redirect");
   const redirect = redirectInUrl ? redirectInUrl : "/";
@@ -24,7 +17,7 @@ export default function SignInPage() {
   const [password, setpassword] = useState("");
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { userInfo, snackBarOpen } = state;
+  const { userInfo } = state;
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -36,6 +29,7 @@ export default function SignInPage() {
       ctxDispatch({ type: "USER_SIGNIN", payload: data });
       localStorage.setItem("userInfo", JSON.stringify(data));
       navigate(redirect || "");
+      ctxDispatch(setSnackbar(true, "success", "Welcome to Your Page"));
     } catch (err) {
       ctxDispatch(setSnackbar(true, "error", "Not Nice"));
     }

@@ -1,6 +1,6 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Container from "@mui/material/Container";
 import ProductPage from "./pages/ProductPage";
 import Box from "@mui/material/Box";
@@ -11,17 +11,16 @@ import CartPage from "./pages/CartPage";
 import SignInPage from "./pages/SignInPage";
 import Dropdown from "./ui/dropdown/Dropdwon";
 import SnackBar from "./ui/snackbar/SnackBar";
+import ShippingPage from "./pages/ShippingPage";
 
 function App() {
-  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { state } = useContext(Store);
   const { cart, userInfo } = state;
-  
 
   return (
     <BrowserRouter>
       <div className="app">
-        <SnackBar
-        ></SnackBar>
+        <SnackBar />
         <header>
           <Container
             style={{ display: "flex", justifyContent: "space-between" }}
@@ -62,6 +61,7 @@ function App() {
               <Route path="/product/:desc" element={<ProductPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/signin" element={<SignInPage />} />
+              <Route path="/shipping" element={<ShippingPage />} />
             </Routes>
           </Container>
         </main>
