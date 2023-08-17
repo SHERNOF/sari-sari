@@ -79,7 +79,7 @@ export default function ShippingPage() {
             label="Full Name"
             type="input"
             value={fullname}
-            onChange={(e) => setFullname((e) => e.target.value)}
+            onChange={setFullname((e) => e.target.value)}
             required
           />
           <TextField
@@ -88,7 +88,7 @@ export default function ShippingPage() {
             label="Address"
             type="input"
             value={address}
-            onChange={(e) => setAddress((e) => e.target.value)}
+            onChange={setAddress((e) => e.target.value)}
             required
           />
           <TextField
@@ -97,7 +97,7 @@ export default function ShippingPage() {
             label="City"
             type="input"
             value={city}
-            onChange={(e) => setCity((e) => e.target.value)}
+            onChange={setCity((e) => e.target.value)}
             required
           />
           <TextField
@@ -106,7 +106,7 @@ export default function ShippingPage() {
             label="Postal Code"
             type="input"
             value={postalCode}
-            onChange={(e) => setPostalCode((e) => e.target.value)}
+            onChange={setPostalCode((e) => e.target.value)}
             required
           />
           <TextField
@@ -115,7 +115,7 @@ export default function ShippingPage() {
             label="Country"
             type="input"
             value={country}
-            onChange={(e) => setCountry((e) => e.target.value)}
+            onChange={setCountry((e) => e.target.value)}
             required
           />
           <div style={{ marginBottom: "3rem" }}>
