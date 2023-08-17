@@ -6,11 +6,14 @@ import FormElements from "../ui/formElements/FormElements";
 import Input from "../ui/input/Input";
 import Label from "../ui/label/Label";
 import axios from "axios";
-import { setSnackbar, Store } from "../store";
+import {  Store } from "../store";
+import { useDispatch } from "react-redux";
+import { setSnackbar } from "../redux/snackbar";
 
-// import Toast from "../ui/toast/Toast";
 
 export default function SignInPage() {
+
+  const dispatch = useDispatch();
   const { search } = useLocation();
   const redirectInUrl = new URLSearchParams(search).get("redirect");
   const redirect = redirectInUrl ? redirectInUrl : "/";
@@ -28,12 +31,13 @@ export default function SignInPage() {
         email,
         password,
       });
-      ctxDispatch({ type: "USER_SIGNIN", payload: data });
+      dispatch({ type: "USER_SIGNIN", payload: data });
       localStorage.setItem("userInfo", JSON.stringify(data));
       navigate(redirect || "");
     } catch (err) {
-      ctxDispatch(setSnackbar(true, "success", "Not Nice"));
+      dispatch(setSnackbar(true, "success", "Not Nice"));
       console.log(snackBarOpen);
+      
     }
 
     setemail("");

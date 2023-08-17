@@ -3,7 +3,7 @@ import { createContext, useReducer } from "react";
 export const Store = createContext();
 const initialState = {
   // snackBar: {
-  snackBarOpen: false,
+  snackBarOpen: true,
   snackBarType: "info",
   snackBarMessage: "",
   // },
