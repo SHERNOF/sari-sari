@@ -15,6 +15,7 @@ export default function Dropdown(props) {
   const signOutHandler = () => {
     ctxDispatch({ type: "USER_SIGNOUT" });
     localStorage.removeItem("userInfo");
+    localStorage.removeItem('shippingAddress')
   };
   return (
     <Box

@@ -1,22 +1,20 @@
 import { Helmet } from "react-helmet-async";
 import { FormControl } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "../ui/button/Button";
 import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import { Store } from "../store";
+import CheckoutSteps from "../components/CheckoutSteps";
 
 export default function ShippingPage() {
-  //   const [fullname, setFullname] = useState("");
-  //   const [address, setAddress] = useState("");
-  //   const [city, setCity] = useState("");
-  //   const [postalCode, setPostalCode] = useState("");
-  //   const [country, setCountry] = useState("");
+
   const { state, dispatch: ctxDispatch } = useContext(Store);
 
-  const { cart: shippingAddress } = state;
-  const [fullname, setFullname] = useState(shippingAddress.fullName || "");
+  const { userInfo,  cart: {shippingAddress} } = state;
+  const [fullName, setFullName] = useState(shippingAddress.fullName || "");
   const [address, setAddress] = useState(shippingAddress.address || "");
   const [city, setCity] = useState(shippingAddress.city || "");
   const [postalCode, setPostalCode] = useState(
@@ -24,23 +22,33 @@ export default function ShippingPage() {
   );
   const [country, setCountry] = useState(shippingAddress.country || "");
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    if(!userInfo){
+        navigate('/signin?redirect=shipping')
+    }
+},[userInfo, navigate])
 
   const submitHandler = (e) => {
     e.preventDefault();
+    console.log('test')
     ctxDispatch({
       type: "SAVE_SHIPPING_ADDRESS",
       payload: {
-        fullname,
+        fullName,
         address,
         city,
         postalCode,
         country,
       },
     });
+
+
+
     localStorage.setItem(
       "shippingAddress",
       JSON.stringify({
-        fullname,
+        fullName,
         address,
         city,
         postalCode,
@@ -49,37 +57,35 @@ export default function ShippingPage() {
     );
     navigate("/payment");
   };
+  
   return (
     <div>
       <Helmet>
         <title>Shipping Address</title>
       </Helmet>
+      <CheckoutSteps step1 step2></CheckoutSteps>
       <h1 style={{ marginBottom: "3rem" }}>Shipping Address</h1>
-      <Paper
-        elevation={24}
-        square
-        sx={{
-          display: "flex",
+   
+        <form    onSubmit={submitHandler}
+          style={{
+            display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
           marginTop: "3rem",
-          maxWidth: "600px",
-        }}
-      >
+          }}>
         <FormControl
-          onSubmit={submitHandler}
-          sx={{
-            width: "90%",
-          }}
-        >
+         style={{
+          width: "40%",
+        }}>
+        
           <TextField
             sx={{ marginBottom: 3, marginTop: 3 }}
             id="outlined-search"
             label="Full Name"
             type="input"
-            value={fullname}
-            onChange={(e) => setFullname(e.target.value)}
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
             required
           />
           <TextField
@@ -118,11 +124,12 @@ export default function ShippingPage() {
             onChange={(e) => setCountry(e.target.value)}
             required
           />
-          <div style={{ marginBottom: "3rem" }}>
-            <Button variant="contained">Submit</Button>
+          <div style={{ marginBottom: "3rem", marginTop:'-1rem' }}>
+            <Button type='submit' variant="contained" >Continue</Button>
           </div>
         </FormControl>
-      </Paper>
+        </form>
+     
     </div>
   );
 }

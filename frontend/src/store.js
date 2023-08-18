@@ -53,9 +53,13 @@ function reducer(state, action) {
       return { ...state, userInfo: action.payload };
     }
     case "USER_SIGNOUT":
-      return { ...state, userInfo: null };
-    // case "TOAST_CLOSE":
-    //   return { ...state, snackBarOpen: false };
+      return { ...state, userInfo: null, 
+        cart:{
+        cartItems:[],
+        shippingAddress:{}
+      } 
+    };
+ 
     case "SET_SNACKBAR":
       const { snackbarOpen, snackbarType, snackbarMessage } = action;
       return { ...state, snackbarOpen, snackbarType, snackbarMessage };

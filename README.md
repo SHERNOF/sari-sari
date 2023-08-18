@@ -879,3 +879,49 @@ H. Finish off the <CartPage /> and add the followng functionalities
                     const [postalCode, setPostalCode] = useStateshippingAddress.postalCode || ");
                     const [country, setCountry] = useStatecountry);
 
+            8a4. useEffect(() => {
+                if(!userInfo){
+                    navigate('/signin?redirect=shipping)
+                }
+            },[userInfo, navigate])
+            
+                - this will ensure to redirect the user to <SignInPage /> if not logged on
+
+
+            8a5. In the <Dropdown/>, add
+
+                localStorage.removeItem('shippingAddress') in
+
+                 const signOutHandler = () => {
+                    ctxDispatch({ type: "USER_SIGNOUT" });
+                    localStorage.removeItem("userInfo");
+                };
+
+                so that the shipping address will be clear upon logout
+
+            8a6. in the Store.js, add the shippingAddress to the state of USER_SIGNOUT
+
+                case "USER_SIGNOUT":
+                return { ...state, userInfo: null };
+
+                case "USER_SIGNOUT":
+                return { ...state, userInfo: null,
+                cart:{
+                    cartItems:[],
+                    shippingAddress:{}
+                }
+                 };
+
+                this will make the cart and <ShippingPage /> are empty
+
+
+            8b. Create the <CheckoutSteps />
+
+            
+
+
+
+
+
+
+
