@@ -49,7 +49,6 @@ main {
 footer {
   text-align: center;
 }
-
 li {
   list-style: none;
   margin-bottom: 0.3rem;
@@ -57,12 +56,18 @@ li {
 img-thumbnail {
   height: 80px;
 }
-
-.checkout-steps > div{
-  border-bottom: .2rem solid #a0a0a0;
-  color: #a0a0a0
+.small-container {
+  max-width: 600px;
+  /* border: 1px solid red; */
 }
-.checkout-steps > div.active{
-  border-bottom: .2rem solid #f08000;
-  color: #f08000
+.checkout-steps {
+  margin-top: 2rem;
+}
+.checkout-steps > div {
+  border-bottom: 0.2rem solid #a0a0a0;
+  color: #a0a0a0;
+}
+.checkout-steps > div.active {
+  border-bottom: 0.2rem solid #f08000;
+  color: #f08000;
 }

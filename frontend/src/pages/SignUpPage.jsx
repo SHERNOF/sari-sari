@@ -8,34 +8,40 @@ import TextField from "@mui/material/TextField";
 import { setSnackbar, Store } from "../store";
 import { getError } from "../utils";
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const { search } = useLocation();
   const redirectInUrl = new URLSearchParams(search).get("redirect");
   const redirect = redirectInUrl ? redirectInUrl : "/";
-
+  const [isAdmin, setisAdmin] = useState("");
+  const [name, setName] = useState("");
   const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      ctxDispatch(setSnackbar(true, "error", "Password did not match"));
+      return;
+    }
     try {
-      const { data } = await axios.post("/api/users/signin", {
+      const { data } = await axios.post("/api/users/signup", {
+        name,
         email,
         password,
+        // isAdmin: false,
       });
+      console.log(data);
       ctxDispatch({ type: "USER_SIGNIN", payload: data });
       localStorage.setItem("userInfo", JSON.stringify(data));
       navigate(redirect || "");
       ctxDispatch(setSnackbar(true, "success", "Welcome to Your Page"));
     } catch (err) {
       ctxDispatch(setSnackbar(true, "error", getError(err)));
+      console.log(typeof err);
     }
-
-    setemail("");
-    setpassword("");
   };
 
   const navigate = useNavigate();
@@ -56,7 +62,7 @@ export default function SignInPage() {
       }}
     >
       <Helmet>
-        <title>Sign In</title>
+        <title>Sign Up</title>
       </Helmet>
       <h1
         style={{
@@ -65,8 +71,9 @@ export default function SignInPage() {
           width: "100%",
         }}
       >
-        Sign In
+        Sign Up
       </h1>
+
       <form
         style={{
           display: "flex",
@@ -77,6 +84,17 @@ export default function SignInPage() {
         }}
         onSubmit={submitHandler}
       >
+        <FormElements>
+          <TextField
+            sx={{ width: "100%" }}
+            id="outlined-search"
+            label="Name"
+            type="text"
+            value={name || ""}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </FormElements>
         <FormElements>
           <TextField
             sx={{ width: "100%" }}
@@ -95,18 +113,30 @@ export default function SignInPage() {
             label="Password"
             type="password"
             value={password || ""}
-            onChange={(e) => setpassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
         </FormElements>
         <FormElements>
-          <Button type="submit">Sign In</Button>
+          <TextField
+            sx={{ width: "100%" }}
+            id="outlined-search"
+            label="Confirm Password"
+            type="password"
+            value={confirmPassword || ""}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </FormElements>
+        <FormElements>
+          <Button type="submit">Sign Up</Button>
         </FormElements>
         <div style={{ textAlign: "left", width: "100%" }}>
-          New Customer?{" "}
-          <Link to={`/signup?redirect=${redirect}`}>Create your account</Link>
+          Already have an account?{" "}
+          <Link to={`/signin?redirect=${redirect}`}>Sign In</Link>
         </div>
       </form>
+      {/* </div> */}
       {/* <Button onClick={handleClick}>Test</Button> */}
     </div>
   );

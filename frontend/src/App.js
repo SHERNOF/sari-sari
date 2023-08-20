@@ -12,6 +12,8 @@ import SignInPage from "./pages/SignInPage";
 import Dropdown from "./ui/dropdown/Dropdwon";
 import SnackBar from "./ui/snackbar/SnackBar";
 import ShippingPage from "./pages/ShippingPage";
+import SignUpPage from "./pages/SignUpPage";
+import PaymentMethodPage from "./pages/PaymentMethodPage";
 
 function App() {
   const { state } = useContext(Store);
@@ -61,7 +63,9 @@ function App() {
               <Route path="/product/:desc" element={<ProductPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/signin" element={<SignInPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
               <Route path="/shipping" element={<ShippingPage />} />
+              <Route path="/payment" element={<PaymentMethodPage />} />
             </Routes>
           </Container>
         </main>

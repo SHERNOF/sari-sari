@@ -884,7 +884,7 @@ H. Finish off the <CartPage /> and add the followng functionalities
                     navigate('/signin?redirect=shipping)
                 }
             },[userInfo, navigate])
-            
+
                 - this will ensure to redirect the user to <SignInPage /> if not logged on
 
 
@@ -915,13 +915,89 @@ H. Finish off the <CartPage /> and add the followng functionalities
                 this will make the cart and <ShippingPage /> are empty
 
 
-            8b. Create the <CheckoutSteps />
+            8a7. Create the <CheckoutSteps />
 
-            
+    8b. Create the <SignUpPage /> by utilizing the "Create your Acccount" link
+    from the <SignUpPage />. if the user already has some items in his cart, the user will be redirected to <ShippingPage />. can reuse the <SignInPage />
 
+        8b1. Create the input form
+        8b2. Create the submitHandler
+        8b3. Create the backend api
 
+            - in the userRouter.js, create the api for the Sign Up
+            - create another instance of a user
+            - userRouter.post('/signup', expressAsyncHandler(async (req, res) => {
+                const new user = new User
+                name: req.body.name,
+                email: req.body.email,
+                password: bcrypt.hashync(req.body.password)
+            })
+                const user = await new User.save()
+                    res.send({
+                    _id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    isAdmin: user.isAdmin,
+                    token: generateToken(user),
+                    });
+            )
 
+                8b3a. implement the <SignUpPage /> in the <App />
 
+                8b3b. Create a check for the similairty of the password and confirmPassword before sending it to the database
 
+                if(password !== confirmPassword){
+                    ctxDispatch(setSnackBar(true, 'error', 'Password did not match' ))
+                    return
+                }
 
+                - the return is to stop the code from executing if the password is not the same
 
+        - Encountered problem during SignUp as the route is looking for the isAdmin. IsAdmin:false was added to the route to default user as not admin
+
+    8c. Implement <PaymentMethodPage />
+
+        - create input form
+        - create the submitHandler()
+            - get the state and dispatch from the context
+            - get the
+
+            const { {cart: shippingAddress, paymentMethod} } = state
+            useEffect(() => {
+                if(!shippingAddress.address){
+                    navigate('/shipping')
+                }
+            }, [shippingAddress, navigate])
+
+            - define the payment method state
+
+            - dispatch the ctxDispatch({type: 'SAVE_PAYMENT_METHOD', payload: action.payload})
+
+            - save payment method to
+            localStorage.setItem('paymentMethod', paymentMethodName )
+            navigate('/placeorder')
+
+            define the 'SAVE_PAYMENT_METHOD' in the Store.js
+             case "SAVE_PAYMENT_METHOD":
+                return {
+                    ...state,
+                    cart: {
+                    ...state.cart,
+                    paymentMethod: action.payload,
+                    },
+                };
+
+            - Implement the <PaymentMethodPage /> in the <App />
+
+            - in the signOutHandler in the <Dropdown /> >>>
+            localStorage.removeItem('paymentMethod')
+
+            - add paymentMethod: '', to USER_SIGNOUT
+
+            - define gettting the paymentMethod from the localStorage at the cart.
+
+            paymentMethod ; localStorage.getItem('paymentMethod')
+            ? localStorage.getItem('paymentMethod')
+            : ''
+
+            - test the <PaymentMethodPage />. At this point the <CheckoutSteps /> should be indicating orange at the Payment.
