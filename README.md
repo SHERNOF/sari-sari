@@ -1001,3 +1001,20 @@ H. Finish off the <CartPage /> and add the followng functionalities
             : ''
 
             - test the <PaymentMethodPage />. At this point the <CheckoutSteps /> should be indicating orange at the Payment.
+
+            - encountered issue during the implementation of the radio buttons because of the {} used instead of [] in
+
+             correct >>> const [paymentMethodName, setpaymentMethod] = useState(paymentMethod || "Paypal")
+
+            - this has the functionality to retain the paymentMethod even after a refresh as it will be save to the store and will be retrieve from the localStorage.
+
+    8d. Implement the <PreviewOrderPage /> 
+
+        Plans:
+        show cartItems, payment and address
+        handle place order action
+        create order create api
+        
+
+
+

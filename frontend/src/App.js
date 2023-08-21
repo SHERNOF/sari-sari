@@ -14,6 +14,7 @@ import SnackBar from "./ui/snackbar/SnackBar";
 import ShippingPage from "./pages/ShippingPage";
 import SignUpPage from "./pages/SignUpPage";
 import PaymentMethodPage from "./pages/PaymentMethodPage";
+import PlaceOrderPage from "./pages/PlaceOrderPage";
 
 function App() {
   const { state } = useContext(Store);
@@ -66,6 +67,7 @@ function App() {
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/shipping" element={<ShippingPage />} />
               <Route path="/payment" element={<PaymentMethodPage />} />
+              <Route path="/placeorder" element={<PlaceOrderPage />} />
             </Routes>
           </Container>
         </main>
