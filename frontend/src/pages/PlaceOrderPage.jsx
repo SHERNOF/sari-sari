@@ -20,13 +20,13 @@ export default function PlaceOrderPage(){
             <h1 style={{marginBottom: '1rem'}}>Preview Order</h1>
             <Grid container>
                 <Grid item md={8}>
-                    <Card>
+                    <Card sx={{marginBottom: '2rem'}}>
                         <CardHeader 
                         title="Shipping"
                         />
                         <CardContent>
-                            <strong>Name: </strong> {cart.shippingAddress.fullName} <br></br>
-                            <strong>Address: </strong> 
+                            <strong>Name : </strong> {cart.shippingAddress.fullName} <br></br>
+                            <strong>Address : </strong> 
                             {cart.shippingAddress.address},{' '}
                             {cart.shippingAddress.city},{' '}
                             {cart.shippingAddress.postalCode},{' '}
@@ -35,7 +35,22 @@ export default function PlaceOrderPage(){
                         <CardContent>
                         <Link to='/shipping'>Edit</Link>
                         </CardContent>
-                        
+                    </Card>
+                    <Card sx={{marginBottom: '2rem'}}>
+                    <CardHeader 
+                        title="Payment"
+                        />
+                    <CardContent>
+                        <strong>Method : </strong> {cart.paymentMethod}
+                    </CardContent>
+                    <CardContent>
+                        <Link to='/payment'>Edit</Link>
+                    </CardContent>
+                    </Card>
+                    <Card>
+                    <CardHeader 
+                        title="Items"
+                        />
                     </Card>
                 </Grid>
             </Grid>
