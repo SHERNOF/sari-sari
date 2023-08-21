@@ -1008,13 +1008,39 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
             - this has the functionality to retain the paymentMethod even after a refresh as it will be save to the store and will be retrieve from the localStorage.
 
-    8d. Implement the <PreviewOrderPage /> 
+    8d. Implement the <PreviewOrderPage />
 
         Plans:
         show cartItems, payment and address
-        handle place order action
+
+        Define the math and logics
+
+        - define the round2, this will round the number to 2 decimal points
+
+        const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100
+
+        - use round to calculate the cart.itemPrice
+        cart.itemsPrice = round2(
+        cart.cartItems.reduce((a, c) => a + c.quantity + c.price, 0));
+
+        cart.shippingPrice = cart.itemsPrice > 100 ? round2(0) : round2(10);
+
+        cart.taxPrice = round2(0.15 * cart.itemsPrice);
+
+        cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
+
+        - check if there's a payment method:
+        useEffect(()=>{
+            if(!cart.paymentMethod){
+                navigate('/payment')
+            }
+        },[cart, navigate])
+
+    8e. Implement Place Order Action
+    create the const placeOrderHandle = () => {
+
+        }
+
+
+
         create order create api
-        
-
-
-
