@@ -13,7 +13,7 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 export default function CartPage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const {
-    cart: { cartItems },
+    cart: { cartItems, shippingAddress, paymentMethod },
   } = state;
   const navigate = useNavigate();
 
@@ -36,6 +36,16 @@ export default function CartPage() {
     });
   };
 
+  // const checkOutHandler = () => {
+  //   if (shippingAddress && paymentMethod) {
+  //     // navigate("/signin?redirect=/shipping");
+  //     navigate("/signin?redirect=/placeorder");
+  //   } else if (!shippingAddress) {
+  //     navigate("/signin?redirect=/shipping");
+  //   } else if (!paymentMethod) {
+  //     navigate("/signin?redirect=/payment");
+  //   }
+  // };
   const checkOutHandler = () => {
     navigate("/signin?redirect=/shipping");
   };
@@ -127,30 +137,30 @@ export default function CartPage() {
           )}
         </Grid>
         <Grid item md={4}>
-          <Paper elevation={5} style={{ padding: "0rem 1rem" }}>
-            <List>
-              <ListItem>
-                <h3>
-                  SubTotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}
-                  {""} items : $
-                  {cartItems.reduce((a, c) => a + c.price * c.quantity, 0)})
-                </h3>
-              </ListItem>
-              <Divider></Divider>
-              <ListItem>
-                <div style={{ display: "grid" }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={cartItems.length === 0}
-                    onClick={checkOutHandler}
-                  >
-                    Proceed to Check Out
-                  </Button>
-                </div>
-              </ListItem>
-            </List>
-          </Paper>
+          {/* <Paper elevation={3}> */}
+          <List>
+            <ListItem>
+              <h3>
+                SubTotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}
+                {""} items : $
+                {cartItems.reduce((a, c) => a + c.price * c.quantity, 0)})
+              </h3>
+            </ListItem>
+            <Divider></Divider>
+            <ListItem>
+              <div style={{ display: "grid", width: "100%" }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={cartItems.length === 0}
+                  onClick={checkOutHandler}
+                >
+                  Proceed to Check Out
+                </Button>
+              </div>
+            </ListItem>
+          </List>
+          {/* </Paper> */}
         </Grid>
       </Grid>
     </div>

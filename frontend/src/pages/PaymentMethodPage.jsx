@@ -18,11 +18,10 @@ export default function PaymentMethodPage() {
     cart: { shippingAddress, paymentMethod },
   } = state;
 
-  const [ paymentMethodName, setPaymentMethod  ]= useState(
+  const [paymentMethodName, setPaymentMethod] = useState(
     paymentMethod || "Paypal"
   );
- 
-  
+
   useEffect(() => {
     if (!shippingAddress.address) {
       navigate("/shipping");
@@ -44,7 +43,7 @@ export default function PaymentMethodPage() {
         </Helmet>
         <h1 style={{ marginTop: "3rem" }}>Payment Method</h1>
         <form onSubmit={submitHandler}>
-        <FormControl component="fieldset">
+          <FormControl component="fieldset">
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               defaultValue="Paypal"
@@ -63,7 +62,7 @@ export default function PaymentMethodPage() {
                 label="Stripe"
                 checked={paymentMethodName === "Stripe"}
                 onChange={(e) => setPaymentMethod(e.target.value)}
-                sx={{marginBottom:'1rem'}}
+                sx={{ marginBottom: "1rem" }}
               />
             </RadioGroup>
             <Button variant="contained" type="submit">
