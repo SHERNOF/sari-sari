@@ -1,10 +1,10 @@
-import exprerss from "express";
+import express from "express";
 import User from "../models/userModels.js";
 import expressAsyncHandler from "express-async-handler";
 import { generateToken } from "../utils.js";
 import bcrypt from "bcryptjs";
 
-const userRouter = exprerss.Router();
+const userRouter = express.Router();
 
 userRouter.post(
   "/signin",

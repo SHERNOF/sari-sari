@@ -3,28 +3,47 @@ import CheckoutSteps from "../components/CheckoutSteps";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import { useContext } from "react";
-import { Store } from "../store";
-import { Link } from "react-router-dom";
+import { useContext, useReducer } from "react";
+import { Store, setSnackbar } from "../store";
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-
+import Loading from '../components/Loading'
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Button from "../ui/button/Button";
+import Button from '@mui/material/Button';
+import axios from 'axios'
+import { getError } from "../utils";
+
+
+const reducer = (state, action) =>{
+    switch(action.type){
+        case 'CREATE_REQUEST':
+        return { ...state, loading: true};
+        case 'CREATE_SUCCESS':
+        return { ...state, loading: false};
+        case 'CREATE_FAIL':
+        return { ...state, loading: false};
+        default:
+        return state
+    }
+}
 
 export default function PlaceOrderPage() {
+    const navigate = useNavigate()
+    const [{ loading}, dispatch] = useReducer(reducer, {
+        loading: false,
+    }) 
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { cart, useerInfo } = state;
-  console.log(cart);
-
+  const { cart, userInfo } = state;
+  
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
 
   cart.itemsPrice = round2(
-    cart.cartItems.reduce((a, c) => a + c.quantity + c.price, 0)
+    cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
   );
   cart.shippingPrice = cart.itemsPrice > 100 ? round2(0) : round2(10);
 
@@ -32,9 +51,33 @@ export default function PlaceOrderPage() {
 
   cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
 
-  //   cart.totalPrice = cart.itemsPrice;
+  const placeOrderHandler = async () => {
+      try{
+        
+        dispatch({ type: 'CREATE_REQUEST' })
+        const { data } = await axios.post('/api/orders',{
+            orderItems: cart.cartItems,
+            shippingAddress: cart.shippingAddress,
+            itemsPrice: cart.itemsPrice,
+            shippingPrice: cart.shippingPrice,
+            taxPrice: cart.taxPrice,
+            totalPrice: cart.totalPrice
+        }, 
+        {
+            headers:{
+                authorization: `Bearer ${userInfo.token}`,
+            },
+        });
+        ctxDispatch({ type: 'CART_CLEAR' });
+        dispatch({ type: 'CREATE_SUCCESS '});
+        localStorage.removeItem('cartItems')
+        navigate(`/order/${data.order._id}`)
 
-  const placeOrderHandle = () => {};
+    }catch (err) {
+        dispatch({ type: 'CREATE_FAIL' })
+        ctxDispatch(setSnackbar(true, "error", getError(err) ))
+    }
+  };
   return (
     <Box>
       <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>
@@ -127,7 +170,7 @@ export default function PlaceOrderPage() {
               <CardHeader title="Order Summary" />
               <ListItem>
                 <Grid container>
-                  <Grid spacing={2} item md={6}>
+                  <Grid  item md={6}>
                     Items :{" "}
                   </Grid>
                   <Grid item md={6}>
@@ -173,13 +216,15 @@ export default function PlaceOrderPage() {
               <ListItem>
                 <div style={{ display: "grid", width: "100%" }}>
                   <Button
-                    type="button"
-                    onClick={placeOrderHandle}
-                    disabled={cart.cartItems === 0}
+                    // type="button"
+                    onClick={placeOrderHandler}
+                    disabled={cart.cartItems.length === 0}
+                    variant="contained"
                   >
                     Place Order
                   </Button>
                 </div>
+                { loading && <Loading />}
               </ListItem>
             </List>
             {/* </Grid> */}

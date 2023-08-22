@@ -1037,10 +1037,70 @@ H. Finish off the <CartPage /> and add the followng functionalities
         },[cart, navigate])
 
     8e. Implement Place Order Action
-    create the const placeOrderHandle = () => {
 
+    - this will create a new order record upon click of the Place Order button
+
+    - create a reducer to execute the loading and cath the error
+
+    const reducer = (state, action) =>{
+        switch(action.type){
+            case 'CREATE_REQUEST':
+            return { ...state, loading: true};
+            case 'CREATE_SUCCESS':
+            return { ...state, loading: false};
+            case 'CREATE_FAIL':
+            return { ...state, loading: false};
+            default:
+            return state
+        }
+    }
+
+    const [{ loading, error }, dispatch] = useReducer(reducer, {
+        loading: false,
+        error: '',
+    }) 
+
+    - use the dispatch from the 
+
+
+    create the const placeOrderHandle = () => {
+        try{
+            dispatch({ type: 'CREATE_REQUEST' })
+            const { data } = await axios.get('/api/orders',{
+                orderItems: cart.cartItems,
+                shippingAddress: cart.shippingAddress,
+                itemsPrice: cart.itemsPrice,
+                shippingPrice: cart.shippingPrice,
+                taxPrice: cart.taxPrice,
+                totalPrice: cart.totalPrice
+            }, 
+            {
+                headers:{
+                    authorization: `Bearer ${userInfo.token}`,
+                }
+            })
+            ctxDispatch({ type: 'CART_CLEAR' })
+            dispatch({ type: 'CREATE_SUCCESS })
+            localStorage.removeItem('cartItems')
+            navigate('/order/${data.order._id}')
+
+        }catch (err) {
+            dispacth({ type: CREATE_FAIL})
+            ctxDispatch(setSnackBar(true, "error", getError(err) ))
+        }
         }
 
+        - after the Place Order button, 
+        { loading && <LoadingBox />}
 
+        - define the CART_CLEAR in the store
+        case 'CART_CLEAR':
+        return {...state, cart: { ...state.cart, cartItems : []}}
 
-        create order create api
+        - posting the payload ( orderItems, shippingAddrress, shippingPrice, taxPrice and totalPrice)
+
+            - create the orderModel.js. in the backend. can reuse the userModel.js
+
+        - create placeorder api
+
+            - create the rderRoutes.js
