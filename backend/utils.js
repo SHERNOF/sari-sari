@@ -12,3 +12,21 @@ export const generateToken = (user) => {
     { expiresIn: "30d" }
   );
 };
+
+export const isAuth = (req, res, next) => {
+  const uthorization = req.headers.authorization;
+  if (authorization) {
+    const token = authorization.slice(7, authorization.length); // Bearer xxxxxx <<<>>> to get only the toke not included the Bearer, then verify it with jwt
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
+      if (err) {
+        res.status(401).send({ message: "Invalid Token" });
+      } else {
+        req.user = decode;
+        next();
+      }
+    });
+  } else {
+    res.status(401).send({ message: "No Token" });
+  }
+};

@@ -9,12 +9,12 @@ const orderSchema = new mongoose.Schema(
         quantity: { type: Number, required: true },
         image: { type: String, required: true },
         price: { type: Number, required: true },
-        product:{
+        product: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Product',
-          required: true
-        }
-      }
+          ref: "Product",
+          required: true,
+        },
+      },
     ],
     shippingAddress: {
       fullName: { type: String, required: true },
@@ -28,17 +28,17 @@ const orderSchema = new mongoose.Schema(
       id: String,
       status: String,
       update_time: String,
-      email_address: String
+      email_address: String,
     },
     itemsPrice: { type: Number, required: true },
     shippingPrice: { type: Number, required: true },
     taxPrice: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    isPaid: { type: Booelan, default: false },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    isPaid: { type: Boolean, default: false },
     paidAt: { type: Date },
     isDelvered: { type: Boolean, default: false },
-    delveredAt: { type: Date }
+    delveredAt: { type: Date },
   },
   {
     timestamps: true,

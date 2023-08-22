@@ -1043,46 +1043,45 @@ H. Finish off the <CartPage /> and add the followng functionalities
     - create a reducer to execute the loading and cath the error
 
     const reducer = (state, action) =>{
-        switch(action.type){
-            case 'CREATE_REQUEST':
-            return { ...state, loading: true};
-            case 'CREATE_SUCCESS':
-            return { ...state, loading: false};
-            case 'CREATE_FAIL':
-            return { ...state, loading: false};
-            default:
-            return state
-        }
+    switch(action.type){
+    case 'CREATE_REQUEST':
+    return { ...state, loading: true};
+    case 'CREATE_SUCCESS':
+    return { ...state, loading: false};
+    case 'CREATE_FAIL':
+    return { ...state, loading: false};
+    default:
+    return state
+    }
     }
 
     const [{ loading, error }, dispatch] = useReducer(reducer, {
-        loading: false,
-        error: '',
-    }) 
+    loading: false,
+    error: '',
+    })
 
-    - use the dispatch from the 
-
+    - use the dispatch from the
 
     create the const placeOrderHandle = () => {
-        try{
-            dispatch({ type: 'CREATE_REQUEST' })
-            const { data } = await axios.get('/api/orders',{
-                orderItems: cart.cartItems,
-                shippingAddress: cart.shippingAddress,
-                itemsPrice: cart.itemsPrice,
-                shippingPrice: cart.shippingPrice,
-                taxPrice: cart.taxPrice,
-                totalPrice: cart.totalPrice
-            }, 
-            {
-                headers:{
-                    authorization: `Bearer ${userInfo.token}`,
-                }
-            })
-            ctxDispatch({ type: 'CART_CLEAR' })
-            dispatch({ type: 'CREATE_SUCCESS })
-            localStorage.removeItem('cartItems')
-            navigate('/order/${data.order._id}')
+    try{
+    dispatch({ type: 'CREATE_REQUEST' })
+    const { data } = await axios.get('/api/orders',{
+    orderItems: cart.cartItems,
+    shippingAddress: cart.shippingAddress,
+    itemsPrice: cart.itemsPrice,
+    shippingPrice: cart.shippingPrice,
+    taxPrice: cart.taxPrice,
+    totalPrice: cart.totalPrice
+    },
+    {
+    headers:{
+    authorization: `Bearer ${userInfo.token}`,
+    }
+    })
+    ctxDispatch({ type: 'CART_CLEAR' })
+    dispatch({ type: 'CREATE_SUCCESS })
+    localStorage.removeItem('cartItems')
+    navigate('/order/${data.order.\_id}')
 
         }catch (err) {
             dispacth({ type: CREATE_FAIL})
@@ -1090,7 +1089,7 @@ H. Finish off the <CartPage /> and add the followng functionalities
         }
         }
 
-        - after the Place Order button, 
+        - after the Place Order button,
         { loading && <LoadingBox />}
 
         - define the CART_CLEAR in the store
@@ -1099,8 +1098,77 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
         - posting the payload ( orderItems, shippingAddrress, shippingPrice, taxPrice and totalPrice)
 
-            - create the orderModel.js. in the backend. can reuse the userModel.js
+        - THE MATH HERE IS QUITE COMPLEX AND NEEDS TO BE REVIEWED. POWERFUL AND LEARNT A LOT
 
-        - create placeorder api
+        - create the orderModel.js. in the backend. can reuse the userModel.js
 
-            - create the rderRoutes.js
+    - Create the placeorder API
+
+      - create the orderModel.js
+
+      - create the orderRoutes.js
+
+        orderRouter.post('/api/placeorder', isAuth, expressAsyncHandler( async () => {
+        const order = new Order({
+        orderItems: req.body.orderItems.map((x) => ({
+        ...x, product: x.\_id
+        })),
+        shippingAddress: req.body.shippingAddress,
+        paymentMethod: req.body.paymentMethod,
+        itemsPrice: req.body.itemsPrice,
+        taxPrice: req.body.taxPrice,
+        totalPrice: req.body.totalPrice,
+        user:req.user.id
+        })
+        }))
+
+        map was used to give id to each item of the orderItems
+        define a middle ware (isAuth) to define the user because it was not posted and will be taken from the token
+
+        define the isAuth in the utils.js
+
+        export const isAuth = (req, res, next) => {
+        const uthorization = req.headers.authorization
+        if(authorization){
+        const token = authorization.slice(7, authorization.length) // Bearer xxxxxx <<<>>> to get only the toke not included the Bearer, then verify it with jwt
+
+            jwt.verify(
+                token,
+                process.env.JWT_SECRET,
+                (err, decode) => {
+                    if(err){
+                        res.status(401.send({ message: 'Invalid Token' })} else {
+                            req.user = decode
+                            next()
+                        }
+                    }
+                }
+            )} else{
+                res.status(401).send({ message: 'No Token' })
+            }
+
+        }
+
+            decode is a decrypted version of the tokem.
+            the next() will call the execution of the expressAsyncHandler()
+
+            then save the new order by:
+
+            orderRouter.post('/api/placeorder', isAuth, expressAsyncHandler( async () => {
+
+        const newOrder = new Order({
+        orderItems: req.body.orderItems.map((x) => ({
+        ...x, product: x.\_id
+        })),
+        shippingAddress: req.body.shippingAddress,
+        paymentMethod: req.body.paymentMethod,
+        itemsPrice: req.body.itemsPrice,
+        taxPrice: req.body.taxPrice,
+        totalPrice: req.body.totalPrice,
+        user:req.user.id
+        })
+        const order = await newOrder.save()
+        res.status(401).send({ message: 'New order created', order })
+        }))
+
+        use the orderRouter.js in the server.js
