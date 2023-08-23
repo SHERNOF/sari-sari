@@ -105,7 +105,7 @@ export default function OrderPage() {
           <Card>
             <CardHeader title="Items" />
             <List>
-              {order.items.map((item) => (
+              {order.orderItems.map((item) => (
                 <ListItem key={item._id}>
                   <Grid container>
                     <Grid item md={6}>
