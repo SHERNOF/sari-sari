@@ -8,7 +8,7 @@ const orderRouter = express.Router();
 orderRouter.post(
   "/",
   isAuth,
-  expressAsyncHandler(async () => {
+  expressAsyncHandler(async (req, res) => {
     const newOrder = new Order({
       orderItems: req.body.orderItems.map((x) => ({
         ...x,
@@ -17,12 +17,13 @@ orderRouter.post(
       shippingAddress: req.body.shippingAddress,
       paymentMethod: req.body.paymentMethod,
       itemsPrice: req.body.itemsPrice,
+      shippingPrice: req.body.shippingPrice,
       taxPrice: req.body.taxPrice,
       totalPrice: req.body.totalPrice,
-      user: req.user.id,
+      user: req.user._id,
     });
     const order = await newOrder.save();
-    escape.status(401).send({ message: "New order create", order });
+    res.status(401).send({ message: "New order create", order });
   })
 );
 

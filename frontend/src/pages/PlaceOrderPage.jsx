@@ -3,7 +3,7 @@ import CheckoutSteps from "../components/CheckoutSteps";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import { useContext, useReducer } from "react";
+import { useContext, useEffect, useReducer } from "react";
 import { Store, setSnackbar } from "../store";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -58,6 +58,7 @@ export default function PlaceOrderPage() {
         const { data } = await axios.post('/api/orders',{
             orderItems: cart.cartItems,
             shippingAddress: cart.shippingAddress,
+            paymentMethod: cart.paymentMethod,
             itemsPrice: cart.itemsPrice,
             shippingPrice: cart.shippingPrice,
             taxPrice: cart.taxPrice,
@@ -70,6 +71,7 @@ export default function PlaceOrderPage() {
         });
         ctxDispatch({ type: 'CART_CLEAR' });
         dispatch({ type: 'CREATE_SUCCESS '});
+        // ctxDispatch(setSnackbar(true, "success", getError(message) ))
         localStorage.removeItem('cartItems')
         navigate(`/order/${data.order._id}`)
 
@@ -78,6 +80,12 @@ export default function PlaceOrderPage() {
         ctxDispatch(setSnackbar(true, "error", getError(err) ))
     }
   };
+
+  useEffect(() => {
+    if (!cart.paymentMethod) {
+      navigate('/payment');
+    }
+  }, [cart, navigate]);
   return (
     <Box>
       <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>

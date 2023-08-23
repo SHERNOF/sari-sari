@@ -1172,3 +1172,56 @@ H. Finish off the <CartPage /> and add the followng functionalities
         }))
 
         use the orderRouter.js in the server.js
+
+
+            - Encountered problem during PlaceOrder as the route is looking for the user. its because of the typo error user: req.user.id. it should be user: req.user._id,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        When placing an order I noticed the count in stock does not go down at all? Does anyone have any tips on how to implement this?
+
+Create a function that decrement product.countInStock:
+1.) addOrderItems: backend/controllers/orderController.js
+Insert the following code on addOrderItem after, newOrder.save()
+
+req.body.orderItems.map(async (item) => {
+  const product = await Product.findById(item._id);
+  product.countInStock -= item.quantity;
+  await product.save();
+});
+Base on that code, once user click the PlaceOrder button:
+
+It save the new order
+Iterate to each Item on that Order
+Find item._id on the Product model
+decrement the item.quantity to the product.countInStock
+then save to apply the changes
+Things to think about:
+1.) That's the code that we can use in order to decrement product, but we have to think we're is the best way implementing that, whether in PlaceOrder or once the OrderPaid?
+
+2.) Another thing, now that you have an idea how to decrement the product, probably you may to think also how increment the product once the order was being cancelled by the customer.
