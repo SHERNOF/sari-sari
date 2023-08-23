@@ -71,7 +71,7 @@ export default function PlaceOrderPage() {
         });
         ctxDispatch({ type: 'CART_CLEAR' });
         dispatch({ type: 'CREATE_SUCCESS '});
-        // ctxDispatch(setSnackbar(true, "success", getError(message) ))
+        ctxDispatch(setSnackbar(true, "success", 'Thank you... Order Created' ))
         localStorage.removeItem('cartItems')
         navigate(`/order/${data.order._id}`)
 

@@ -1175,9 +1175,51 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
 
             - Encountered problem during PlaceOrder as the route is looking for the user. its because of the typo error user: req.user.id. it should be user: req.user._id,
+            - encountered problem of req.user not defined. It's because the parameters req, res were not input in the expresssAsyncHandler((req, res) =>) of the orderRouter.js
 
 
+            - below is the result of the order
 
+            {message: "New order create", order: {orderItems: [,…],…}}
+            message: "New order create"
+            order: 
+            {orderItems: [,…],…}
+            createdAt: "2023-08-23T06:39:53.621Z"
+            isDelvered: false
+            isPaid: 
+            false
+            itemsPrice: 250
+            orderItems: [,…]0: 
+            {desc: "adidas-fit-shirt", name: "Adidas Fit Shirt", quantity: 1, image: "/images/p2.jpg", price: 250,…}
+            paymentMethod: "Stripe"
+            shippingAddress: {fullName: "Sherwin", address: "26 Angove St ", city: "Cr", postalCode: "3081", country: "Au"}
+            address: 
+            "26 Angove St "
+            city: "Cr"
+            country: "Au"
+            fullName: "Sherwin"
+            postalCode: "3081"
+            shippingPrice: 0
+            taxPrice: 37.5
+            totalPrice: 287.5
+            updatedAt: "2023-08-23T06:39:53.621Z"
+            user: "64d8b55667d1463d22d25b5f"
+            __v: 0
+            _id: "64e5a9b971736f6be4f7f322"
+
+
+8f. Create the <OrderPage />
+
+    - Show the Order details with an id created by the mongo db and is reflected in the address bar such as >>> 64e5ab7671736f6be4f7f32c
+
+    Plans
+        - create be api for order/:id
+        - fetch order api in fe
+        - show order information in 2 columns
+
+    - Create the <OrdrPage />
+        - start the page with the loading state and use the <Loading /> and <MessageBox /> to display its status
+        loading ? <Loading /> : error ? <MessageBox>{error}</MessageBox> : <div />
 
 
 

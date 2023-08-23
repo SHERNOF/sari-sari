@@ -23,7 +23,7 @@ orderRouter.post(
       user: req.user._id,
     });
     const order = await newOrder.save();
-    res.status(401).send({ message: "New order create", order });
+    res.status(201).send({ message: "New order create", order });
   })
 );
 
