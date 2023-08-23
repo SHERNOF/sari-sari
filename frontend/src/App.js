@@ -15,6 +15,7 @@ import ShippingPage from "./pages/ShippingPage";
 import SignUpPage from "./pages/SignUpPage";
 import PaymentMethodPage from "./pages/PaymentMethodPage";
 import PlaceOrderPage from "./pages/PlaceOrderPage";
+import OrderPage from "./pages/OrderPage";
 
 function App() {
   const { state } = useContext(Store);
@@ -68,6 +69,7 @@ function App() {
               <Route path="/shipping" element={<ShippingPage />} />
               <Route path="/payment" element={<PaymentMethodPage />} />
               <Route path="/placeorder" element={<PlaceOrderPage />} />
+              <Route path="/order/:id" element={<OrderPage />} />
             </Routes>
           </Container>
         </main>

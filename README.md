@@ -1173,7 +1173,6 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
         use the orderRouter.js in the server.js
 
-
             - Encountered problem during PlaceOrder as the route is looking for the user. its because of the typo error user: req.user.id. it should be user: req.user._id,
             - encountered problem of req.user not defined. It's because the parameters req, res were not input in the expresssAsyncHandler((req, res) =>) of the orderRouter.js
 
@@ -1182,18 +1181,18 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
             {message: "New order create", order: {orderItems: [,…],…}}
             message: "New order create"
-            order: 
+            order:
             {orderItems: [,…],…}
             createdAt: "2023-08-23T06:39:53.621Z"
             isDelvered: false
-            isPaid: 
+            isPaid:
             false
             itemsPrice: 250
-            orderItems: [,…]0: 
+            orderItems: [,…]0:
             {desc: "adidas-fit-shirt", name: "Adidas Fit Shirt", quantity: 1, image: "/images/p2.jpg", price: 250,…}
             paymentMethod: "Stripe"
             shippingAddress: {fullName: "Sherwin", address: "26 Angove St ", city: "Cr", postalCode: "3081", country: "Au"}
-            address: 
+            address:
             "26 Angove St "
             city: "Cr"
             country: "Au"
@@ -1207,7 +1206,6 @@ H. Finish off the <CartPage /> and add the followng functionalities
             __v: 0
             _id: "64e5a9b971736f6be4f7f322"
 
-
 8f. Create the <OrderPage />
 
     - Show the Order details with an id created by the mongo db and is reflected in the address bar such as >>> 64e5ab7671736f6be4f7f32c
@@ -1220,6 +1218,89 @@ H. Finish off the <CartPage /> and add the followng functionalities
     - Create the <OrdrPage />
         - start the page with the loading state and use the <Loading /> and <MessageBox /> to display its status
         loading ? <Loading /> : error ? <MessageBox>{error}</MessageBox> : <div />
+
+        - define the reducer to handle the state
+
+        - use useEffect(()=>{
+
+        }, [])
+
+        to get the order. check first of the user is signed in. if not redirect to login
+
+        const navigate = useNavigate()
+        useEffect(()=>{
+            if(!userInfo){
+                return navigate('/login')
+            }
+        }, [])
+
+        - get the userInfo from useContext{}
+
+        to get the order
+
+        - use the useParams to get the order/:id from the url parameters
+
+        const params = useParams()
+        const { id: orderId } = params
+
+        - check for order. if order don't exist then fetchOrder()
+
+         useEffect(() => {
+            const fetchOrder = async () => {
+            try {
+                dispatch({ type: "FETCH_REQUEST" });
+                const { data } = await axios.get(`/api/orders/${orderId}`, {
+                headers: { authorization: `Bearer ${userInfo.token}` },
+                });
+                dispatch({ type: "FETCH_SUCCESS", payload: data });
+            } catch (err) {
+                dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+            }};
+                if (!userInfo) {
+                return navigate("/login");
+            }
+                if (!order._id || (order._id && order._id !== orderId)) {
+                fetchOrder();
+            }
+
+        }, [order, userInfo, navigate, orderId]);
+
+
+        - for the <div> part
+            - show the orderId in the title of the page. 1st <Card> shows the shipping information
+            <Helmet>
+                <title>Order {orderId}</title>
+            </Helmet>
+            <h1>{Order {orderId}}</h1>
+            <Grid container>
+                <Grid item>
+                    <Card>
+                        <CardHeader title="Shipping" />
+                    </Card>
+                </Grid>
+
+            </Grid>
+
+            - 2nd Card shows the payment information
+
+            - 3rd Card is for the Order Items
+
+        implement <OrderPage /> in <App />
+
+        - in orderRoute.js implement the backend part. Get the data from backend and send it to frontend
+
+        const order = await Order.findById(req.oarams.id)
+        if(order){
+            res.send(order)
+        } else {
+            res.status(401).send){ message: 'Order not found' }
+        }
+
+         <<>> will look for the id from the url
+
+
+
+
 
 
 
@@ -1252,15 +1333,15 @@ Create a function that decrement product.countInStock:
 Insert the following code on addOrderItem after, newOrder.save()
 
 req.body.orderItems.map(async (item) => {
-  const product = await Product.findById(item._id);
-  product.countInStock -= item.quantity;
-  await product.save();
+const product = await Product.findById(item.\_id);
+product.countInStock -= item.quantity;
+await product.save();
 });
 Base on that code, once user click the PlaceOrder button:
 
 It save the new order
 Iterate to each Item on that Order
-Find item._id on the Product model
+Find item.\_id on the Product model
 decrement the item.quantity to the product.countInStock
 then save to apply the changes
 Things to think about:
