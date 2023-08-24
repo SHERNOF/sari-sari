@@ -10,7 +10,6 @@ import { Helmet } from "react-helmet-async";
 import { Card, CardContent, CardHeader, Grid } from "@mui/material";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -45,7 +44,6 @@ export default function OrderPage() {
         const { data } = await axios.get(`/api/orders/${orderId}`, {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
-        console.log(data);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -67,9 +65,10 @@ export default function OrderPage() {
       <Helmet>
         <title>Order {orderId}</title>
       </Helmet>
-      <h1>Order {orderId}</h1>
-      <Grid container md={8}>
-        <Grid item>
+      <h1 style={{ marginBottom: "3rem" }}>Order {orderId}</h1>
+      {/* <Grid container md={8}> */}
+      <Grid container spacing={4}>
+        <Grid item md={8}>
           <Card sx={{ marginBottom: "2rem" }} elevation={3}>
             <CardHeader title="Shipping" />
             <CardContent>
@@ -78,37 +77,46 @@ export default function OrderPage() {
               <strong>Address : </strong>
               {order.shippingAddress.address}, {order.shippingAddress.city},{" "}
               {order.shippingAddress.postalCode},{" "}
-              {order.shippingAddress.country}
+              {order.shippingAddress.country},{" "}
+              {order.isDelivered ? (
+                <MessageBox severity="success">
+                  Delivered at {order.deliveredAt}
+                </MessageBox>
+              ) : (
+                <MessageBox severity="error">Not Delivered</MessageBox>
+              )}
             </CardContent>
-            {order.isDelivered ? (
-              <MessageBox variant="success">
-                Delivered at {order.deliveredAt}
-              </MessageBox>
-            ) : (
-              <MessageBox variant="danger">Not Delivered</MessageBox>
-            )}
-            <CardContent>
+            {/* <CardContent>
               <Link to="/shipping">Edit</Link>
-            </CardContent>
+            </CardContent> */}
           </Card>
-          <Card>
+          <Card elevation={3} sx={{ marginBottom: "2rem" }}>
             <CardHeader title="Payment" />
             <CardContent>
               <strong>Name : </strong> {order.shippingAddress.fullName}{" "}
+              {order.isPaid ? (
+                <MessageBox seveity="success">
+                  Paid at {order.paidAt}
+                </MessageBox>
+              ) : (
+                <MessageBox severity="error">Not Paid</MessageBox>
+              )}
             </CardContent>
-            {order.isPaid ? (
-              <MessageBox variant="success">Paid at {order.paidAt}</MessageBox>
-            ) : (
-              <MessageBox variant="danger">Not Paid</MessageBox>
-            )}
           </Card>
-          <Card>
+          <Card elevation={3} sx={{ marginBottom: "2rem" }}>
             <CardHeader title="Items" />
             <List>
               {order.orderItems.map((item) => (
                 <ListItem key={item._id}>
                   <Grid container>
-                    <Grid item md={6}>
+                    <Grid
+                      item
+                      md={6}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
                       <img
                         src={item.image}
                         alt={item.name}
@@ -128,8 +136,8 @@ export default function OrderPage() {
             </List>
           </Card>
         </Grid>
-        <Grid container md={4}>
-          <Card>
+        <Grid item md={4}>
+          <Card elevation={7}>
             <CardHeader title="Order Summary" />
             <List>
               <ListItem>
