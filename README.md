@@ -1298,6 +1298,75 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
          <<>> will look for the id from the url
 
+    8g. Pay by Paypal
+
+        8g1. Generate oayoal client id
+
+            - developer.paypal.com/home
+            - log in to dashboar, then go to dashboard
+            - clgo to Apps and Credentials, sandbox and create App
+            - copy the client id AND PUT IT IN .ENV
+            - PAYPAL_CLIENT_ID=AZiD7BlVeOAjcjLQT4ixQmiobKbHGYYox7QFV3fYTWW2WtXPF_7VT_5fB8scdSftXeiaq1cYm8niatfK
+
+        8g2. create api to return client id
+
+            - in server.js
+                app.get('/api/keys/paypal, (req, res)=>{
+                    res.send(process.env.PAYPAL_CLIENT_ID || 'sb' )
+                })
+
+            - in FE npm install @paypal/react-paypal-js
+
+        8g3. use use PayPalScriptProvider in index.js
+
+            -   <PaypalScriptProvider deferLoading={true}>
+                    <App />
+                </PaypalScriptProvider>
+        
+        8g4. use PayPalScriptReducer in <OrderPage />
+
+            - import { PaypalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js'
+            - add the loadPaypalScript in useEffect
+
+                 if (!order._id || (order._id && order._id !== orderId)) {
+                    fetchOrder();
+                    } else {
+                        const loadPaypalScript = async () => {
+                            const { data: clientId } = await axios.get('/api/keys/paypal', {
+                                headers: { authorization: `Bearer ${userInfo.token}`}
+                            })
+                        }
+                        loadPaypalScript()
+                    }
+                }, [order, userInfo, navigate, orderId]);
+
+            - before the useEffect, define the 
+            const [{ isPending }, paypalDispatch ] = usePayPalScriptReducer()
+            
+            - then add the following to the useEffect to get the clientId
+                paypalDispatch({
+                    type: 'resetOptions,
+                    value: {
+                        'client-id: clientId,
+                        currency: 'USD'
+                    }
+                })
+
+            - aftersetting up the options, paypalDispatch({ type: 'setLoadingStatus', value: 'pending' })
+
+
+
+            
+
+        8g4. 
+
+
+        - implement loadPaypalScript function
+        - render paypal button
+        - implement onApprove payment function
+        - create pay order api in backend
+
+
 
 
 
