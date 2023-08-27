@@ -1300,7 +1300,7 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
     8g. Pay by Paypal
 
-        8g1. Generate oayoal client id
+        8g1. Generate payoal client id
 
             - developer.paypal.com/home
             - log in to dashboar, then go to dashboard
@@ -1322,7 +1322,7 @@ H. Finish off the <CartPage /> and add the followng functionalities
             -   <PaypalScriptProvider deferLoading={true}>
                     <App />
                 </PaypalScriptProvider>
-        
+
         8g4. use PayPalScriptReducer in <OrderPage />
 
             - import { PaypalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js'
@@ -1340,9 +1340,9 @@ H. Finish off the <CartPage /> and add the followng functionalities
                     }
                 }, [order, userInfo, navigate, orderId]);
 
-            - before the useEffect, define the 
+            - before the useEffect, define the
             const [{ isPending }, paypalDispatch ] = usePayPalScriptReducer()
-            
+
             - then add the following to the useEffect to get the clientId
                 paypalDispatch({
                     type: 'resetOptions,
@@ -1352,13 +1352,11 @@ H. Finish off the <CartPage /> and add the followng functionalities
                     }
                 })
 
-            - aftersetting up the options, paypalDispatch({ type: 'setLoadingStatus', value: 'pending' })
+            - aftersetting up the options,
+            paypalDispatch({ type: 'setLoadingStatus', value: 'pending' })
 
 
-
-            
-
-        8g4. 
+        8g4.
 
 
         - implement loadPaypalScript function
