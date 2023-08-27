@@ -1,5 +1,4 @@
-import { Store } from "../store.js";
-
+import { setSnackbar, Store } from "../store.js";
 import Loading from "../components/Loading";
 import MessageBox from "../components/MessageBox";
 import { useContext, useEffect, useReducer } from "react";
@@ -8,7 +7,7 @@ import axios from "axios";
 import { getError } from "../utils.js";
 import { Helmet } from "react-helmet-async";
 import { Card, CardContent, CardHeader, Grid } from "@mui/material";
-import { PaypalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 
@@ -20,6 +19,14 @@ const reducer = (state, action) => {
       return { ...state, loading: false, order: action.payload, error: "" };
     case "FETCH_FAIL":
       return { ...state, loading: false, order: action.payload };
+    case "PAY_REQUEST":
+      return { ...state, loadingPay: true };
+    case "PAY_SUCCESS":
+      return { ...state, loadingPay: false, successPay: true };
+    case "PAY_FAIL":
+      return { ...state, loadingPay: false };
+    case "PAY_RESET":
+      return { ...state, loadingPay: false, successPay: false };
     default:
       return state;
   }
@@ -29,17 +36,54 @@ export default function OrderPage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
   const navigate = useNavigate();
-  const [{ loading, error, order }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: "",
-    order: {},
-  });
+  const [{ loading, error, order, loadingPay, successPay }, dispatch] =
+    useReducer(reducer, {
+      successPay: false,
+      loadingPay: false,
+      loading: true,
+      error: "",
+      order: {},
+    });
 
   const params = useParams();
   const { id: orderId } = params;
-
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
+  const createOrder = (data, actions) => {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: { value: order.totalPrice },
+          },
+        ],
+      })
+      .then((orderID) => {
+        return orderID;
+      });
+  };
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then(async function (details) {
+      try {
+        dispatch({ type: "PAY_REQUEST" });
+        const { data } = await axios.put(
+          `/api/orders/${order._id}/pay`,
+          details,
+          {
+            headers: { authorization: `Bearer ${userInfo.token}` },
+          }
+        );
+        dispatch({ type: "PAY_SUCCESS", payload: data });
+        ctxDispatch(setSnackbar(true, "success", "Order is Paid"));
+      } catch (err) {
+        dispatch({ type: "PAY_FAIL", payload: getError(err) });
+        ctxDispatch(setSnackbar(true, "error", getError(err)));
+      }
+    });
+  };
+  const onError = (err) => {
+    ctxDispatch(setSnackbar(true, "error", getError(err)));
+  };
   useEffect(() => {
     const fetchOrder = async () => {
       try {
@@ -55,8 +99,11 @@ export default function OrderPage() {
     if (!userInfo) {
       return navigate("/login");
     }
-    if (!order._id || (order._id && order._id !== orderId)) {
+    if (!order._id || successPay || (order._id && order._id !== orderId)) {
       fetchOrder();
+      if (successPay) {
+        dispatch({ type: "PAY_RESET" });
+      }
     } else {
       const loadPaypalScript = async () => {
         const { data: clientId } = await axios.get("/api/keys/paypal", {
@@ -73,11 +120,11 @@ export default function OrderPage() {
       };
       loadPaypalScript();
     }
-  }, [order, userInfo, navigate, orderId]);
+  }, [order, userInfo, navigate, orderId, paypalDispatch, successPay]);
   return loading ? (
     <Loading />
   ) : error ? (
-    <MessageBox ariant="danger">{error}</MessageBox>
+    <MessageBox variant="danger">{error}</MessageBox>
   ) : (
     <div>
       <Helmet>
@@ -151,7 +198,7 @@ export default function OrderPage() {
             </List>
           </Card>
         </Grid>
-        <Grid item md={4}>
+        <Grid item md={4} xs={12} sm={12} sx={{ marginBottom: "2rem" }}>
           <Card elevation={7}>
             <CardHeader title="Order Summary" />
             <List>
@@ -173,6 +220,23 @@ export default function OrderPage() {
                   <Grid item>${order.totalPrice.toFixed(2)}</Grid>
                 </Grid>
               </ListItem>
+
+              {!order.isPaid && (
+                <ListItem>
+                  {isPending ? (
+                    <Loading />
+                  ) : (
+                    <div style={{ width: "100%" }}>
+                      <PayPalButtons
+                        createOrder={createOrder}
+                        onApprove={onApprove}
+                        onError={onError}
+                      ></PayPalButtons>
+                    </div>
+                  )}
+                  {loadingPay && <Loading />}
+                </ListItem>
+              )}
             </List>
           </Card>
         </Grid>

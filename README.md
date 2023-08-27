@@ -1351,49 +1351,146 @@ H. Finish off the <CartPage /> and add the followng functionalities
                         currency: 'USD'
                     }
                 })
+                - currency can be change to the preferred country
 
             - aftersetting up the options,
             paypalDispatch({ type: 'setLoadingStatus', value: 'pending' })
 
+            - add paypalDispatch to the useEffect dependency
+            [order, userInfo, navigate, orderId, paypalDispatch]);
 
-        8g4.
-
-
-        - implement loadPaypalScript function
         - render paypal button
+            - after the Order Total field, impelment a conditional rendering of Paypal buttons
+
+                {
+                    !order.isPaid && (
+                        <ListItem>
+                            {
+                                isPending ? (<LoadingBox />) : <PayPalButtons
+                                    createOrder={createOrder}
+                                    onApprove={onApprove}
+                                    onError={onError}
+                                >
+                            }
+                        </ListItem>
+                    )
+                }
+
+                - isPending is coming from react-paypal-js
+                - define the functions createOrder
+
+                const createOrder = (data, actions) => {
+                    return (actions.order)
+                    .create({
+                        purchase_units: [
+                            {
+                                amount: { value: order.totalPrice }
+                            }
+                        ]
+                    })
+                    .then((orderID) => {
+                        return orderID
+                    })
+                }
+
+
+
+                const onApprove = (data, actions) => {
+                    return actions.order.capture().then(async function (details){
+                        try{
+                            dispatch({ type: 'PAY_REQUEST' })
+                            const { data } = await axios.put(`api/orders/${order._id}/pay`, details),
+                            {
+                                header: { authorization: `Bearer ${userInfo.token}`}
+                            }
+                            dispatch({ type: 'PAY_SUCCESS', payload: data })
+                            ctxDispatch(setSnackBar(true, 'success', 'Order is Paid'))
+                        }catch (err) {
+                            dispatch({ type: 'PAY_FAIL', payload: getError(err)}
+                            ctxDispatch(setSnackBar(true,'error',getError(err)))
+                            )
+                        }
+                    })
+                }
+
+                - details contains the user and payment information from the PayPal side
+
+                - create the api for api/orders/${order._id}/pay
+                - implement the PAY_REQUEST, PAY_SUCCESS and PAY_FAIL in the reducer inside the <OrderPage />
+                case "PAY_REQUEST":
+                    return { ...state, loadingPay: true };
+                case "PAY_SUCCESS":
+                    return { ...state, loadingPay: false, successPay: true };
+                case "PAY_FAIL":
+                    return { ...state, loadingPay: false };
+                case "PAY_RESET":
+                return { ...state, loadingPay: false, successPay: false };
+
+                - implement the const onError = (err) => {
+                    ctxDispatch(setSnackBar(true, 'error', getError(err)))
+                }
+
+                add the successPay and loadingPay in the  state
+                 const [{ loading, error, order, loadingPay, successPay }, dispatch] = useReducer(reducer, {
+                successPay: false,
+                loadingPay: false,
+                loading: true,
+                error: "",
+                order: {},
+                });
+
+                add the successPay in the useEffect as a condition
+                if (!order._id || successPay || (order._id && order._id !== orderId)) {fetchOrder();
+
+                if (successPay) {dispatch({ type: "PAY_RESET" });
+                }
+
+                add the successPay in the dependency array of the useEffect
+
+
+                add { loadingPay && <Loading />}
+
+
+
         - implement onApprove payment function
-        - create pay order api in backend
+        - create pay order api in backend at orderRoute.js
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        orderRouter.put(
+            "/:id/pay",
+            isAuth,
+            expressAsyncHandler(async (req, res) => {
+            const order = await Order.findById(req.params.id);
+            if (order) {
+                order.isPaid = true;
+                order.paidAt = Date.now();
+                order.paymentResult = {
+                id: req.body.id,
+                status: req.body.status,
+                update_time: req.body.update_time,
+                mail_address: req.body.email_address,
+            };
+            const updateOrder = await order.save();
+            res.send({ message: "Order Paid", order: updateOrder });
+            } else {
+            res.status(404).send({ message: "Order Not Found" });}}));
 
         When placing an order I noticed the count in stock does not go down at all? Does anyone have any tips on how to implement this?
+
+
+
+        - simulate the payment. login to sandbox, then test account, get the sandbox info and use the credit card details
+            4239538684643756
+            VISA
+            09/2028
+            123
+
+        - encountered error 404 in payment simulation:
+        found out that missing / in `api/orders/${order._id}/pay`, should be `/api/orders/${order._id}/pay`,
+
+        - encountered issue in payment simulation : No Token
+            found missing s in the header: { authorization: `Bearer ${userInfo.token}` }, should be headers: { authorization: `Bearer ${userInfo.token}` },
+
+/\* \*/
 
 Create a function that decrement product.countInStock:
 1.) addOrderItems: backend/controllers/orderController.js
