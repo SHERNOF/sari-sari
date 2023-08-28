@@ -23,3 +23,5 @@ Libraries methods used
 10. npm i bcryptjs
 11. npm i express-async-handler
 12. npm i jsonwebtoken in be
+13. use of npm install @paypal/react-paypal-js
+14. use of material ui table
