@@ -1490,7 +1490,94 @@ H. Finish off the <CartPage /> and add the followng functionalities
         - encountered issue in payment simulation : No Token
             found missing s in the header: { authorization: `Bearer ${userInfo.token}` }, should be headers: { authorization: `Bearer ${userInfo.token}` },
 
-/\* \*/
+9.  Customer Area
+
+    9a. Display the order history - This will display th eorder istory of the user. Each order is clicable and can view the details of each order
+
+        9a1. create the <OrderHistoryPage />. conditionally load the
+            { loading
+            ? <Loading />
+            : eroor
+            ? <MessageBox variant='danger' >{error}</MessageBox>
+            : <table>
+                <thead>
+                    <th>ID<th/>
+                    <th>Date<th/>
+                    <th>Total<th/>
+                    <th>Paid<th/>
+                    <th>Delivered<th/>
+                    <th>Actions<th/>
+                <thead/>
+                <tbody></tbody>
+            <table/> }
+
+        9a2. define the reducer for loading, error and orders
+
+        const [{ loading, error, orders }, dispacth] = seReducer(reducer, {
+            loading: true,
+            error:' ',
+            orders: []
+        })
+
+        9a3. define the
+            useEffect(()=>{
+                const fetchData = async () =>{
+                    dispatch({ type: 'FETCH_REQUEST' })
+                    try{
+
+                    }catch(err){
+                        const { data }  = await axios.get(`/api/orders/mine`,
+                        header: { authorization: `Bearer ${userInfo.token}` }
+                        )
+                        dispatch({ type: 'FETCH_FAIL',
+                        payload: getError(err)
+                         })
+                    }
+                }
+                fetchData()
+            }, [userInfo])
+
+            - what happened here is to send an ajax request to `/api/orders/mine` to get the orders of the current user by getting its token from the backend and return it to the frontend as well as the users orders
+
+            headers: { Authorization: `Bearer ${userInfo.token}` }, is to get the user info
+
+            use map in
+                <tbody>
+            { orders.map(order) => (
+                <tr key={order._id}></tr>
+                <td>{order._id}</td>
+                <td>{order.createdAt.substring(0, 10)}</td>
+                <td>{order.totalPice.toFiced(2)}</td>
+                <td>{order.isPaid ? order.paidAt.substring(0, 10) : 'No' }</td>
+                <td>{order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No' }</td>
+                <td>
+                    <Button
+                    type={button}
+                    variant={primary}
+                    onClick={() => {
+                         navigate(`/order/${order._id}`)
+                    }}
+                    >Details</Button>
+                </td>
+            )}
+            </tbody>
+
+        9a4. Implement the api fro /api/orders/mine at the orderRouter.js
+
+            orderRouter.get('/mine',
+            isAuth,
+            expressAsyncHandler(async (req, res) => {
+                const orders = await Order.find({ user: req.user._id
+                res.send(orders)
+                })
+            })
+            )
+
+            this returns the orders of the current user
+
+        9a5. Implement in <App />
+
+=========================================================================
 
 Create a function that decrement product.countInStock:
 1.) addOrderItems: backend/controllers/orderController.js
