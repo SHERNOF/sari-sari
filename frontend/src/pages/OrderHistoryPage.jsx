@@ -15,7 +15,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import styled from "@emotion/styled";
+import { styled } from "@mui/material/styles";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -56,7 +56,7 @@ export default function OrderHistoryPage() {
 
   const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
     loading: true,
-    error: " ",
+    error: "",
   });
   console.log(orders);
 
@@ -105,7 +105,8 @@ export default function OrderHistoryPage() {
                     {order.createdAt.substring(0, 10)}
                   </StyledTableCell>
                   <StyledTableCell>
-                    {order.totalPice.toFiced(2)}
+                    {/* {order.totalPice.toFixed(2)} */}
+                    {order.totalPrice.toFixed(2)}
                   </StyledTableCell>
                   <StyledTableCell>
                     {order.isPaid ? order.paidAt.substring(0, 10) : "No"}
