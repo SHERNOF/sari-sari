@@ -17,6 +17,7 @@ export default function Dropdown(props) {
     localStorage.removeItem("userInfo");
     localStorage.removeItem("shippingAddress");
     localStorage.removeItem("paymentMethod");
+    window.location.href = "/signin";
   };
   return (
     <Box
@@ -29,11 +30,7 @@ export default function Dropdown(props) {
         <InputLabel id="demo-simple-select-label" sx={{ color: "white" }}>
           {userInfo.name}
         </InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          // label={userInfo.name}
-        >
+        <Select labelId="demo-simple-select-label" id="demo-simple-select">
           <Link to="/profile">
             <MenuItem>User Profile</MenuItem>
           </Link>

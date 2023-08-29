@@ -1577,6 +1577,102 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
         9a5. Implement in <App />
 
+    9b. <ProfilePage /> - this can update the user information
+
+        9b1. create the <ProfilePage />. This is similar to <SignUp />
+
+            - implement in tha <App />
+            - get the userInfo from the useContext
+
+        9b2. implement the submitHandler
+            - create a reducer to show the <Loading />
+            const reducer = (state, action) => {
+                switch (action.type) {
+                    case 'UPDATE_REQUEST':
+                    return { ...state, loadingUpdate: true }
+                    case 'UPDATE_SUCCESS':
+                    return { ...state, loadingUpdate: false }
+                    case 'UPDATE_FAIL':
+                    return { ...state, loadingUpdate: false }
+                    default
+                    return state
+                }
+            }
+            const [{ loadingUpdate }, dispatch] = userReducer(reduecr, {
+                loadingUpdate: false
+            })
+
+            - send an ajax request to get the user info from the backend
+
+            const submitHandler = async (e)=>{
+                e.preventDefault()
+                try{
+                    const { data } = wait axios.put('/api/users/profile', {
+                        name,
+                        email,
+                        password
+                    },
+                    { headers: { Authorization: `Bearer ${userInfo.token}` }
+                    }
+                    )
+                    dispatch({ type: 'UPDATE_SUCCESS' })
+                    ctxDispatch({ type: 'USER_SIGNIN', payload: data })
+                    localSotrage.setItem('userInfo', JSON.stringify(data))
+                    ctxDispatch(setSnackbar(true, 'success', 'User updated successfully')
+                }catch(err){
+                    dispatch({ type: 'UPDATE_FAIL'})
+                    <!-- use ctxDispacth to activate the toast -->
+                    ctxDispatch(setSnackbar(true, 'error', getError(err)))
+
+                }
+            }
+        9b3. create user upate api at the userRoute.js
+
+            userRouter.put('/profile',
+            isAuth,
+            expressAsyncHandler(async (req, res)=>{
+                <!-- get the user from db -->
+                onst user = await User.findById(req.user._id)
+                if(user){
+                    <!-- || means, if the field is empty use the old data -->
+                    user.name = req.body.name || user.name
+                    user.email = req.body.email || user.email
+
+                    if(req.body.password){
+                        user.password = bcrypt.hashSync(req.body.password, 8)
+                    }
+                    const updatedUser = wait user.save()
+                    res.send({
+                        _id: updatedUser._id,
+                        name: updatedUser.name,
+                        email: updatedUser.email,
+                        isAdmin: updatedUser.isAdmin,
+                        token: generateToken(updatedUser)
+                    })
+                } else {
+                    res.status(404).send({ message: 'User not found' })
+                }
+            })
+            )
+
+        9b4. update user info
+
+            - in the <Dropdown />, add window.location.href = '/signin' to redirect the page to sign in upon sign out
+
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+
 =========================================================================
 
 Create a function that decrement product.countInStock:
