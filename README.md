@@ -1700,7 +1700,8 @@ H. Finish off the <CartPage /> and add the followng functionalities
                 $ git config --global user.name "John Doe"
                 $ git config --global user.email johndoe@example.com
 
-            - testing 123
+            - testing 123 kamotte
+            
 
 
 
