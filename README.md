@@ -1712,6 +1712,24 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
             - click get started, github and authorize render
             - click new service
+            - select a repo to connect. connect to sari-sari
+            - enter the name for web service "mern sari-sari"
+            - environment is node
+            - select most of the default
+            - selcet npm run build in build command
+            - start command = npm start
+            - select the free type account
+            - click advance
+                - click environmental variables
+                    - add the JWT_SECRET, MONGODB_URI
+            - scroll down and click create web app
+
+    9e. Create sidebar and search box
+
+        9e1. add the sidebar = https://mui.com/material-ui/react-drawer/
+
+            - in <App />, define an open state for sidebar const [ sidebarIsOpen, setSidebarIsOpen ] = useState(false)
+            - in the index.css, at sidebar section, style the navbar to accomodate the drawer component
 
 -
 -

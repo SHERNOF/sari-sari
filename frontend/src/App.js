@@ -1,6 +1,6 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Container from "@mui/material/Container";
 import ProductPage from "./pages/ProductPage";
 import Box from "@mui/material/Box";
@@ -18,20 +18,53 @@ import PlaceOrderPage from "./pages/PlaceOrderPage";
 import OrderPage from "./pages/OrderPage";
 import OrderHistoryPage from "./pages/OrderHistoryPage";
 import ProfilePage from "./pages/ProfilePage";
+import {
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 function App() {
   const { state } = useContext(Store);
   const { cart, userInfo } = state;
+  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+  const sidebarHandler = () => {
+    setSidebarIsOpen(!sidebarIsOpen);
+  };
 
   return (
     <BrowserRouter>
-      <div className="app">
+      <div
+        className={
+          sidebarIsOpen ? "site-container active-cont" : "site-container"
+        }
+      >
         <SnackBar />
         <header>
           <Container
             style={{ display: "flex", justifyContent: "space-between" }}
           >
             <div style={{ display: "flex", alignItems: "center" }}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={sidebarHandler}
+                edge="start"
+                sx={{
+                  marginRight: 1,
+                  ...(sidebarIsOpen && { display: "none" }),
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
               <Link to="/">sari-sari</Link>
             </div>
             <div
@@ -60,6 +93,33 @@ function App() {
             </div>
           </Container>
         </header>
+        <div>
+          <Drawer
+            sx={{
+              width: 240,
+              flexShrink: 0,
+              "& .MuiDrawer-paper": {
+                width: 240,
+                boxSizing: "border-box",
+              },
+            }}
+            variant="persistent"
+            anchor="left"
+            open={sidebarIsOpen}
+          >
+            <div className="side-navbar">
+              <IconButton onClick={sidebarHandler}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </div>
+            <Divider />
+            <List>test1</List>
+            <Divider />
+            <List>test2</List>
+          </Drawer>
+          {/* <Main open={open}> */}
+          <div />
+        </div>
         <main>
           <Container>
             <Routes>

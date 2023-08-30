@@ -73,6 +73,29 @@ li {
   color: #f08000;
 }
 
+/* sidebar classes */
+.site-container {
+  transition: all 0.5s;
+  /* display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column; */
+}
+.active-cont {
+  margin-left: 240px;
+}
+.active-nav {
+  left: 0;
+}
+.sidebar-nav {
+  width: 240px;
+  height: 100%;
+  position: absolute;
+  left: -300px;
+  background-color: #100901;
+  transition: 0.5s;
+}
+
 @media (max-width: 768px) {
   h1 {
     font-size: 1.2em;
