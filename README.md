@@ -1674,7 +1674,7 @@ H. Finish off the <CartPage /> and add the followng functionalities
                 - remove the import data from "./data.js";
                 - add the app.use(express.static(path.join(_dirname, '/frontend/build'))) <<< what this does is to serve all the file inside the /frontend/build as a static files and will beserve by http://localhost:${port} >>>
 
-                
+
             9c2. serve build folder in frontend folder
                 - add app.get('*', (req, res)=>{
                     res.sendFile(path.join(_dirname, '/frontend/build/index.html'))
@@ -1684,6 +1684,20 @@ H. Finish off the <CartPage /> and add the followng functionalities
             
     
         9c3. Create Heroku account
+            - sign up for heroku if no account yet
+            - create anew app
+            - click the github icon to connect the app to github
+            - click onnect to github
+            - authorize heroku
+            - in the search for repository part, select the repo which is sari-sari. click afterwards
+            - Click enable automatic deploys
+            - in settings, reveal config vars
+                - copy thev value of the JWT_SECRET, PAYPAL AND MONGODB from .env
+            - stop the fronend and backend and copy the .env from backend to root
+            - in the root directory npm start
+            - run localhost:5000/api/seed if the products are not displayed
+
+
         9c4. connect it to github
         9c5. create mongodb atlas database
         9c6. set database connection in heroku env variables
