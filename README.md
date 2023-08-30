@@ -1696,6 +1696,10 @@ H. Finish off the <CartPage /> and add the followng functionalities
             - stop the fronend and backend and copy the .env from backend to root
             - in the root directory npm start
             - run localhost:5000/api/seed if the products are not displayed
+            - if github is not configured and working on other pc, configure the github acct
+                $ git config --global user.name "John Doe"
+                $ git config --global user.email johndoe@example.com
+
 
 
         9c4. connect it to github
