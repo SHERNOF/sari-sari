@@ -1659,6 +1659,46 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
             - in the <Dropdown />, add window.location.href = '/signin' to redirect the page to sign in upon sign out
 
+
+    9c. Publish to Heroku
+
+        9c1. create and config node project
+            - npm init in the root folder
+            - in package.json, at scripts, 
+                - "build": "cd backend && npm install && cd ../frontend && npm install && npm run build"
+                - "start": "node backend/server.js"
+
+            - in the server.js
+                - const _dirname = path.resolve() <<< before the err this returns the current directory>>>
+                - import path from path
+                - remove the import data from "./data.js";
+                - add the app.use(express.static(path.join(_dirname, '/frontend/build'))) <<< what this does is to serve all the file inside the /frontend/build as a static files and will beserve by http://localhost:${port} >>>
+
+                
+            9c2. serve build folder in frontend folder
+                - add app.get('*', (req, res)=>{
+                    res.sendFile(path.join(_dirname, '/frontend/build/index.html'))
+                }) << this means that everything that user enter will be serve by localhost"${port} will be serve by the index.html>>
+
+                - run npm run build
+            
+    
+        9c3. Create Heroku account
+        9c4. connect it to github
+        9c5. create mongodb atlas database
+        9c6. set database connection in heroku env variables
+        9c7. commit and push
+
+
+
+-
+-
+-
+-
+-
+-
+-
+-
 -
 -
 -

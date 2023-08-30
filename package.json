@@ -1,0 +1,13 @@
+{
+  "name": "sari-sari",
+  "version": "1.0.0",
+  "description": "1.  App birth\r     a. npx create-react-app frontend\r     b. all frontend codes here and later on server side will be put in the backend folder\r     c. third folder will be store to manage the state\r     d. clean up. remove unnecessary files and imports in App.js\r     e. plan to use material-ui as a back up for UI\r     f. framer for animation\r     g. react-icons\r     h. Maybe react-spring\r     i. initially use index.css for styling\r     j. create the header",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd backend && npm install && cd ../frontend && npm install && npm run build",
+    "start": "node backend/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
