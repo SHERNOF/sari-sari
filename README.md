@@ -1731,6 +1731,8 @@ H. Finish off the <CartPage /> and add the followng functionalities
             - in <App />, define an open state for sidebar const [ sidebarIsOpen, setSidebarIsOpen ] = useState(false)
             - in the index.css, at sidebar section, style the navbar to accomodate the drawer component
 
+            kmote
+
 -
 -
 -

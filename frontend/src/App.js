@@ -93,7 +93,15 @@ function App() {
             </div>
           </Container>
         </header>
-        <div>
+        <div
+          style={{
+            height: "100%",
+            position: "absolute",
+            left: "-300px",
+            backgroundColor: "#100901",
+            transition: "0.5s",
+          }}
+        >
           <Drawer
             sx={{
               width: 240,
@@ -101,15 +109,22 @@ function App() {
               "& .MuiDrawer-paper": {
                 width: 240,
                 boxSizing: "border-box",
+                border: "1px solid red",
+                backgroundColor: "#100901",
+                color: "white",
               },
             }}
             variant="persistent"
             anchor="left"
             open={sidebarIsOpen}
           >
-            <div className="side-navbar">
+            <div
+              style={{
+                textAlign: "right",
+              }}
+            >
               <IconButton onClick={sidebarHandler}>
-                <ChevronLeftIcon />
+                <ChevronLeftIcon sx={{ color: "white" }} />
               </IconButton>
             </div>
             <Divider />

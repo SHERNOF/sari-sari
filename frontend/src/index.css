@@ -72,14 +72,15 @@ li {
   border-bottom: 0.2rem solid #f08000;
   color: #f08000;
 }
-
+.app {
+  text-align: center;
+}
 /* sidebar classes */
 .site-container {
   transition: all 0.5s;
-  /* display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-direction: column; */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 .active-cont {
   margin-left: 240px;
