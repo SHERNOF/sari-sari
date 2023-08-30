@@ -100,7 +100,6 @@ function App() {
             left: "-300px",
             backgroundColor: "#100901",
             transition: "0.5s",
-            // border: "1px solid red",
           }}
         >
           <Drawer
