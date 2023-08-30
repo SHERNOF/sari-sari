@@ -1659,12 +1659,11 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
             - in the <Dropdown />, add window.location.href = '/signin' to redirect the page to sign in upon sign out
 
-
     9c. Publish to Heroku
 
         9c1. create and config node project
             - npm init in the root folder
-            - in package.json, at scripts, 
+            - in package.json, at scripts,
                 - "build": "cd backend && npm install && cd ../frontend && npm install && npm run build"
                 - "start": "node backend/server.js"
 
@@ -1681,8 +1680,8 @@ H. Finish off the <CartPage /> and add the followng functionalities
                 }) << this means that everything that user enter will be serve by localhost"${port} will be serve by the index.html>>
 
                 - run npm run build
-            
-    
+
+
         9c3. Create Heroku account
             - sign up for heroku if no account yet
             - create anew app
@@ -1700,17 +1699,32 @@ H. Finish off the <CartPage /> and add the followng functionalities
                 $ git config --global user.name "John Doe"
                 $ git config --global user.email johndoe@example.com
 
-            - testing 123 kamotte talaga kamote
-
-
-
-
         9c4. connect it to github
         9c5. create mongodb atlas database
-        9c6. set database connection in heroku env variables
+        9c6. set database connection in heroku from the .env variables
         9c7. commit and push
 
+            - issue encountered here is it was discovered that its master branch has a name of jolrct and not master. need to take a look at this
 
+    9d. Connect to render
+
+        9d1. go to render.com and create an account
+
+            - click get started, github and authorize render
+            - click new service
+
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 
 -
 -

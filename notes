@@ -25,3 +25,5 @@ Libraries methods used
 12. npm i jsonwebtoken in be
 13. use of npm install @paypal/react-paypal-js
 14. use of material ui table
+15. use of heroku to connect the frontend, backend and the databse.
+16. Render
