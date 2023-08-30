@@ -81,10 +81,6 @@ li {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  /* display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-direction: column; */
 }
 .active-cont {
   margin-left: 240px;
