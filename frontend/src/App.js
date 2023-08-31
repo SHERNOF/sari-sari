@@ -57,7 +57,7 @@ function App() {
                 color="inherit"
                 aria-label="open drawer"
                 onClick={sidebarHandler}
-                edge="start"
+                edge="end"
                 sx={{
                   marginRight: 1,
                   ...(sidebarIsOpen && { display: "none" }),
@@ -109,9 +109,8 @@ function App() {
               "& .MuiDrawer-paper": {
                 width: 240,
                 boxSizing: "border-box",
-                border: "1px solid red",
-                backgroundColor: "#100901",
-                color: "white",
+                
+                
               },
             }}
             variant="persistent"
@@ -123,14 +122,16 @@ function App() {
                 textAlign: "right",
               }}
             >
-              <IconButton onClick={sidebarHandler}>
-                <ChevronLeftIcon sx={{ color: "white" }} />
-              </IconButton>
+              <div onClick={sidebarHandler}
+              //  style={{border: '1px solid red',  }}
+               >
+                <ChevronLeftIcon sx={{  padding: '1.5rem' }} />
+              </div>
             </div>
             <Divider />
-            <List>test1</List>
+            <List sx={{color:'black'}}>test1</List>
             <Divider />
-            <List>test2</List>
+            <List sx={{color:'black'}}>test2</List>
           </Drawer>
           {/* <Main open={open}> */}
           <div />
