@@ -18,10 +18,10 @@ import PlaceOrderPage from "./pages/PlaceOrderPage";
 import OrderPage from "./pages/OrderPage";
 import OrderHistoryPage from "./pages/OrderHistoryPage";
 import ProfilePage from "./pages/ProfilePage";
-
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import {
   Divider,
-
+  Drawer,
   IconButton,
   List,
   ListItem,
@@ -32,7 +32,6 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import SwipeableTemporaryDrawer from "./ui/drawer/Drawer";
 
 function App() {
   const { state } = useContext(Store);
@@ -96,7 +95,32 @@ function App() {
           </Container>
         </header>
 
-        <SwipeableTemporaryDrawer></SwipeableTemporaryDrawer>
+          <Drawer
+            sx={{
+              width: 240,
+              flexShrink: 0,
+              "& .MuiDrawer-paper": {
+                width: 240,
+                boxSizing: "border-box",
+              },
+            }}
+            variant="persistent"
+            anchor="left"
+            open={sidebarIsOpen}
+          >
+            <Container>
+            
+              <div onClick={sidebarHandler}
+              style={{textAlign: "right"}}>
+                <ChevronLeftIcon sx={{  padding: '1.5rem' }} />
+              </div>
+            
+            </Container>
+            <Divider />
+            <List sx={{color:'black'}}>test1</List>
+            <Divider />
+            <List sx={{color:'black'}}>test2</List>
+          </Drawer>
           
           <div />
         
