@@ -1730,8 +1730,90 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
             - in <App />, define an open state for sidebar const [ sidebarIsOpen, setSidebarIsOpen ] = useState(false)
             - in the index.css, at sidebar section, style the navbar to accomodate the drawer component
+            - const [categories, setCategories] = useState([])
+            <<< this will define the categories of the sidebar>>>
+            -  sdefeine the useEffet. make an ajax request to get the '/api/product/categories' to get the categories from { data }.
+                useEffect(() => {
+                    const fetchCategories = async () => {
+                    try {
+                        const { data } = await axios.get("/api/product/categories");
+                        setCategories(data);
+                    } catch (err) {
+                        ctxDispatch(setSnackbar("true", "error", getError(err)));
+                    }
+                    };
+                    fetchCategories()
+                }, []);
 
-            kmote
+                - in productRputer.js, define the '/api/product/categories'
+
+               productRouter.get(
+                "/categories",
+                expressAsyncHandler(async (req, res) => {
+                    const categories = await Product.find().distinct("category");
+                    res.send(categories);
+                })
+                );
+
+                - Product.find() was used to get all products and only get the category of the product by using distinct function to return unique categories and not duplicates
+
+                distinct('category')
+
+                - the store it in
+
+                const categories
+
+                - then send it to frontend
+
+                res.send(categories)
+
+        - at this point the Pants and Shirt links are not yet working. need to implement the search? function
+
+
+        - Create the <SearchBox />
+
+            - set the submitHandler =
+
+                 const submitHandler = (e) => {
+                    e.preventDefault();
+                    navigate(query ? `/search/?query=${query}` : "/search");
+                };
+
+    9f. create <SearchPage />
+
+        - this page is the result of the search in the search bar. It will also show the details of the result products. it can also sort the product base from the price
+
+        - get the search from URL by const { search } = useLocation(); then store it in const sp = new URLSearchParams(search);
+
+        - defien the reducer
+        const reducer = (state, action) => {
+            switch (action.type) {
+                case "FETCH_REQUEST":
+                return { ...state, loading: true };
+                case "FETCH_SUCCESS":
+                return {
+                    ...state,
+                    products: action.payload.products,
+                    page: action.payload.page,
+                    pages: action.payload.pages,
+                    countProducts: action.payload.countProducts,
+                    loading: false,
+                };
+                case "FETCH_FAIL":
+                return { ...state, loading: false, error: action.payload };
+
+                default:
+                return state;
+            }
+            };
+
+
+
+
+
+        9f1. show filters
+        9f2. create api for earching products
+        9f3. display results
 
 -
 -
