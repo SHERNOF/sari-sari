@@ -2,6 +2,7 @@ import { createContext, useReducer } from "react";
 
 export const Store = createContext();
 const initialState = {
+  sidebarIsOpen: false,
   snackbarOpen: false,
   snackbarType: "info",
   snackbarMessage: "",
@@ -37,13 +38,6 @@ function reducer(state, action) {
         : [...state.cart.cartItems, newItem];
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } };
-    // return {
-    //     ...state,
-    //     cart:{
-    //         ...state.cart,
-    //         cartItems:[...state.cart.cartItems, action.payload],
-    //     },
-    // }
 
     case "CART_REMOVE_ITEM": {
       const cartItems = state.cart.cartItems.filter(
@@ -91,8 +85,15 @@ function reducer(state, action) {
         },
       };
 
-      case 'CART_CLEAR':
-        return {...state, cart: { ...state.cart, cartItems : []}}
+    case "CART_CLEAR":
+      return { ...state, cart: { ...state.cart, cartItems: [] } };
+
+    case "SIDEBAR":
+      // const { sidebarIsOpen } = action;
+      return { sidebarIsOpen: (state.sidebarIsOpen = false) };
+
+    case "SIDEBAR_HANDLER":
+      return { sidebarIsOpen: (state.sidebarIsOpen = true) };
 
     default:
       return state;
