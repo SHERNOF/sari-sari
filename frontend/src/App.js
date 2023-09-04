@@ -33,6 +33,7 @@ import {
 import axios from "axios";
 import { getError } from "./utils";
 import SearchBox from "./components/SearchBox";
+import SearchPage from "./pages/SearchPage";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -164,6 +165,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/product/:desc" element={<ProductPage />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/search" element={<SearchPage />} />
               <Route path="/signin" element={<SignInPage />} />
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/profile" element={<ProfilePage />} />
