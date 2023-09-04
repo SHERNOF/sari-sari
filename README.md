@@ -1784,8 +1784,19 @@ H. Finish off the <CartPage /> and add the followng functionalities
         - this page is the result of the search in the search bar. It will also show the details of the result products. it can also sort the product base from the price
 
         - get the search from URL by const { search } = useLocation(); then store it in const sp = new URLSearchParams(search);
+        - once const sp is captured, get the following details:
 
-        - defien the reducer
+         const { search } = useLocation();
+        const sp = new URLSearchParams(search); // /search?category=Shirts
+        const category = sp.get("category") || "all";
+        const query = sp.get("query") || "all";
+        const price = sp.get("price") || "all";
+        const rating = sp.get("rating") || "all";
+        const order = sp.get("order") || "newest";
+        const page = sp.get("page") || 1;
+
+
+        - define the reducer
         const reducer = (state, action) => {
             switch (action.type) {
                 case "FETCH_REQUEST":
@@ -1806,6 +1817,92 @@ H. Finish off the <CartPage /> and add the followng functionalities
                 return state;
             }
             };
+
+        - define the useEffect. send an ajax request from BE and get the page, query, category, price, rating and order information. use these variables as the dependency
+        useEffect(() => {
+            const fetchData = async (req, res) => {
+            try {
+                const { data } = await axios.get(
+                `/api/products/search?page=${page}&query=${query}&category=${category}&price=${price}&rating=${rating}&order=${order}`
+                );
+                dispatch({ type: "FETCH_SUCCESS", payload: data });
+            } catch (err) {
+                dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+            }
+            };
+            fetchData();
+        }, [category, error, order, page, price, query, rating]);
+
+        - define and get the categories by using useState and useEffect
+
+            const [categories, setCategories] = useState([])
+            useEffect(()=>{
+                const fetchCategories = async (req, res)=>{
+                try{
+                    const {data} = await axios.get(`/api/products/categories`,
+                    setCategories(data)
+                    ) 
+                }catch(err){
+                    ctxDispatch(setSnackbar(true, 'error', getError(err)))
+                }
+                }
+                fetchCategories()
+            }, [dispatch])
+
+        - define the urlGetFilter
+
+            const getFilterUrl = (filter) => {
+                const filterPage = filter.page || page
+                const filterCategory = filter.category || category
+                const filterQuery = filter.query || query
+                const filterRating = filter.rating || rating
+                const filterPrice = filter.price || price
+                const sortOrder = filter.order || order
+                return `/search?category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&order=${filterOrder}&page=${filterPage}`
+            }
+
+
+        - define some sample prices
+            export const prices = [
+                {
+                    name: '$1 -  $50',
+                    value: '1-50'
+                },
+                {
+                    name: '$51 -  $200',
+                    value: '51-200'
+                },
+                {
+                    name: '$201 -  $1000',
+                    value: '201-100'
+                }
+            ]
+        
+        - define the ratigs reference
+
+            export const ratings = [
+                {
+                    name: '4stars & up',
+                    rating: 4
+                },
+                {
+                    name: '3stars & up',
+                    rating: 3
+                },
+                {
+                    name: '2stars & up',
+                    rating: 2
+                },
+                {
+                    name: '1stars & up',
+                    rating: 1
+                },
+            ]
+
+        - implement the <SearchPage /> in <App />
+
+        - implement the api for 
+        `/api/products/search?page=${page}&query=${query}&category=${category}&price=${price}&rating=${rating}&order=${order}` in productRouter.js
 
 
 
