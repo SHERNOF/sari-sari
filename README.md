@@ -1904,6 +1904,8 @@ H. Finish off the <CartPage /> and add the followng functionalities
         - implement the api for 
         `/api/products/search?page=${page}&query=${query}&category=${category}&price=${price}&rating=${rating}&order=${order}` in productRouter.js
 
+        - encounterd an error of "react-dom.development.js:86 Warning: validateDOMNesting(...): <form> cannot appear as a descendant of <form>." because of the <form> and <Paper component='form'> declaration
+
 
 
 
