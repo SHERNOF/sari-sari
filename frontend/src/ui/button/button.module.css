@@ -12,6 +12,7 @@
   margin: 1rem 0;
   background-color: #3776ff;
   color: white;
+  font-size: .6em;
 }
 .button:hover,
 .button:active {

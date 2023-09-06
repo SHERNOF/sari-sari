@@ -140,7 +140,7 @@ export default function SearchScreen() {
         <title>Search Products</title>
       </Helmet>
       <Grid container>
-        <Grid md={3} item>
+        <Grid md={3} item >
           <h3>Department</h3>
           <div>
             <ul>
@@ -211,15 +211,15 @@ export default function SearchScreen() {
             </ul>
           </div>
         </Grid>
-        <Grid md={9} item>
+        <Grid md={9} item >
           {loading ? (
             <Loading></Loading>
           ) : error ? (
             <MessageBox variant="danger">{error}</MessageBox>
           ) : (
             <>
-              <Grid container className="justify-content-between mb-3">
-                <Grid item md={6}>
+              <Grid container className="justify-content-between mb-3" sx={{marginTop:'2rem'}}>
+                <Grid item md={6} sx={{marginBottom:'2rem'}}>
                   <div>
                     {countProducts === 0 ? 'No' : countProducts} Results
                     {query !== 'all' && ' : ' + query}
@@ -258,11 +258,9 @@ export default function SearchScreen() {
                 <MessageBox>No Product Found</MessageBox>
               )}
 
-              <Grid container>
+              <Grid container spacing={1.5}>
                 {products.map((product) => (
-                  <Grid item sm={6} lg={4} className="mb-3" key={product._id}>
                     <Product product={product}></Product>
-                  </Grid>
                 ))}
               </Grid >
 
@@ -270,7 +268,7 @@ export default function SearchScreen() {
                 {[...Array(pages).keys()].map((x) => (
                   <Link
                     key={x + 1}
-                    className="mx-1"
+                    style={{marginLeft:'1rem'}}
                     to={{
                       pathname: '/search',
                       seacrh: getFilterUrl({ page: x + 1 }, true),

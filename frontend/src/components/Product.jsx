@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
+import Button from '../ui/button/Button'
 import RatingComponent from "./RatingComponent";
 import axios from "axios";
 import { Store } from "../store";
