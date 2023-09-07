@@ -4,7 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useContext, useState } from "react";
-import { Store } from "../../store";
+import { Store } from "../store";
 import { Link } from "react-router-dom";
 import { Divider } from "@mui/material";
 

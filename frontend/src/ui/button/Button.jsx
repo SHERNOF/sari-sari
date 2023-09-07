@@ -5,9 +5,9 @@ export default function Button(props) {
   return (
     <button
       type={props.type || "button"}
-      // onCLick={props.onCLick}
       className={classes.button}
-      disabled={props.disabled || ''}
+      disabled={props.disabled || ""}
+      onClick={props.onClick}
     >
       {props.children}
     </button>

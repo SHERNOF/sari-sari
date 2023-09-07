@@ -3,13 +3,14 @@ import Home from "./pages/Home";
 import React, { useContext, useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import ProductPage from "./pages/ProductPage";
+import Header from "./components/Header.jsx";
 import Box from "@mui/material/Box";
 import Badge from "@mui/material/Badge";
 import { Store, setSnackbar } from "./store";
 import Stack from "@mui/material/Stack";
 import CartPage from "./pages/CartPage";
 import SignInPage from "./pages/SignInPage";
-import Dropdown from "./ui/dropdown/Dropdwon";
+import Dropdown from "./components/Dropdown";
 import SnackBar from "./ui/snackbar/SnackBar";
 import ShippingPage from "./pages/ShippingPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -34,6 +35,10 @@ import axios from "axios";
 import { getError } from "./utils";
 import SearchBox from "./components/SearchBox";
 import SearchPage from "./pages/SearchPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Admin from "./components/Admin";
+import AdminRoute from "./components/AdminRoute";
+import DashboardPage from "./pages/DashboardPage";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -89,8 +94,9 @@ function App() {
                   style={{ color: "white", marginLeft: "1rem" }}
                 />
               </IconButton>
-              <Link style={{ marginRight: "1rem" }} to="/">
-                sari-sari
+              <Link to="/">
+                {/* sari-sari */}
+                <h1 className="store">sari-sari</h1>
               </Link>
               <SearchBox onChange={(e) => e.target.value}></SearchBox>
             </div>
@@ -101,7 +107,6 @@ function App() {
                 alignItems: "center",
               }}
             >
-              {userInfo ? <Dropdown /> : <Link to="/signin">Sign In</Link>}
               <Link to="/cart" style={{ marginLeft: "2rem" }}>
                 {cart.cartItems.length > 0 && (
                   <Stack>
@@ -112,11 +117,16 @@ function App() {
                       )}
                       color="primary"
                     >
-                      cart
+                      <h3 style={{ color: "white", marginRight: "1rem" }}>
+                        cart
+                      </h3>
                     </Badge>
                   </Stack>
                 )}
               </Link>
+
+              {userInfo && userInfo.isAdmin && <Admin />}
+              {userInfo ? <Dropdown /> : <Link to="/signin">Sign In</Link>}
             </div>
           </Container>
         </header>
@@ -168,12 +178,42 @@ function App() {
               <Route path="/search" element={<SearchPage />} />
               <Route path="/signin" element={<SignInPage />} />
               <Route path="/signup" element={<SignUpPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/shipping" element={<ShippingPage />} />
               <Route path="/payment" element={<PaymentMethodPage />} />
+              {/* admin routes */}
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <AdminRoute>
+                    <DashboardPage />
+                  </AdminRoute>
+                }
+              />
               <Route path="/placeorder" element={<PlaceOrderPage />} />
-              <Route path="/orderhistory" element={<OrderHistoryPage />} />
-              <Route path="/order/:id" element={<OrderPage />} />
+              <Route
+                path="/orderhistory"
+                element={
+                  <ProtectedRoute>
+                    <OrderHistoryPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/order/:id"
+                element={
+                  <ProtectedRoute>
+                    <OrderPage />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </Container>
         </main>

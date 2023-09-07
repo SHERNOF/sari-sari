@@ -1841,7 +1841,7 @@ H. Finish off the <CartPage /> and add the followng functionalities
                 try{
                     const {data} = await axios.get(`/api/products/categories`,
                     setCategories(data)
-                    ) 
+                    )
                 }catch(err){
                     ctxDispatch(setSnackbar(true, 'error', getError(err)))
                 }
@@ -1877,7 +1877,7 @@ H. Finish off the <CartPage /> and add the followng functionalities
                     value: '201-100'
                 }
             ]
-        
+
         - define the ratigs reference
 
             export const ratings = [
@@ -1901,7 +1901,7 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
         - implement the <SearchPage /> in <App />
 
-        - implement the api for 
+        - implement the api for
         `/api/products/search?page=${page}&query=${query}&category=${category}&price=${price}&rating=${rating}&order=${order}` in productRouter.js
 
         - encounterd an error of "react-dom.development.js:86 Warning: validateDOMNesting(...): <form> cannot appear as a descendant of <form>." because of the <form> and <Paper component='form'> declaration
@@ -1913,6 +1913,43 @@ H. Finish off the <CartPage /> and add the followng functionalities
         9f1. show filters
         9f2. create api for earching products
         9f3. display results
+
+        - learnt here the pagination and sorting data
+
+10. Admin Area - expected to learn hopw to upload photos to online services, create and edit a post. Some advance features like the dashboard etc. Expectation as follows:
+
+    10a. Create <AdminPage/> >>> create a protected route
+    10b. Create the <Dashboard /> >>> aggregation, dashboard creation, math functions
+    10c. Manage Products
+    10d. Create product
+    10e. Create <ProductEditPage />
+    10f. Implement update product
+    10g. Upload product image >>> SW3 functions, upload photos and videos in remote sites
+    10h. Delete Product - deleting data in mongoDb
+    10i. List orders -
+    10j. Deliver order - order handling
+    10k. Delete order
+    10l. List users
+    10m. Edit users
+    10n. Delete users
+
+    10a. Create <AdminPage/>
+
+        10a1. Create admin menu in the header
+            - Define protected route component in frontend/components/<ProtectedRoute />
+                - to implement in <App />, use and wrap the <Profile />, <OrderPage /> and <OrderHistoryPage /> inside <ProtectedRoute /> because this is the component that will require authentication
+
+                <Routepath="/profile"element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}/>
+
+            - define admin route component
+                - similar to<ProtectedRoute />, this will have an extra check if the userInfo is .isAdmin then it can have its Admin Pages like Dashboard, Product, Order and Users Lists
+
+                - Implement in <App /> like how the <ProtectedRoute /> was used. Initially create the <DashboardPage /> for testing. IMplement it after the <PaymentMethodPage />
+
+
+            - add menu for admin in header
+
+                - after the Sign In line in the <App />
 
 -
 -
