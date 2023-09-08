@@ -22,6 +22,7 @@ import ProfilePage from "./pages/ProfilePage";
 import MenuIcon from "@mui/icons-material/Menu";
 import { IconButton } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import {
   Divider,
   Drawer,
@@ -117,9 +118,9 @@ function App() {
                       )}
                       color="primary"
                     >
-                      <h3 style={{ color: "white", marginRight: "1rem" }}>
-                        cart
-                      </h3>
+                      <ShoppingCartIcon
+                        sx={{ color: "white" }}
+                      ></ShoppingCartIcon>
                     </Badge>
                   </Stack>
                 )}

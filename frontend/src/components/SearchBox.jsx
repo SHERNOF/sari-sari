@@ -14,26 +14,24 @@ export default function SearchBox() {
     navigate(query ? `/search/?query=${query}` : "/search");
   };
   return (
-    
-      <Paper
-        component="form"
-        sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 200 }}
-        onSubmit={submitHandler}
-      >
-        <InputBase
-          sx={{ ml: 1, flex: 1 }}
-          placeholder="Search..."
-          inputProps={{ "aria-label": "search google maps" }}
-          onChange={(e) => e.target.value}
-          type="text"
-          name="query"
-          id="query"
-        />
-        <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-        <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
-          <SearchIcon />
-        </IconButton>
-      </Paper>
-    
+    <Paper
+      component="form"
+      sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 250 }}
+      onSubmit={submitHandler}
+    >
+      <InputBase
+        sx={{ ml: 1, flex: 1 }}
+        placeholder="Search..."
+        inputProps={{ "aria-label": "search google maps" }}
+        onChange={(e) => e.target.value}
+        type="text"
+        name="query"
+        id="query"
+      />
+      <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+      <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+        <SearchIcon />
+      </IconButton>
+    </Paper>
   );
 }

@@ -4,6 +4,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
 import { Link } from "react-router-dom";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import IconButton from "@mui/material/IconButton";
 
 export default function Admin() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -17,16 +19,18 @@ export default function Admin() {
 
   return (
     <div>
-      <Button
+      <IconButton
         id="fade-button"
         aria-controls={open ? "fade-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
+        size="large"
+        aria-label="account of current user"
         sx={{ color: "white" }}
       >
-        Admin
-      </Button>
+        <AccountCircle />
+      </IconButton>
       <Menu
         id="fade-menu"
         MenuListProps={{
@@ -36,6 +40,7 @@ export default function Admin() {
         open={open}
         onClose={handleClose}
         TransitionComponent={Fade}
+        style={{ width: "15ch" }}
       >
         <MenuItem value={"Dashboard"}>
           <Link to="/admin/dashboard" style={{ fontSize: ".7em" }}>

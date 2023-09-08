@@ -41,19 +41,25 @@ export default function LongMenu() {
         PaperProps={{
           style: {
             maxHeight: ITEM_HEIGHT * 4.5,
-            width: "20ch",
+            width: "15ch",
           },
         }}
       >
         <MenuItem value={"Dashboard"}>
-          <Link to="/profile">User Profile</Link>
+          <Link style={{ fontSize: ".7em" }} to="/profile">
+            User Profile
+          </Link>
         </MenuItem>
         <MenuItem value={"Products"}>
-          <Link to="/orderhistory">Order History</Link>
+          <Link style={{ fontSize: ".7em" }} to="/orderhistory">
+            Order History
+          </Link>
         </MenuItem>
         <Divider></Divider>
         <MenuItem value={"Products"}>
-          <Link to="/signout">Sign Out</Link>
+          <Link style={{ fontSize: ".7em" }} to="/signout">
+            Sign Out
+          </Link>
         </MenuItem>
       </Menu>
     </div>
