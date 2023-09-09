@@ -5,6 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Link } from "react-router-dom";
 import { Divider } from "@mui/material";
+import { Store } from "../store";
 
 const ITEM_HEIGHT = 48;
 
@@ -16,6 +17,16 @@ export default function LongMenu() {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const { state, dispatch: ctxDispatch } = React.useContext(Store);
+  const { userInfo } = state;
+
+  const signOutHandler = () => {
+    ctxDispatch({ type: "USER_SIGNOUT" });
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("shippingAddress");
+    localStorage.removeItem("paymentMethod");
+    window.location.href = "/signin";
   };
 
   return (
@@ -45,19 +56,23 @@ export default function LongMenu() {
           },
         }}
       >
-        <MenuItem value={"Dashboard"}>
+        <MenuItem>
           <Link style={{ fontSize: ".7em" }} to="/profile">
             User Profile
           </Link>
         </MenuItem>
-        <MenuItem value={"Products"}>
+        <MenuItem>
           <Link style={{ fontSize: ".7em" }} to="/orderhistory">
             Order History
           </Link>
         </MenuItem>
         <Divider></Divider>
-        <MenuItem value={"Products"}>
-          <Link style={{ fontSize: ".7em" }} to="/signout">
+        <MenuItem>
+          <Link
+            style={{ fontSize: ".7em" }}
+            to="#signout"
+            onClick={signOutHandler}
+          >
             Sign Out
           </Link>
         </MenuItem>

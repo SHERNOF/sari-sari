@@ -60,7 +60,6 @@ li {
 }
 .small-container {
   max-width: 600px;
-  border: 1px solid red;
   align-self: center;
 }
 .checkout-steps {

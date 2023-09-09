@@ -90,13 +90,9 @@ function App() {
                   ...(sideBarIsOpen && { display: "none" }),
                 }}
               >
-                <MenuIcon
-                  className="custom-icon"
-                  style={{ color: "white", marginLeft: "1rem" }}
-                />
+                <MenuIcon className="custom-icon" style={{ color: "white" }} />
               </IconButton>
               <Link to="/">
-                {/* sari-sari */}
                 <h1 className="store">sari-sari</h1>
               </Link>
               <SearchBox onChange={(e) => e.target.value}></SearchBox>
@@ -125,7 +121,6 @@ function App() {
                   </Stack>
                 )}
               </Link>
-
               {userInfo && userInfo.isAdmin && <Admin />}
               {userInfo ? <Dropdown /> : <Link to="/signin">Sign In</Link>}
             </div>

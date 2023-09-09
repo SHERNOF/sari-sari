@@ -1951,6 +1951,99 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
                 - after the Sign In line in the <App />
 
+    10b. Create the <Dashboard /> >>> aggregation, dashboard creation, math functions
+
+        - create the dashboard ui
+                - Create a reducer to fetch dashboard data from BE
+                - const reducer = (state, action) => {
+                    switch (action.type) {
+                        case "FETCH_REQUEST":
+                        return { ...state, loading: true };
+                        case "FETCH_SUCCESS":
+                        return { ...state, loading: false, summary: action.payload };
+                        case "FETCH_FAIL":
+                        return { ...state, loading: false, error: action.payload };
+
+                        default:
+                        return state;
+                    }
+                    };
+
+                - get the userInfo by
+                    - const { state } = useContext(Store)
+                    - const { userInfo } = state
+                    - needed here is the userInfo token to authentication the request to get the dashboard data
+
+                - Send the dashboard data from BE by useEffect
+
+                    useEffect(() => {
+                        const fetchData = async () => {
+                        try {
+                            const { data } = await axios.get("/api/orders/summary", {
+                            header: { Authorization: `Bearer ${userInfo.token}` },
+                            });
+                            dispatch({ type: "FETCH_SUCCESS", payload: data });
+                        } catch (err) {
+                            dispatch({ type: "FETCH_FAIL", error: getError(err) });
+                        }
+                        };
+                        fetchData();
+                    }, [userInfo]);
+
+            - return the data to BE
+
+                - create 3 cards to show the number of users registered in the site, total sales and number of orders
+
+            Implement the BE for "/api/orders/summary" api  in orderRoute.js
+
+                - define the isAdmin in utils.js
+                    export const isAdmin = (req, res, next) => {
+                        if (req.user && req.user.isAdmin) { <<< this means that its requiring an Admin account to be able to access this api>>>
+                            next();
+                        } else {
+                            res.status(401).send({ message: "Invalid Admin Token" }); << this means t
+                        }
+                        };
+                - use isAdmin in the orderRouter.js
+
+                - use aggregate function on the Order Model to get the total price and number of orders (https://www.mongodb.com/docs/manual/aggregation/)
+                    - aggregate function accepts an array as a parameter
+
+                    orderRouter.get(
+                    "/summary",
+                    isAuth,
+                    isAdmin,
+                    expressAsyncHandler(async (req, res) => {
+                        const orders = await Order.aggregate([
+                        {
+                            $group: { <<group any document without the id thus null>>
+                            _id: null,
+                            numOrders: { $sum: 1 }, <<$sum: 1, counts the number of documents in the order collection>>
+                            totalSales: { $sum: '$totalPrice' }, << what it does is to calculate the total price in the Order Model>>
+                            },
+                        },
+                        ]);
+                        const users = await User.aggregate([
+                        {
+                            $group: {
+                            _id: null,
+                            numOrders: { $sum: 1 },
+                            },
+                        },
+                        ]);
+                        res.send(orders, users);
+                    })
+                    );
+
+
+
+
+
+
+
+        - implement backend api
+        - connect ui to backend
+
 -
 -
 -
