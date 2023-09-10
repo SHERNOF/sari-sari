@@ -130,6 +130,22 @@ li {
   color: inherit;
   width: 100%;
 }
+.paginationHolder {
+  margin-top: 1rem;
+}
+.paginationHolder:first-child {
+  margin-left: 0;
+}
+.btn {
+  border: 1px solid rgba(1, 1, 1, 0.2);
+  border-radius: 2px;
+  margin: 0.1rem;
+  padding: 0.5rem;
+  font-size: 0.8em;
+}
+.btn.bold {
+  font-weight: bold;
+}
 
 @media (max-width: 768px) {
   h1 {

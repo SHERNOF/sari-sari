@@ -48,17 +48,17 @@ export default function Admin() {
           </Link>
         </MenuItem>
         <MenuItem value={"Products"}>
-          <Link to="/admin/productlist" style={{ fontSize: ".7em" }}>
+          <Link to="/admin/products" style={{ fontSize: ".7em" }}>
             Products
           </Link>
         </MenuItem>
         <MenuItem value={"Order List"}>
-          <Link to="/admin/orderlist" style={{ fontSize: ".7em" }}>
+          <Link to="/admin/orders" style={{ fontSize: ".7em" }}>
             Order List
           </Link>
         </MenuItem>
         <MenuItem value={"User List"}>
-          <Link style={{ fontSize: ".7em" }} to="/admin/userlist">
+          <Link style={{ fontSize: ".7em" }} to="/admin/users">
             Users
           </Link>
         </MenuItem>

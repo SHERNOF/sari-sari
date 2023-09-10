@@ -8,19 +8,8 @@ import { Store } from "../store";
 import { getError } from "../utils";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
+import Chart from "react-google-charts";
 
-// const reducer = (state, action) => {
-//   switch (action.type) {
-//     case "FETCH_REQUEST":
-//       return { ...state, loading: true };
-//     case "FETCH_SUCCESS":
-//       return { ...state, summary: action.payload, loading: false };
-//     case "FETCH_FAIL":
-//       return { ...state, loading: false, error: action.payload };
-//     default:
-//       return state;
-//   }
-// };
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -99,6 +88,7 @@ export default function DashboardPage() {
               <Card>
                 <CardHeader title="Total Sales" />
                 <CardContent>
+                  ${" "}
                   {summary.orders && summary.users[0]
                     ? summary.orders[0].totalSales.toFixed(2)
                     : 0}
@@ -106,6 +96,41 @@ export default function DashboardPage() {
               </Card>
             </Grid>
           </Grid>
+          <div>
+            <h2>Sales</h2>
+            {summary.dailyOrders.length === 0 ? (
+              <MessageBox>No Sale</MessageBox>
+            ) : (
+              <Chart
+                width="100%"
+                height="400px"
+                chartType="AreaChart"
+                loader={<div>Loading Chart...</div>}
+                data={[
+                  ["Date", "Sales"],
+                  ...summary.dailyOrders.map((x) => [x._id, x.sales]),
+                ]}
+              ></Chart>
+            )}
+          </div>
+
+          <div>
+            <h2>Categories</h2>
+            {summary.productCategories.length === 0 ? (
+              <MessageBox>No Category</MessageBox>
+            ) : (
+              <Chart
+                width="100%"
+                height="400px"
+                chartType="PieChart"
+                loader={<div>Loading Chart...</div>}
+                data={[
+                  ["Category", "Products"],
+                  ...summary.productCategories.map((x) => [x._id, x.count]),
+                ]}
+              ></Chart>
+            )}
+          </div>
         </>
       )}
     </div>

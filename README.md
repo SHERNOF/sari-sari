@@ -2035,14 +2035,438 @@ H. Finish off the <CartPage /> and add the followng functionalities
                     })
                     );
 
+                - encountered a problem here reading(users) because of the wrong spelling of { loading }, it was spelled as laoding
+
+            - create dashboard chart using react google charts
+
+                 <div>
+                    <h2>Sales</h2>
+                    {summary.dailyOrders.length === 0 ? (
+                    <MessageBox>No Sale</MessageBox>
+                    ) : (
+                    <Chart
+                        width="100%"
+                        height="400px"
+                        chartType="AreaChart"
+                        loader={<div>Loading Chart...</div>}
+                        data={[
+                        ["Date", "Sales"],
+                        ...summary.dailyOrders.map((x) => [x._id, x.sales]),
+                        ]}
+                    ></Chart>
+                    )}
+                </div>
+
+                - implem,ent the aggreagation fior dailyOrders in orderRoute.js. here use also the $group pipeline and need to group the data base on the date of the order
+
+                -  const dailyOrders = await Order.aggregate([
+                    {
+                        $group: {
+                        _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, <<this will enable to get the order per date>>
+                        orders: { $sum: 1 },
+                        sales: { $sum: "$totalPrice" },
+                        },
+                    },
+                    { $sort: { _id: 1 } },
+                    ]);
+
+                - duplicate the chart code for the categories
+
+                         <div>
+                            <h2>Categories</h2>
+                            {summary.productCategories.length === 0 ? (
+                            <MessageBox>No Category</MessageBox>
+                            ) : (
+                            <Chart
+                                width="100%"
+                                height="400px"
+                                chartType="PieChart"
+                                loader={<div>Loading Chart...</div>}
+                                data={[
+                                ["Category", "Products"],
+                                ...summary.productCategories.map((x) => [x._id, x.count]),
+                                ]}
+                            ></Chart>
+                            )}
+                        </div>
+
+    10c. Manage Products - this will list the products for admin when Products link is press and paginate the products page
+
+        10c1. create <ProductListPage />
+            - define the reducer
+
+            - const reducer = (state, action) => {
+                switch (action.type) {
+                    case "FETCH_REQUEST":
+                    return { ...state, loading: true };
+                    case "FETCH_SUCCESS":
+                    return {
+                        ...state,
+                        products: action.payload.products,
+                        page: action.payload.page,
+                        pages: action.payload.pages,
+                        loading: false,
+                    };
+                    case "FETCH_FAIL":
+                    return { ...state, loading: false, error: action.payload };
+                    default:
+                    return state;
+                }
+                };
+                const [{ loading, error, page, pages }, dispatch] = useReducer(reducer, {loading: true,, error:''});
+
+            - get the data feom BE by useEffect
+
+                    useEffect(() => {
+                        const fetchData = async () => {
+                        try {
+                            const { data } = await axios.get(`/api/products/admin?page=${page}`, {
+                            headers: { Authorization: `Bearer ${userInfo.token}` },
+                            });
+                            dispatch({ type: "FETCH_SUCCESS", payload: data });
+                        } catch (err) {
+                            dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+                        }
+                        };
+                        fetchData();
+                    }, [page, userInfo]);
+
+                - get the ${page} from the url by using the useLocation of reacr-router-dom =
+                    const { search, pathname } = useLocation();
+                    const sp = new URLSearchParams(search);
+                    const page = sp.get("page") || 1;
+
+
+            - design the FE
+
+
+            - implement the route in productROuter.js
+
+                productRouter.get(
+                "/admin",
+                isAuth,
+                isAdmin,
+                expressAsyncHandler(async (req, res) => {
+                    const { query } = req;
+                    const page = query.page || 1;
+                    const pageSize = query.pageSize || PAGE_SIZE;
+
+                    const products = await Product.find()
+                    .skip(pageSize * (page - 1))
+                    .limit(pageSize);
+                    const countProducts = await Product.countDocuments();
+                    res.send({
+                    products,
+                    countProducts,
+                    page,
+                    pages: Math.ceil(countProducts / pageSize),
+                    });
+                })
+                );
+
+        - Implement the page in <App />
+
+                <Route
+                    path="/admin/products"
+                    element={
+                    <AdminRoute>
+                        <ProductListPage />
+                    </AdminRoute>
+                    }
+                />
+
+    10d. Create Product - in the <ProductListPage />, there will be a new vreate product button
+
+        10d1. implement backend api
+            - create a post request in the productRouter.js
+            - productRouter.post(
+                "/",
+                isAuth,
+                isAdmin,
+                expressAsyncHandler(async (req, res) => {
+                    const newProduct = new Product({
+                    name: "sample name " + Date.now(),
+                    desc: "sample name-" + Date.now(),
+                    image: "/images/p1.jpg",
+                    price: 0,
+                    category: "sample category",
+                    brand: "sample brand",
+                    countInStock: 0,
+                    rating: 0,
+                    numReviews: 0,
+                    description: "sample description",
+                    });
+                    const product = await product.save(); << this saves the new product to database >>
+                    res.send({ message: 'Product Created', product }) << this send the product to FE >>
+                })
+                );
+
+        10d2. Create product button
+
+            - in <ProductListPage /> create the button
+            - create the createHandler
+
+        10d3. handle onClick - to create product
+              const createHandler = async () => {
+                    if (window.confirm("Are you sure you want to create?")) {
+                    try {
+                        dispatch({ type: "CREATE_REQUEST " });
+                        const { data } = await axios.post(
+                        "/api/products",
+                        {},
+                        { headers: { Authorization: `Bearer ${userInfo.token}` } }
+                        );
+                        ctxDispatch(
+                        setSnackbar(true, "success", "Product Created Successfully")
+                        );
+                        dispatch({ type: "CREATE_SUCCESS" });
+                        navigate(`/admin/product/${data.product._id}`);
+                    } catch (err) {
+                        ctxDispatch(setSnackbar(true, "error", getError(err)));
+                        dispatch({ type: "CREATE_FAIL" });
+                    }
+                    }
+                };
+
+            - there is an issue here and for future improvement, the create button is automatically creating a default component and will require the user to edit it. it shoulkd be a form to open when the button is click and then the user will just fill up the information about the product
+
+    10e. Create Produce Edit Screen - create an edit button to all the listed products. the user will be re-directed to a new page to edit the product. this is a good practice to edit a post
+
+        10e1. create edit button
+        10e2. create edit product ui
+            - create the <ProductEditPage />
+            - get the userInfo to authenticate the user and be able to edit the product
+                const { state } = useContext(Store);
+                const { userInfo } = state;
+
+            - create the reducer thast will handle the fetchData
+
+                const reducer = (state, action) => {
+                    switch (action.type) {
+                        case "FETCH_REQUEST":
+                        return { ...state, loading: true };
+                        case "FETCH_SUCCESS":
+                        return { ...state, loading: false };
+                        case "FETCH_FAIL":
+                        return { ...state, loading: false, error: action.payload };
+                        default:
+                        return state;
+                    }
+                    };
+
+                const [{ loading, error }, dispatch] = useReducer(reducer, {
+                    loading: true,
+                    error: "",
+                });
+
+            - define the variables by using useState
+                const [name, setName] = useState('');
+                const [desc, setDesc] = useState('');
+                const [price, setPrice] = useState('');
+                const [image, setImage] = useState('');
+                const [category, setCategory] = useState('');
+                const [countInStock, setCountInStock] = useState('');
+                const [brand, setBrand] = useState('');
+                const [detailedDescription, setDetailedDescription] = useState('');
+
+            - fetchData from Be by useEffect
+
+                useEffect(() => {
+                    const fetchData = async (req, res) => {
+                    try {
+                        dispatch({ type: "FETCH_REUQEST" });
+                        const { data } = await axios.get(`/api/products/${productId}`); <productId need to be captured from the url by const params = useParams(); deconstruct id from params const { id: productId } =  params>
+                        <then send it to the FE>
+                              setName(data.name);
+                            setDesc(data.desc);
+                            setPrice(data.price);
+                            setImage(data.image);
+                            setCategory(data.category);
+                            setCountInStock(data.countInStock);
+                            setBrand(data.brand);
+                            setdetailedDescription(data.detailedDescription);
+                            dispatch({ type: "FETCH_SUCCESS" });
+
+                    } catch (err) {
+                        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+                    }
+                    };
+                    fetchData();
+                }, [productId]);
+
+
+
+        10e3. display product info in the input box
+
+            - create the UI
+            - add the Edit Button in the <ProductListPage />
+            - then implement in <App/>
+
+    10F. Implement Update Product - this will give the feature to the Update button (submitHandler) in the <ProductEditPage />
+
+        - create the submitHandler
+          const submitHandler = async (e) => {
+                e.preventDefault();
+                try {
+                await axios.put(
+                    `/api/products/${productId}`,
+                    {
+                    _id: productId,
+                    name,
+                    desc,
+                    price,
+                    image,
+                    category,
+                    brand,
+                    countInStock,
+                    detailedDescription,
+                    },
+                    {
+                    headers: { Authorization: `Bearer ${userInfo.token}` },
+                    }
+                );
+                dispatch({ type: "UPDATE_REQUEST" });
+                } catch (err) {
+                ctxDispatch(setSnackbar(true, "error", getError(err)));
+                dispatch({ type: "UPDATE_FAIL" });
+                }
+            };
+        -   create the reducer
+                case 'UPDATE_REQUEST':
+                return { ...state, loadingUpdate: true };
+                case 'UPDATE_SUCCESS':
+                return { ...state, loadingUpdate: false };
+                case 'UPDATE_FAIL':
+                return { ...state, loadingUpdate: false };
+
+        - implement the BE route in the productRouter.js
+
+            productRouter.put(
+                '/:id',
+                isAuth,
+                isAdmin,
+                expressAsyncHandler(async (req, res) => {
+                    const productId = req.params.id;
+                    const product = await Product.findById(productId);
+                    if (product) {
+                    product.name = req.body.name;
+                    product.slug = req.body.slug;
+                    product.price = req.body.price;
+                    product.image = req.body.image;
+                    product.category = req.body.category;
+                    product.brand = req.body.brand;
+                    product.countInStock = req.body.countInStock;
+                    product.description = req.body.description;
+                    await product.save();
+                    res.send({ message: 'Product Updated' });
+                    } else {
+                    res.status(404).send({ message: 'Product Not Found' });
+                    }
+                })
+                );
+
+            - use the loadingUpdate from the reducer in the <ProductEditPage /> to conditionally load the <Loading />. implement after the update button
+
+    10g. Uploading Image - the most awaited section. The file will be uploaded to cloudinary
+
+        10g1. create cloudinary account (https://cloudinary.com/)
+            - in dashboard, click the copy in the app name box then paste it in BE .env
+                - CLOUDINARY_CLOUD_NAME=
+                - copy also the CLOUDINARY_API_KEY
+                - CLOUDINARY_URL
+                - CLOUDINARY_SECRET
+
+            - IMPLEMENT THE UPLOAD BUTTON
+                - npm i cloudinary in BE
+                - create the uploadRoutes.js
+                    import express from 'express';
+                        import multer from 'multer'; < package to handle file upload to server >
+                        import { v2 as cloudinary } from 'cloudinary';
+                        import streamifier from 'streamifier'; < use to streasm files from the server >
+                        import { isAdmin, isAuth } from '../utils.js';
+
+                        const upload = multer();
+
+                        const uploadRouter = express.Router();
+
+                        uploadRouter.post(
+                        '/',
+                        isAuth,
+                        isAdmin,
+                        upload.single('file'), <from multer>
+                        async (req, res) => {
+                            cloudinary.config({
+                            cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+                            api_key: process.env.CLOUDINARY_API_KEY,
+                            api_secret: process.env.CLOUDINARY_API_SECRET,
+                            });
+                            const streamUpload = (req) => {
+                            return new Promise((resolve, reject) => {
+                                const stream = cloudinary.uploader.upload_stream((error, result) => {
+                                if (result) {
+                                    resolve(result);
+                                } else {
+                                    reject(error);
+                                }
+                                });
+                                streamifier.createReadStream(req.file.buffer).pipe(stream);
+                            });
+                            };
+                            const result = await streamUpload(req);
+                            res.send(result);
+                        }
+                        );
+                        export default uploadRouter;
+
+                - define the reducer in the <ProductEditPage />
+                     case "UPLOAD_REQUEST":
+                    return { ...state, loadingUpload: true };
+                    case "UPLOAD_SUCCESS":
+                    return { ...state, loadingUpload: false, errorUpload: "" };
+                    case "UPLOAD_FAIL":
+                    return { ...state, loadingUpload: false, errorUpload: action.payload };
+
+                    - use the loadingUpload to conditionally load the <Loading />
+
+                    - create another field in <ProductEditPage /> for the file upload
+                    - create the uploadFileHandler
+
+                    const uploadFileHandler = async (e) => {
+                        const file = e.target.files[0];
+                        const bodyFormData = new FormData();
+                        bodyFormData.append("file", file);
+                        try {
+                        dispatch({ type: "UPLOAD_REQUEST" });
+                        const { data } = await axios.post("/api/upload", bodyFormData, {
+                            headers: {
+                            "Content-Type": "multipart/form-data",
+                            authorization: `Bearer ${userInfo.token}`,
+                            },
+                        });
+                        dispatch({ type: "UPLOAD_SUCCESS" });
+                        ctxDispatch(setSnackbar(true, "success", "Image uploaded successfully"));
+                        setImage(data.secure_url);
+                        } catch (err) {
+                        ctxDispatch(setSnackbar(true, "error", getError(err)));
+                        dispatch({ type: "UPLOAD_FAIL", payload: getError(err) });
+                        }
+                    };
+
+            - use the uploadRouter.js in the server.js
+                - app.use("/api/upload", uploadRouter);
+
+                - encountered error uploading file, it's looking for an API Key
+                - imported the following to uploadRouter.js
+
+                    import dotenv from "dotenv";
+                    dotenv.config();
 
 
 
 
-
-
-        - implement backend api
-        - connect ui to backend
+        10g2. use the api in .env
+        10g3. handle upload file
+        10g4. implemet BE api to upload
 
 -
 -

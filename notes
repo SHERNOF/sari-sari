@@ -28,3 +28,11 @@ Libraries methods used
 15. use of heroku to connect the frontend, backend and the databse.
 16. Render
 17. use of render
+18. use of aggregation function to compute data from mongoDb https://www.mongodb.com/docs/manual/aggregation/
+19. React google charts
+
+20. npm install --save react-google-charts
+21. https://www.react-google-charts.com/
+22. cloudinary to upload image files (https://cloudinary.com/) - npm i cloudinary in the backend
+23. npm i streamifier in be
+24. npm i multer - is a package to handle file uploading to server
