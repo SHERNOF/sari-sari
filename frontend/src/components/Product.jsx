@@ -36,7 +36,9 @@ export default function Product({ product }) {
         <CardContent className="product">
           <CardMedia>
             <Link to={`/product/${product.desc}`}>
-              <img src={product.image} alt={product.name} />
+              <div style={{height:'300px'}}>
+              <img src={product.image} alt={product.name} style={{minHeight:'100%'}} />
+              </div>
             </Link>
           </CardMedia>
           <CardContent className="product-info">
