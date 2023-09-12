@@ -2,7 +2,7 @@ import { createContext, useReducer } from "react";
 
 export const Store = createContext();
 const initialState = {
-  sidebarIsOpen: false,
+  sideBarIsOpen: false,
   snackbarOpen: false,
   snackbarType: "info",
   snackbarMessage: "",
@@ -88,17 +88,19 @@ function reducer(state, action) {
     case "CART_CLEAR":
       return { ...state, cart: { ...state.cart, cartItems: [] } };
 
-    case "SIDEBAR":
-      // const { sidebarIsOpen } = action;
-      return { sidebarIsOpen: (state.sidebarIsOpen = false) };
-
-    case "SIDEBAR_HANDLER":
-      return { sidebarIsOpen: (state.sidebarIsOpen = true) };
+    case "SET_SIDEBAR":
+      const { sideBarIsOpen } = action;
+      return { ...state, sideBarIsOpen };
 
     default:
       return state;
   }
 }
+
+export const setSideBarIsOpen = (sideBarIsOpen) => ({
+  type: "SET_SIDEBAR",
+  sideBarIsOpen,
+});
 
 export const setSnackbar = (
   snackbarOpen,

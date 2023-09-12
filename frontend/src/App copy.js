@@ -6,7 +6,7 @@ import ProductPage from "./pages/ProductPage";
 import Header from "./components/Header.jsx";
 import Box from "@mui/material/Box";
 import Badge from "@mui/material/Badge";
-import { Store, setSnackbar, setSideBarIsOpen } from "./store";
+import { Store, setSnackbar } from "./store";
 import Stack from "@mui/material/Stack";
 import CartPage from "./pages/CartPage";
 import SignInPage from "./pages/SignInPage";
@@ -46,9 +46,9 @@ import HideAppBar from "./components/Header.jsx";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { cart, userInfo, sideBarIsOpen } = state;
+  const { cart, userInfo } = state;
   const [categories, setCategories] = useState([]);
-  // const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
+  const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -61,7 +61,6 @@ function App() {
     };
     fetchCategories();
   }, []);
-  console.log(typeof setSideBarIsOpen);
 
   return (
     <BrowserRouter>
@@ -72,6 +71,65 @@ function App() {
       >
         <SnackBar />
         <HideAppBar></HideAppBar>
+        {/* <header>
+          <Container
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <IconButton
+                aria-label="open drawer"
+                onClick={() => setSideBarIsOpen(true)}
+                edge="end"
+                sx={{
+                  marginRight: 1,
+                  ...(sideBarIsOpen && { display: "none" }),
+                }}
+              >
+                <MenuIcon className="custom-icon" style={{ color: "white" }} />
+              </IconButton>
+              <Link to="/">
+                <h1 className="store">sari-sari</h1>
+              </Link>
+              <SearchBox onChange={(e) => e.target.value}></SearchBox>
+            </div>
+            <div
+              style={{
+                marginLeft: "2rem",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Link to="/cart" style={{ marginLeft: "2rem" }}>
+                {cart.cartItems.length > 0 && (
+                  <Stack>
+                    <Badge
+                      badgeContent={cart.cartItems.reduce(
+                        (a, c) => a + c.quantity,
+                        0
+                      )}
+                      color="primary"
+                    >
+                      <ShoppingCartIcon
+                        sx={{ color: "white" }}
+                      ></ShoppingCartIcon>
+                    </Badge>
+                  </Stack>
+                )}
+              </Link>
+              {userInfo && userInfo.isAdmin && <Admin />}
+              {userInfo ? <Dropdown /> : <Link to="/signin">Sign In</Link>}
+            </div>
+          </Container>
+        </header> */}
         <Drawer
           sx={{
             flexShrink: 0,
@@ -84,8 +142,7 @@ function App() {
           open={sideBarIsOpen}
         >
           <div
-            // onClick={() => setSideBarIsOpen(false)}
-            onClick={() => ctxDispatch(setSideBarIsOpen(false))}
+            onClick={() => setSideBarIsOpen(false)}
             style={{
               display: "flex",
               justifyContent: "space-between",
@@ -103,8 +160,7 @@ function App() {
                 <ListItemButton>
                   <Link
                     to={`/search?category=${category}`}
-                    // onClick={() => setSideBarIsOpen(false)}
-                    onClick={() => ctxDispatch(setSideBarIsOpen(false))}
+                    onClick={() => setSideBarIsOpen(false)}
                   ></Link>
                   <ListItemText primary={category}></ListItemText>
                 </ListItemButton>
@@ -113,7 +169,7 @@ function App() {
           </List>
         </Drawer>
         <div />
-        <main style={{ marginTop: "2rem" }}>
+        <main>
           <Container>
             <Routes>
               <Route path="/" element={<Home />} />

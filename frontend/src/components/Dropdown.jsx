@@ -4,7 +4,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Link } from "react-router-dom";
-import { Divider } from "@mui/material";
+import { Divider, Tooltip } from "@mui/material";
 import { Store } from "../store";
 
 const ITEM_HEIGHT = 48;
@@ -31,16 +31,18 @@ export default function LongMenu() {
 
   return (
     <div>
-      <IconButton
-        aria-label="more"
-        id="long-button"
-        aria-controls={open ? "long-menu" : undefined}
-        aria-expanded={open ? "true" : undefined}
-        aria-haspopup="true"
-        onClick={handleClick}
-      >
-        <MoreVertIcon sx={{ color: "white" }} />
-      </IconButton>
+      <Tooltip title="Account settings">
+        <IconButton
+          aria-label="more"
+          id="long-button"
+          aria-controls={open ? "long-menu" : undefined}
+          aria-expanded={open ? "true" : undefined}
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          <MoreVertIcon sx={{ color: "white" }} />
+        </IconButton>
+      </Tooltip>
       <Menu
         id="long-menu"
         MenuListProps={{

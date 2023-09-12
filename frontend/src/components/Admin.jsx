@@ -6,8 +6,13 @@ import Fade from "@mui/material/Fade";
 import { Link } from "react-router-dom";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import IconButton from "@mui/material/IconButton";
+import { Avatar, Tooltip } from "@mui/material";
+import { Store } from "../store";
 
 export default function Admin() {
+  const { state, dispatch: ctxDispatch } = React.useContext(Store);
+  const { userInfo } = state;
+  console.log(userInfo.name);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -19,7 +24,7 @@ export default function Admin() {
 
   return (
     <div>
-      <IconButton
+      {/* <IconButton
         id="fade-button"
         aria-controls={open ? "fade-menu" : undefined}
         aria-haspopup="true"
@@ -30,7 +35,22 @@ export default function Admin() {
         sx={{ color: "white" }}
       >
         <AccountCircle />
-      </IconButton>
+      </IconButton> */}
+      <Tooltip title="Account info">
+        <IconButton
+          onClick={handleClick}
+          size="small"
+          sx={{ ml: 2 }}
+          aria-controls={open ? "account-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+        >
+          <Avatar sx={{ width: 32, height: 32, fontSize: ".8em" }}>
+            {userInfo.name.charAt(0)}
+          </Avatar>
+        </IconButton>
+      </Tooltip>
+
       <Menu
         id="fade-menu"
         MenuListProps={{

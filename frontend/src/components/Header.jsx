@@ -2,12 +2,18 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import CssBaseline from "@mui/material/CssBaseline";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Slide from "@mui/material/Slide";
+import { Badge, IconButton } from "@mui/material";
+import { Link } from "react-router-dom";
+import SearchBox from "./SearchBox";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Stack } from "@mui/system";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { setSideBarIsOpen, Store } from "../store";
+import Admin from "../components/Admin";
+import Dropdown from "../components/Dropdown";
 
 function Header(props) {
   const { children, window } = props;
@@ -35,12 +41,73 @@ Header.propTypes = {
 };
 
 export default function HideAppBar(props) {
+  // const [sideBarIsOpen, setSideBarIsOpen] = React.useState(false);
+  const { state, dispatch: ctxDispatch } = React.useContext(Store);
+  const { cart, userInfo, sideBarIsOpen } = state;
   return (
-    <React.Fragment sx={{ marginBottom: "5rem" }}>
-      {/* <CssBaseline /> */}
+    <React.Fragment>
       <Header {...props}>
-        <AppBar>
-          <Toolbar>{props.children}</Toolbar>
+        <AppBar sx={{ background: "#404040" }}>
+          {/* <Toolbar>{props.children}</Toolbar> */}
+          <Container
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <IconButton
+                aria-label="open drawer"
+                // onClick={() => setSideBarIsOpen(true)}
+                onClick={() => ctxDispatch(setSideBarIsOpen(true))}
+                edge="end"
+                sx={{
+                  marginRight: 1,
+                  ...(sideBarIsOpen && { display: "none" }),
+                }}
+              >
+                <MenuIcon className="custom-icon" style={{ color: "white" }} />
+              </IconButton>
+              <Link to="/">
+                <h1 className="store">sari-sari</h1>
+              </Link>
+              <SearchBox onChange={(e) => e.target.value}></SearchBox>
+            </div>
+
+            <div
+              style={{
+                marginLeft: "2rem",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Link to="/cart" style={{ marginLeft: "2rem" }}>
+                {cart.cartItems.length > 0 && (
+                  <Stack>
+                    <Badge
+                      badgeContent={cart.cartItems.reduce(
+                        (a, c) => a + c.quantity,
+                        0
+                      )}
+                      color="primary"
+                    >
+                      <ShoppingCartIcon
+                        sx={{ color: "white" }}
+                      ></ShoppingCartIcon>
+                    </Badge>
+                  </Stack>
+                )}
+              </Link>
+              {userInfo && userInfo.isAdmin && <Admin />}
+              {userInfo ? <Dropdown /> : <Link to="/signin">Sign In</Link>}
+            </div>
+          </Container>
         </AppBar>
       </Header>
       <Toolbar />
