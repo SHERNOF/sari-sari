@@ -104,8 +104,12 @@ export default function HideAppBar(props) {
                   </Stack>
                 )}
               </Link>
-              {userInfo && userInfo.isAdmin && <Admin />}
-              {userInfo ? <Dropdown /> : <Link to="/signin">Sign In</Link>}
+              {userInfo && userInfo.isAdmin ? (
+                <Admin />
+              ) : (
+                <Link to="/signin">Sign In</Link>
+              )}
+              {/* {userInfo ? <Dropdown /> : <Link to="/signin">Sign In</Link>} */}
             </div>
           </Container>
         </AppBar>

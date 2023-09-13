@@ -20,7 +20,7 @@ import OrderPage from "./pages/OrderPage";
 import OrderHistoryPage from "./pages/OrderHistoryPage";
 import ProfilePage from "./pages/ProfilePage";
 import MenuIcon from "@mui/icons-material/Menu";
-import { IconButton } from "@mui/material";
+import { IconButton, SpeedDial } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import {
@@ -43,12 +43,39 @@ import DashboardPage from "./pages/DashboardPage";
 import ProductListPage from "./pages/ProductListPage";
 import ProductEditPage from "./pages/ProductEditPage";
 import HideAppBar from "./components/Header.jsx";
+import SDial from "./components/Sdial";
+import { styled } from "@mui/material/styles";
+import { blue, green, red } from "@mui/material/colors";
+
+// const Root = styled("div")(({ theme }) => ({
+//   padding: theme.spacing(1),
+//   [theme.breakpoints.down("md")]: {
+//     backgroundColor: red[500],
+//   },
+//   [theme.breakpoints.up("md")]: {
+//     backgroundColor: blue[500],
+//   },
+//   [theme.breakpoints.up("lg")]: {
+//     backgroundColor: green[500],
+//   },
+// }));
+
+export const themeOptions = {
+  palette: {
+    mode: "dark",
+    primary: {
+      main: "#3949ab",
+    },
+    secondary: {
+      main: "#f50057",
+    },
+  },
+};
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { cart, userInfo, sideBarIsOpen } = state;
+  const { sideBarIsOpen } = state;
   const [categories, setCategories] = useState([]);
-  // const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -65,6 +92,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      {/* <Root> */}
       <div
         className={
           sideBarIsOpen ? "site-container active-cont" : "site-container"
@@ -112,6 +140,7 @@ function App() {
             ))}
           </List>
         </Drawer>
+        <SDial></SDial>
         <div />
         <main style={{ marginTop: "2rem" }}>
           <Container>
@@ -189,6 +218,7 @@ function App() {
           SHERNOF
         </Box>
       </div>
+      {/* </Root> */}
     </BrowserRouter>
   );
 }

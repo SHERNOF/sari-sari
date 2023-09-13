@@ -1,5 +1,4 @@
 import {
-  bottomNavigationActionClasses,
   Grid,
   Table,
   TableContainer,
@@ -118,7 +117,7 @@ export default function ProductListPage() {
         container
         sx={{
           display: "flex",
-          alignItems: "center",
+          // alignItems: "center",
           justifyContent: "space-between",
         }}
       >
