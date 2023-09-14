@@ -16,6 +16,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { styled } from "@mui/material/styles";
 import Button from "../ui/button/Button";
+import StyledButton from "../ui/button/Button";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -125,10 +126,16 @@ export default function ProductListPage() {
           <h1>Products</h1>
         </Grid>
         <Grid item>
-          <div style={{ textAlign: "flex-end", width: "100px" }}>
-            <Button type="button" onClick={createHandler}>
+          <div
+            style={{
+              textAlign: "flex-end",
+              width: "100px",
+              border: "1px solid red",
+            }}
+          >
+            <StyledButton sx={{ marginRight: "-3rem" }} onClick={createHandler}>
               Create Product
-            </Button>
+            </StyledButton>
           </div>
         </Grid>
       </Grid>
@@ -162,14 +169,14 @@ export default function ProductListPage() {
                     <StyledTableCell>{product.category}</StyledTableCell>
                     <StyledTableCell>{product.brand}</StyledTableCell>
                     <StyledTableCell>
-                      <Button
+                      <StyledButton
                         type="button"
                         onClick={() =>
                           navigate(`/admin/product/${product._id}`)
                         }
                       >
                         Edit
-                      </Button>
+                      </StyledButton>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}

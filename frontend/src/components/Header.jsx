@@ -47,8 +47,7 @@ export default function HideAppBar(props) {
   return (
     <React.Fragment>
       <Header {...props}>
-        <AppBar sx={{ background: "#404040" }}>
-          {/* <Toolbar>{props.children}</Toolbar> */}
+        <AppBar>
           <Container
             style={{
               display: "flex",
@@ -83,7 +82,9 @@ export default function HideAppBar(props) {
               style={{
                 marginLeft: "2rem",
                 display: "flex",
-                alignItems: "center",}}>
+                alignItems: "center",
+              }}
+            >
               <Link to="/cart" style={{ marginLeft: "2rem" }}>
                 {cart.cartItems.length > 0 && (
                   <Stack>
@@ -93,9 +94,10 @@ export default function HideAppBar(props) {
                         0
                       )}
                       color="primary"
-                      sx={{marginRight:'1rem'}}>
+                      sx={{ marginRight: "1rem" }}
+                    >
                       <ShoppingCartIcon
-                        sx={{ color: "white",  }}
+                        sx={{ color: "white" }}
                       ></ShoppingCartIcon>
                     </Badge>
                   </Stack>
@@ -104,7 +106,12 @@ export default function HideAppBar(props) {
               {userInfo && userInfo.isAdmin ? (
                 <Admin />
               ) : (
-                <Link to="/signin" style={{marginLeft:'1rem', color:'white'}}>Sign In</Link>
+                <Link
+                  to="/signin"
+                  style={{ marginLeft: "1rem", color: "white" }}
+                >
+                  Sign In
+                </Link>
               )}
               {/* {userInfo ? <Dropdown /> : <Link to="/signin">Sign In</Link>} */}
             </div>

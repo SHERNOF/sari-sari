@@ -12,7 +12,7 @@ body {
   height: 100vh;
 }
 header {
-  background: #404040;
+  /* background: #404040; */
   padding: 1rem;
 }
 a {

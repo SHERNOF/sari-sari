@@ -69,18 +69,23 @@ export default function Admin() {
         }}
       >
         <MenuItem value={"Dashboard"}>
-          <StyledLink to="/admin/dashboard">Dashboard</StyledLink>
+          <StyledLink to="/admin/dashboard" style={{ fontSize: ".7em" }}>
+            Dashboard
+          </StyledLink>
         </MenuItem>
 
-        <MenuItem value={"Products"}>
-          <StyledLink to="/admin/products">Products</StyledLink>
-        </MenuItem>
-
+        <StyledLink to="/admin/products" style={{ fontSize: ".7em" }}>
+          <MenuItem value={"Products"}>Products</MenuItem>
+        </StyledLink>
         <MenuItem value={"Order List"}>
-          <StyledLink to="/admin/orders">Order List</StyledLink>
+          <StyledLink to="/admin/orders" style={{ fontSize: ".7em" }}>
+            Order List
+          </StyledLink>
         </MenuItem>
         <MenuItem value={"User List"}>
-          <StyledLink to="/admin/users">Users</StyledLink>
+          <StyledLink style={{ fontSize: ".7em" }} to="/admin/users">
+            Users
+          </StyledLink>
         </MenuItem>
         <Divider></Divider>
         <MenuItem>
@@ -88,15 +93,23 @@ export default function Admin() {
         </MenuItem>
         <Divider></Divider>
         <MenuItem>
-          <StyledLink to="/profile">User Profile</StyledLink>
+          <StyledLink style={{ fontSize: ".7em" }} to="/profile">
+            User Profile
+          </StyledLink>
         </MenuItem>
         <MenuItem>
-          <StyledLink to="/orderhistory">Order History</StyledLink>
+          <StyledLink style={{ fontSize: ".7em" }} to="/orderhistory">
+            Order History
+          </StyledLink>
         </MenuItem>
         <Divider></Divider>
 
         <MenuItem>
-          <StyledLink to="#signout" onClick={signOutHandler}>
+          <StyledLink
+            style={{ fontSize: ".7em" }}
+            to="#signout"
+            onClick={signOutHandler}
+          >
             Sign Out
           </StyledLink>
         </MenuItem>

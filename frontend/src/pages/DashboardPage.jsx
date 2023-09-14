@@ -1,4 +1,4 @@
-import { CardContent, Grid, Typography } from "@mui/material";
+import { CardContent, Grid, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
 import { Helmet } from "react-helmet-async";
@@ -66,7 +66,6 @@ export default function DashboardPage() {
             <Grid item md={4}>
               <Card>
                 <CardHeader title="Users" />
-
                 <CardContent>
                   {summary.users && summary.users[0]
                     ? summary.users[0].numUsers
@@ -101,16 +100,18 @@ export default function DashboardPage() {
             {summary.dailyOrders.length === 0 ? (
               <MessageBox>No Sale</MessageBox>
             ) : (
-              <Chart
-                width="100%"
-                height="400px"
-                chartType="AreaChart"
-                loader={<div>Loading Chart...</div>}
-                data={[
-                  ["Date", "Sales"],
-                  ...summary.dailyOrders.map((x) => [x._id, x.sales]),
-                ]}
-              ></Chart>
+              <Card>
+                <Chart
+                  width="100%"
+                  height="400px"
+                  chartType="AreaChart"
+                  loader={<div>Loading Chart...</div>}
+                  data={[
+                    ["Date", "Sales"],
+                    ...summary.dailyOrders.map((x) => [x._id, x.sales]),
+                  ]}
+                ></Chart>
+              </Card>
             )}
           </div>
 
@@ -119,16 +120,18 @@ export default function DashboardPage() {
             {summary.productCategories.length === 0 ? (
               <MessageBox>No Category</MessageBox>
             ) : (
-              <Chart
-                width="100%"
-                height="400px"
-                chartType="PieChart"
-                loader={<div>Loading Chart...</div>}
-                data={[
-                  ["Category", "Products"],
-                  ...summary.productCategories.map((x) => [x._id, x.count]),
-                ]}
-              ></Chart>
+              <Paper sx={{ marginBottom: "2rem" }}>
+                <Chart
+                  width="100%"
+                  height="400px"
+                  chartType="PieChart"
+                  loader={<div>Loading Chart...</div>}
+                  data={[
+                    ["Category", "Products"],
+                    ...summary.productCategories.map((x) => [x._id, x.count]),
+                  ]}
+                ></Chart>
+              </Paper>
             )}
           </div>
         </>

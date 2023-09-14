@@ -20,7 +20,7 @@ import OrderPage from "./pages/OrderPage";
 import OrderHistoryPage from "./pages/OrderHistoryPage";
 import ProfilePage from "./pages/ProfilePage";
 import MenuIcon from "@mui/icons-material/Menu";
-import { IconButton, SpeedDial, ThemeProvider } from "@mui/material";
+import { Card, IconButton, SpeedDial, ThemeProvider } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import {
@@ -46,22 +46,21 @@ import HideAppBar from "./components/Header.jsx";
 import SDial from "./components/Sdial";
 import { styled } from "@mui/material/styles";
 import { blue, green, red } from "@mui/material/colors";
-import { ThemeOptions } from '@mui/material/styles';
-import { createTheme } from '@mui/material/styles';
-
+import { ThemeOptions } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
+    mode: "dark",
     primary: {
-      main: '#90caf9',
+      main: "#673ab7",
     },
     secondary: {
-      main: '#ce93d8',
+      main: "#ce93d8",
     },
     background: {
-      default: '#121212',
-      paper: '#121212',
+      default: "#121212",
+      paper: "#121212",
     },
   },
 });
@@ -86,133 +85,132 @@ function App() {
 
   return (
     <BrowserRouter>
-
-      <ThemeProvider  theme={theme}>
-      <div
-        className={
-          sideBarIsOpen ? "site-container active-cont" : "site-container"
-        }
-      >
-        <SnackBar />
-        <HideAppBar></HideAppBar>
-        <Drawer
-          sx={{
-            flexShrink: 0,
-            "& .MuiDrawer-paper": {
-              width: 240,
-              boxSizing: "border-box",
-            },
-          }}
-          variant="persistent"
-          open={sideBarIsOpen}
+      <ThemeProvider theme={theme}>
+        <div
+          className={
+            sideBarIsOpen ? "site-container active-cont" : "site-container"
+          }
         >
-          <div
-            // onClick={() => setSideBarIsOpen(false)}
-            onClick={() => ctxDispatch(setSideBarIsOpen(false))}
-            style={{
+          <SnackBar />
+          <HideAppBar></HideAppBar>
+          <Drawer
+            sx={{
+              flexShrink: 0,
+              "& .MuiDrawer-paper": {
+                width: 240,
+                boxSizing: "border-box",
+              },
+            }}
+            variant="persistent"
+            open={sideBarIsOpen}
+          >
+            <div
+              // onClick={() => setSideBarIsOpen(false)}
+              onClick={() => ctxDispatch(setSideBarIsOpen(false))}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "1rem",
+              }}
+            >
+              <strong>Categories</strong>
+              <ChevronLeftIcon className="custom-icons" />
+            </div>
+            <Divider></Divider>
+            <List>
+              {categories.map((category) => (
+                <ListItem key={category} disablePadding>
+                  <ListItemButton>
+                    <Link
+                      to={`/search?category=${category}`}
+                      // onClick={() => setSideBarIsOpen(false)}
+                      onClick={() => ctxDispatch(setSideBarIsOpen(false))}
+                    ></Link>
+                    <ListItemText primary={category}></ListItemText>
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Drawer>
+          <SDial></SDial>
+          <div />
+          <Card style={{ marginTop: "2rem" }}>
+            <Container>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/product/:desc" element={<ProductPage />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/search" element={<SearchPage />} />
+                <Route path="/signin" element={<SignInPage />} />
+                <Route path="/signup" element={<SignUpPage />} />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <ProfilePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/shipping" element={<ShippingPage />} />
+                <Route path="/payment" element={<PaymentMethodPage />} />
+                {/* admin routes */}
+                <Route
+                  path="/admin/dashboard"
+                  element={
+                    <AdminRoute>
+                      <DashboardPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/admin/products"
+                  element={
+                    <AdminRoute>
+                      <ProductListPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/admin/product/:id"
+                  element={
+                    <AdminRoute>
+                      <ProductEditPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route path="/placeorder" element={<PlaceOrderPage />} />
+                <Route
+                  path="/orderhistory"
+                  element={
+                    <ProtectedRoute>
+                      <OrderHistoryPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/order/:id"
+                  element={
+                    <ProtectedRoute>
+                      <OrderPage />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </Container>
+          </Card>
+          <Box
+            sx={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "center",
               alignItems: "center",
               padding: "1rem",
+              border: "1px solid red",
             }}
           >
-            <strong>Categories</strong>
-            <ChevronLeftIcon className="custom-icons" />
-          </div>
-          <Divider></Divider>
-          <List>
-            {categories.map((category) => (
-              <ListItem key={category} disablePadding>
-                <ListItemButton>
-                  <Link
-                    to={`/search?category=${category}`}
-                    // onClick={() => setSideBarIsOpen(false)}
-                    onClick={() => ctxDispatch(setSideBarIsOpen(false))}
-                  ></Link>
-                  <ListItemText primary={category}></ListItemText>
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Drawer>
-        <SDial></SDial>
-        <div />
-        <main style={{ marginTop: "2rem" }}>
-          <Container>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/product/:desc" element={<ProductPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/signin" element={<SignInPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <ProfilePage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/shipping" element={<ShippingPage />} />
-              <Route path="/payment" element={<PaymentMethodPage />} />
-              {/* admin routes */}
-              <Route
-                path="/admin/dashboard"
-                element={
-                  <AdminRoute>
-                    <DashboardPage />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path="/admin/products"
-                element={
-                  <AdminRoute>
-                    <ProductListPage />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path="/admin/product/:id"
-                element={
-                  <AdminRoute>
-                    <ProductEditPage />
-                  </AdminRoute>
-                }
-              />
-              <Route path="/placeorder" element={<PlaceOrderPage />} />
-              <Route
-                path="/orderhistory"
-                element={
-                  <ProtectedRoute>
-                    <OrderHistoryPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/order/:id"
-                element={
-                  <ProtectedRoute>
-                    <OrderPage />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </Container>
-        </main>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "1rem",
-            border: "1px solid red",
-          }}
-        >
-          SHERNOF
-        </Box>
-      </div>
+            SHERNOF
+          </Box>
+        </div>
       </ThemeProvider>
     </BrowserRouter>
   );
