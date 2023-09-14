@@ -61,7 +61,7 @@ export default function Admin() {
         // style={{ width: "15ch" }}
         PaperProps={{
           style: {
-            maxHeight: ITEM_HEIGHT * 5.5,
+            maxHeight: ITEM_HEIGHT * 6.5,
             width: "20ch",
           },
         }}

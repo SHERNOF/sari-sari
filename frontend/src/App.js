@@ -20,7 +20,7 @@ import OrderPage from "./pages/OrderPage";
 import OrderHistoryPage from "./pages/OrderHistoryPage";
 import ProfilePage from "./pages/ProfilePage";
 import MenuIcon from "@mui/icons-material/Menu";
-import { IconButton, SpeedDial } from "@mui/material";
+import { IconButton, SpeedDial, ThemeProvider } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import {
@@ -46,31 +46,25 @@ import HideAppBar from "./components/Header.jsx";
 import SDial from "./components/Sdial";
 import { styled } from "@mui/material/styles";
 import { blue, green, red } from "@mui/material/colors";
+import { ThemeOptions } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
-// const Root = styled("div")(({ theme }) => ({
-//   padding: theme.spacing(1),
-//   [theme.breakpoints.down("md")]: {
-//     backgroundColor: red[500],
-//   },
-//   [theme.breakpoints.up("md")]: {
-//     backgroundColor: blue[500],
-//   },
-//   [theme.breakpoints.up("lg")]: {
-//     backgroundColor: green[500],
-//   },
-// }));
 
-export const themeOptions = {
+const theme = createTheme({
   palette: {
-    mode: "dark",
+    mode: 'light',
     primary: {
-      main: "#3949ab",
+      main: '#90caf9',
     },
     secondary: {
-      main: "#f50057",
+      main: '#ce93d8',
+    },
+    background: {
+      default: '#121212',
+      paper: '#121212',
     },
   },
-};
+});
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -92,7 +86,8 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* <Root> */}
+
+      <ThemeProvider  theme={theme}>
       <div
         className={
           sideBarIsOpen ? "site-container active-cont" : "site-container"
@@ -218,7 +213,7 @@ function App() {
           SHERNOF
         </Box>
       </div>
-      {/* </Root> */}
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

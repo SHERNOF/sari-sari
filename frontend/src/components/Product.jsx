@@ -9,6 +9,7 @@ import Button from '../ui/button/Button'
 import RatingComponent from "./RatingComponent";
 import axios from "axios";
 import { Store } from "../store";
+import { Typography } from "@mui/material";
 
 export default function Product({ product }) {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -46,7 +47,7 @@ export default function Product({ product }) {
               style={{ textDecoration: "none" }}
               to={`/product/${product.desc}`}
             >
-              <h3>{product.name}</h3>
+              <Typography sx={{color:'primary'}}>{product.name}</Typography>
             </Link>
             <RatingComponent rating={product.rating}></RatingComponent>
             <p style={{ marginTop: "-0.3rem" }}>
