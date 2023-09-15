@@ -9,6 +9,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import StyledH1 from "../ui/pageTitle/PageTitle";
 
 export default function PaymentMethodPage() {
   const navigate = useNavigate();
@@ -40,7 +41,8 @@ export default function PaymentMethodPage() {
         <Helmet>
           <title>Payment Method</title>
         </Helmet>
-        <h1 style={{ marginTop: "3rem" }}>Payment Method</h1>
+        <StyledH1 style={{ marginTop: "3rem" }}>Payment Method</StyledH1>
+
         <form onSubmit={submitHandler}>
           <FormControl component="fieldset">
             <RadioGroup

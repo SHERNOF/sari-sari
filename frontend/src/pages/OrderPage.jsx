@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, Grid } from "@mui/material";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
+import StyledH1 from "../ui/pageTitle/PageTitle.jsx";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -130,7 +131,7 @@ export default function OrderPage() {
       <Helmet>
         <title>Order {orderId}</title>
       </Helmet>
-      <h1 style={{ marginBottom: "3rem" }}>Order {orderId}</h1>
+      <StyledH1 style={{ marginBottom: "3rem" }}>Order</StyledH1>
       {/* <Grid container md={8}> */}
       <Grid container spacing={4}>
         <Grid item md={8}>

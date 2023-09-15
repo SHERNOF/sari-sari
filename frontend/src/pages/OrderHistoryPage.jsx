@@ -14,6 +14,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/material/styles";
+import StyledH1 from "../ui/pageTitle/PageTitle";
+import { height } from "@mui/system";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -73,11 +75,11 @@ export default function OrderHistoryPage() {
     fetchData();
   }, [userInfo]);
   return (
-    <div>
+    <div style={{ minHeight: "100vh" }}>
       <Helmet>
         <title>Order History</title>
       </Helmet>
-      <h1>Order History</h1>
+      <StyledH1>Order History</StyledH1>
       {loading ? (
         <Loading />
       ) : error ? (

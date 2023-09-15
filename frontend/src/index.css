@@ -7,13 +7,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 .app {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 100vh;
 }
 header {
   /* background: #404040; */
-  padding: 1rem;
+  /* padding: 1rem; */
 }
 a {
   text-decoration: none;
@@ -48,8 +48,12 @@ main {
 .product-info {
   padding: 1rem;
 }
-footer {
+.footer {
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
 }
 li {
   list-style: none;

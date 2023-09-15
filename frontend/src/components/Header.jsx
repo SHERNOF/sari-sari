@@ -1,7 +1,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
+
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Container from "@mui/material/Container";
 import Slide from "@mui/material/Slide";
@@ -13,7 +13,6 @@ import { Stack } from "@mui/system";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { setSideBarIsOpen, Store } from "../store";
 import Admin from "../components/Admin";
-import Dropdown from "../components/Dropdown";
 
 function Header(props) {
   const { children, window } = props;
@@ -41,12 +40,11 @@ Header.propTypes = {
 };
 
 export default function HideAppBar(props) {
-  // const [sideBarIsOpen, setSideBarIsOpen] = React.useState(false);
   const { state, dispatch: ctxDispatch } = React.useContext(Store);
   const { cart, userInfo, sideBarIsOpen } = state;
   return (
     <React.Fragment>
-      <Header {...props}>
+      <Header {...props} sx={{ top: "0" }}>
         <AppBar>
           <Container
             style={{
@@ -68,6 +66,8 @@ export default function HideAppBar(props) {
                 sx={{
                   marginRight: 1,
                   ...(sideBarIsOpen && { display: "none" }),
+                  flexGrow: 1,
+                  display: { xs: "none", sm: "block" },
                 }}
               >
                 <MenuIcon className="custom-icon" style={{ color: "white" }} />
@@ -94,7 +94,7 @@ export default function HideAppBar(props) {
                         0
                       )}
                       color="primary"
-                      sx={{ marginRight: "1rem" }}
+                      sx={{ marginRight: { md: "1rem", sm: "-1rem" } }}
                     >
                       <ShoppingCartIcon
                         sx={{ color: "white" }}
@@ -108,7 +108,10 @@ export default function HideAppBar(props) {
               ) : (
                 <Link
                   to="/signin"
-                  style={{ marginLeft: "1rem", color: "white" }}
+                  style={{
+                    marginLeft: "1rem",
+                    color: "white",
+                  }}
                 >
                   Sign In
                 </Link>
@@ -118,8 +121,6 @@ export default function HideAppBar(props) {
           </Container>
         </AppBar>
       </Header>
-      <Toolbar />
-      <Container></Container>
     </React.Fragment>
   );
 }

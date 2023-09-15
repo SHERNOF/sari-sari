@@ -16,11 +16,18 @@ export default function SearchBox() {
   return (
     <Paper
       component="form"
-      sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 200,  height: 25,  }}
+      sx={{
+        p: "2px 4px",
+        display: "flex",
+        alignItems: "center",
+        width: 200,
+        height: 25,
+        display: { xs: "none", sm: "block" },
+      }}
       onSubmit={submitHandler}
     >
       <InputBase
-        sx={{ ml: 1, flex: 1, fontSize:'.7em' }}
+        sx={{ ml: 1, flex: 1, fontSize: ".7em" }}
         placeholder="Search..."
         inputProps={{ "aria-label": "search google maps" }}
         onChange={(e) => e.target.value}

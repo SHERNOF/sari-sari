@@ -40,7 +40,7 @@ export default function Admin() {
         <IconButton
           onClick={handleClick}
           size="small"
-          sx={{ ml: 2 }}
+          sx={{ marginLeft: { sm: "0" }, ml: 1 }}
           aria-controls={open ? "account-menu" : undefined}
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
@@ -60,10 +60,9 @@ export default function Admin() {
         open={open}
         onClose={handleClose}
         TransitionComponent={Fade}
-        // style={{ width: "15ch" }}
         PaperProps={{
           style: {
-            maxHeight: ITEM_HEIGHT * 7.5,
+            maxHeight: { md: ITEM_HEIGHT * 7.5, sm: ITEM_HEIGHT * 5.5 },
             width: "20ch",
           },
         }}

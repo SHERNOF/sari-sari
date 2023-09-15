@@ -4,6 +4,7 @@ import { useContext, useReducer, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { setSnackbar, Store } from "../store";
 import FormElements from "../ui/formElements/FormElements";
+import StyledH1 from "../ui/pageTitle/PageTitle";
 import { getError } from "../utils";
 
 export default function ProfilePage() {
@@ -57,27 +58,26 @@ export default function ProfilePage() {
         maxWidth: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        // justifyContent: "center",
         alignItems: "center",
+        minHeight: "100vh",
       }}
     >
       <Helmet>
         <title>User Info</title>
       </Helmet>
-      <h1
-        style={{
-          marginBottom: "3rem",
-          textAlign: "left",
-          width: "100%",
-        }}
-      >
-        User Info
-      </h1>
+      <div style={{ width: "100%", marginBottom: "2rem" }}>
+        <StyledH1
+          style={{ textAlign: "left", marginBottom: "3rem", width: "100%" }}
+        >
+          User Info
+        </StyledH1>
+      </div>
       <form
         onSubmit={submitHandler}
         style={{
           display: "flex",
-          width: "40%",
+          width: "60%",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",

@@ -10,6 +10,7 @@ import Loading from "../components/Loading";
 import FormElements from "../ui/formElements/FormElements";
 import { TextField } from "@mui/material";
 import Button from "../ui/button/Button";
+import StyledH1 from "../ui/pageTitle/PageTitle";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -134,7 +135,7 @@ export default function ProductEditPage() {
         <Helmet>
           <title>Edit Product ${productId}</title>
         </Helmet>
-        <h1>Edit Product</h1>
+        <StyledH1>Edit Product</StyledH1>
         {loading ? (
           <Loading />
         ) : error ? (

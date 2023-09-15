@@ -8,12 +8,15 @@ import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import { Store } from "../store";
 import CheckoutSteps from "../components/CheckoutSteps";
+import StyledH1 from "../ui/pageTitle/PageTitle";
 
 export default function ShippingPage() {
-
   const { state, dispatch: ctxDispatch } = useContext(Store);
 
-  const { userInfo,  cart: {shippingAddress} } = state;
+  const {
+    userInfo,
+    cart: { shippingAddress },
+  } = state;
   const [fullName, setFullName] = useState(shippingAddress.fullName || "");
   const [address, setAddress] = useState(shippingAddress.address || "");
   const [city, setCity] = useState(shippingAddress.city || "");
@@ -22,16 +25,16 @@ export default function ShippingPage() {
   );
   const [country, setCountry] = useState(shippingAddress.country || "");
   const navigate = useNavigate();
-  
+
   useEffect(() => {
-    if(!userInfo){
-        navigate('/signin?redirect=shipping')
+    if (!userInfo) {
+      navigate("/signin?redirect=shipping");
     }
-},[userInfo, navigate])
+  }, [userInfo, navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log('test')
+    console.log("test");
     ctxDispatch({
       type: "SAVE_SHIPPING_ADDRESS",
       payload: {
@@ -42,8 +45,6 @@ export default function ShippingPage() {
         country,
       },
     });
-
-
 
     localStorage.setItem(
       "shippingAddress",
@@ -57,28 +58,35 @@ export default function ShippingPage() {
     );
     navigate("/payment");
   };
-  
+
   return (
     <div>
       <Helmet>
         <title>Shipping Address</title>
       </Helmet>
       <CheckoutSteps step1 step2></CheckoutSteps>
-      <h1 style={{ marginBottom: "3rem" }}>Shipping Address</h1>
-   
-        <form    onSubmit={submitHandler}
-          style={{
-            display: "flex",
+
+      <StyledH1
+        style={{ marginBottom: "3rem", textAlign: "left", width: "100%" }}
+      >
+        Shipping Address
+      </StyledH1>
+
+      <form
+        onSubmit={submitHandler}
+        style={{
+          display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
           marginTop: "3rem",
-          }}>
+        }}
+      >
         <FormControl
-         style={{
-          width: "40%",
-        }}>
-        
+          style={{
+            width: "40%",
+          }}
+        >
           <TextField
             sx={{ marginBottom: 3, marginTop: 3 }}
             id="outlined-search"
@@ -124,12 +132,13 @@ export default function ShippingPage() {
             onChange={(e) => setCountry(e.target.value)}
             required
           />
-          <div style={{ marginBottom: "3rem", marginTop:'-1rem' }}>
-            <Button type='submit' variant="contained" >Continue</Button>
+          <div style={{ marginBottom: "3rem", marginTop: "-1rem" }}>
+            <Button type="submit" variant="contained">
+              Continue
+            </Button>
           </div>
         </FormControl>
-        </form>
-     
+      </form>
     </div>
   );
 }

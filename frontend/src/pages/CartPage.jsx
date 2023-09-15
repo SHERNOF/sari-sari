@@ -9,6 +9,7 @@ import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOut
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import axios from "axios";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import StyledH1 from "../ui/pageTitle/PageTitle";
 
 export default function CartPage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -54,7 +55,7 @@ export default function CartPage() {
       <Helmet>
         <title>Shopping Cart</title>
       </Helmet>
-      <h1>Shopping Cart</h1>
+      <StyledH1>Shopping Cart</StyledH1>
       <Grid container spacing={2}>
         <Grid item md={8}>
           {cartItems.length === 0 ? (

@@ -1,7 +1,7 @@
 // import React from "react";
 // import classes from "./button.module.css";
 
-// export default function Button(props) {
+// export default function StyledButton(props) {
 //   return (
 //     <button
 //       type={props.type || "button"}
@@ -22,7 +22,7 @@ export default function StyledButton(props) {
     <Button
       variant="contained"
       type={props.type || "button"}
-      disabled={props.disabled || ""}
+      disabled={props.disabled || null}
       onClick={props.onClick}
       sx={{ display: "block", width: "100%", fontSize: ".7em" }}
     >

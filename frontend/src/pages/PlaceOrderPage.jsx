@@ -7,39 +7,39 @@ import { useContext, useEffect, useReducer } from "react";
 import { Store, setSnackbar } from "../store";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import Loading from '../components/Loading'
+import Loading from "../components/Loading";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Button from '@mui/material/Button';
-import axios from 'axios'
+import Button from "@mui/material/Button";
+import axios from "axios";
 import { getError } from "../utils";
+import StyledH1 from "../ui/pageTitle/PageTitle";
 
-
-const reducer = (state, action) =>{
-    switch(action.type){
-        case 'CREATE_REQUEST':
-        return { ...state, loading: true};
-        case 'CREATE_SUCCESS':
-        return { ...state, loading: false};
-        case 'CREATE_FAIL':
-        return { ...state, loading: false};
-        default:
-        return state
-    }
-}
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "CREATE_REQUEST":
+      return { ...state, loading: true };
+    case "CREATE_SUCCESS":
+      return { ...state, loading: false };
+    case "CREATE_FAIL":
+      return { ...state, loading: false };
+    default:
+      return state;
+  }
+};
 
 export default function PlaceOrderPage() {
-    const navigate = useNavigate()
-    const [{ loading}, dispatch] = useReducer(reducer, {
-        loading: false,
-    }) 
+  const navigate = useNavigate();
+  const [{ loading }, dispatch] = useReducer(reducer, {
+    loading: false,
+  });
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
-  
+
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
 
   cart.itemsPrice = round2(
@@ -52,38 +52,39 @@ export default function PlaceOrderPage() {
   cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
 
   const placeOrderHandler = async () => {
-      try{
-        
-        dispatch({ type: 'CREATE_REQUEST' })
-        const { data } = await axios.post('/api/orders',{
-            orderItems: cart.cartItems,
-            shippingAddress: cart.shippingAddress,
-            paymentMethod: cart.paymentMethod,
-            itemsPrice: cart.itemsPrice,
-            shippingPrice: cart.shippingPrice,
-            taxPrice: cart.taxPrice,
-            totalPrice: cart.totalPrice
-        }, 
+    try {
+      dispatch({ type: "CREATE_REQUEST" });
+      const { data } = await axios.post(
+        "/api/orders",
         {
-            headers:{
-                authorization: `Bearer ${userInfo.token}`,
-            },
-        });
-        ctxDispatch({ type: 'CART_CLEAR' });
-        dispatch({ type: 'CREATE_SUCCESS '});
-        ctxDispatch(setSnackbar(true, "success", 'Thank you... Order Created' ))
-        localStorage.removeItem('cartItems')
-        navigate(`/order/${data.order._id}`)
-
-    }catch (err) {
-        dispatch({ type: 'CREATE_FAIL' })
-        ctxDispatch(setSnackbar(true, "error", getError(err) ))
+          orderItems: cart.cartItems,
+          shippingAddress: cart.shippingAddress,
+          paymentMethod: cart.paymentMethod,
+          itemsPrice: cart.itemsPrice,
+          shippingPrice: cart.shippingPrice,
+          taxPrice: cart.taxPrice,
+          totalPrice: cart.totalPrice,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+      ctxDispatch({ type: "CART_CLEAR" });
+      dispatch({ type: "CREATE_SUCCESS " });
+      ctxDispatch(setSnackbar(true, "success", "Thank you... Order Created"));
+      localStorage.removeItem("cartItems");
+      navigate(`/order/${data.order._id}`);
+    } catch (err) {
+      dispatch({ type: "CREATE_FAIL" });
+      ctxDispatch(setSnackbar(true, "error", getError(err)));
     }
   };
 
   useEffect(() => {
     if (!cart.paymentMethod) {
-      navigate('/payment');
+      navigate("/payment");
     }
   }, [cart, navigate]);
   return (
@@ -92,7 +93,8 @@ export default function PlaceOrderPage() {
       <Helmet>
         <title>Preview Order</title>
       </Helmet>
-      <h1 style={{ marginBottom: "1rem" }}>Preview Order</h1>
+
+      <StyledH1>Preview Order</StyledH1>
       <Grid container spacing={4}>
         <Grid item md={8}>
           <Card sx={{ marginBottom: "2rem" }} elevation={3}>
@@ -178,7 +180,7 @@ export default function PlaceOrderPage() {
               <CardHeader title="Order Summary" />
               <ListItem>
                 <Grid container>
-                  <Grid  item md={6}>
+                  <Grid item md={6}>
                     Items :{" "}
                   </Grid>
                   <Grid item md={6}>
@@ -232,7 +234,7 @@ export default function PlaceOrderPage() {
                     Place Order
                   </Button>
                 </div>
-                { loading && <Loading />}
+                {loading && <Loading />}
               </ListItem>
             </List>
             {/* </Grid> */}

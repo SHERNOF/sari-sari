@@ -1,26 +1,23 @@
-import React, { useContext, useEffect, useReducer, useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import React, { useContext, useEffect, useReducer, useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
-import { getError } from '../utils';
-import { Helmet } from 'react-helmet-async';
+import { getError } from "../utils";
+import { Helmet } from "react-helmet-async";
 
+import Product from "../components/Product";
 
-
-
-import Product from '../components/Product';
-
-import { Store, setSnackbar } from '../store';
-import { Button, Grid } from '@mui/material';
-import RatingComponent from '../components/RatingComponent';
-import MessageBox from '../components/MessageBox';
-import Loading from '../components/Loading';
+import { Store, setSnackbar } from "../store";
+import { Button, Grid } from "@mui/material";
+import RatingComponent from "../components/RatingComponent";
+import MessageBox from "../components/MessageBox";
+import Loading from "../components/Loading";
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'FETCH_REQUEST':
+    case "FETCH_REQUEST":
       return { ...state, loading: true };
-    case 'FETCH_SUCCESS':
+    case "FETCH_SUCCESS":
       return {
         ...state,
         products: action.payload.products,
@@ -29,7 +26,7 @@ const reducer = (state, action) => {
         countProducts: action.payload.countProducts,
         loading: false,
       };
-    case 'FETCH_FAIL':
+    case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
 
     default:
@@ -39,57 +36,57 @@ const reducer = (state, action) => {
 
 const prices = [
   {
-    name: '$1 to $50',
-    value: '1-50',
+    name: "$1 to $50",
+    value: "1-50",
   },
   {
-    name: '$51 to $200',
-    value: '51-200',
+    name: "$51 to $200",
+    value: "51-200",
   },
   {
-    name: '$201 to $1000',
-    value: '201-1000',
+    name: "$201 to $1000",
+    value: "201-1000",
   },
 ];
 
 export const ratings = [
   {
-    name: '4stars & up',
+    name: "4stars & up",
     rating: 4,
   },
 
   {
-    name: '3stars & up',
+    name: "3stars & up",
     rating: 3,
   },
 
   {
-    name: '2stars & up',
+    name: "2stars & up",
     rating: 2,
   },
 
   {
-    name: '1stars & up',
+    name: "1stars & up",
     rating: 1,
   },
 ];
 
 export default function SearchScreen() {
-  const {  dispatch: ctxDispatch } = useContext(Store)
+  const { dispatch: ctxDispatch } = useContext(Store);
   const navigate = useNavigate();
   const { search } = useLocation();
   const sp = new URLSearchParams(search); // /search?category=Shirts
-  const category = sp.get('category') || 'all';
-  const query = sp.get('query') || 'all';
-  const price = sp.get('price') || 'all';
-  const rating = sp.get('rating') || 'all';
-  const order = sp.get('order') || 'newest';
-  const page = sp.get('page') || 1;
+  const category = sp.get("category") || "all";
+  const query = sp.get("query") || "all";
+  const price = sp.get("price") || "all";
+  const rating = sp.get("rating") || "all";
+  const order = sp.get("order") || "newest";
+  const page = sp.get("page") || 1;
 
   const [{ loading, error, products, pages, countProducts }, dispatch] =
     useReducer(reducer, {
       loading: true,
-      error: '',
+      error: "",
     });
 
   useEffect(() => {
@@ -98,10 +95,10 @@ export default function SearchScreen() {
         const { data } = await axios.get(
           `/api/products/search?page=${page}&query=${query}&category=${category}&price=${price}&rating=${rating}&order=${order}`
         );
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({
-          type: 'FETCH_FAIL',
+          type: "FETCH_FAIL",
           payload: getError(error),
         });
       }
@@ -116,8 +113,7 @@ export default function SearchScreen() {
         const { data } = await axios.get(`/api/products/categories`);
         setCategories(data);
       } catch (err) {
-        
-        ctxDispatch(setSnackbar(true, 'error', getError(err)))
+        ctxDispatch(setSnackbar(true, "error", getError(err)));
       }
     };
     fetchCategories();
@@ -131,7 +127,7 @@ export default function SearchScreen() {
     const filterPrice = filter.price || price;
     const sortOrder = filter.order || order;
     return `${
-      skipPathname ? '' : '/search?'
+      skipPathname ? "" : "/search?"
     }category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&order=${sortOrder}&page=${filterPage}`;
   };
   return (
@@ -140,14 +136,14 @@ export default function SearchScreen() {
         <title>Search Products</title>
       </Helmet>
       <Grid container>
-        <Grid md={3} item >
+        <Grid md={3} item>
           <h3>Department</h3>
           <div>
             <ul>
               <li>
                 <Link
-                  className={'all' === category ? 'text-bold' : ''}
-                  to={getFilterUrl({ category: 'all' })}
+                  className={"all" === category ? "text-bold" : ""}
+                  to={getFilterUrl({ category: "all" })}
                 >
                   Any
                 </Link>
@@ -155,7 +151,7 @@ export default function SearchScreen() {
               {categories.map((c) => (
                 <li key={c}>
                   <Link
-                    className={c === category ? 'text-bold' : ''}
+                    className={c === category ? "text-bold" : ""}
                     to={getFilterUrl({ category: c })}
                   >
                     {c}
@@ -169,8 +165,8 @@ export default function SearchScreen() {
             <ul>
               <li>
                 <Link
-                  className={'all' === price ? 'text-bold' : ''}
-                  to={getFilterUrl({ price: 'all' })}
+                  className={"all" === price ? "text-bold" : ""}
+                  to={getFilterUrl({ price: "all" })}
                 >
                   Any
                 </Link>
@@ -179,7 +175,7 @@ export default function SearchScreen() {
                 <li key={p.value}>
                   <Link
                     to={getFilterUrl({ price: p.value })}
-                    className={p.value === price ? 'text-bold' : ''}
+                    className={p.value === price ? "text-bold" : ""}
                   >
                     {p.name}
                   </Link>
@@ -194,45 +190,55 @@ export default function SearchScreen() {
                 <li key={r.name}>
                   <Link
                     to={getFilterUrl({ rating: r.rating })}
-                    className={`${r.rating}` === `${rating}` ? 'text-bold' : ''}
+                    className={`${r.rating}` === `${rating}` ? "text-bold" : ""}
                   >
-                    <RatingComponent caption={' & up'} rating={r.rating}></RatingComponent>
+                    <RatingComponent
+                      caption={" & up"}
+                      rating={r.rating}
+                    ></RatingComponent>
                   </Link>
                 </li>
               ))}
               <li>
                 <Link
-                  to={getFilterUrl({ rating: 'all' })}
-                  className={rating === 'all' ? 'text-bold' : ''}
+                  to={getFilterUrl({ rating: "all" })}
+                  className={rating === "all" ? "text-bold" : ""}
                 >
-                  <RatingComponent caption={' & up'} rating={0}></RatingComponent>
+                  <RatingComponent
+                    caption={" & up"}
+                    rating={0}
+                  ></RatingComponent>
                 </Link>
               </li>
             </ul>
           </div>
         </Grid>
-        <Grid md={9} item >
+        <Grid md={9} item>
           {loading ? (
             <Loading></Loading>
           ) : error ? (
             <MessageBox variant="danger">{error}</MessageBox>
           ) : (
             <>
-              <Grid container className="justify-content-between mb-3" sx={{marginTop:'2rem'}}>
-                <Grid item md={6} sx={{marginBottom:'2rem'}}>
+              <Grid
+                container
+                className="justify-content-between mb-3"
+                sx={{ marginTop: "2rem" }}
+              >
+                <Grid item md={6} sx={{ marginBottom: "2rem" }}>
                   <div>
-                    {countProducts === 0 ? 'No' : countProducts} Results
-                    {query !== 'all' && ' : ' + query}
-                    {category !== 'all' && ' : ' + category}
-                    {price !== 'all' && ' : Price ' + price}
-                    {rating !== 'all' && ' : Rating ' + rating + ' & up'}
-                    {query !== 'all' ||
-                    category !== 'all' ||
-                    rating !== 'all' ||
-                    price !== 'all' ? (
+                    {countProducts === 0 ? "No" : countProducts} Results
+                    {query !== "all" && " : " + query}
+                    {category !== "all" && " : " + category}
+                    {price !== "all" && " : Price " + price}
+                    {rating !== "all" && " : Rating " + rating + " & up"}
+                    {query !== "all" ||
+                    category !== "all" ||
+                    rating !== "all" ||
+                    price !== "all" ? (
                       <Button
                         severity="light"
-                        onClick={() => navigate('/search')}
+                        onClick={() => navigate("/search")}
                       >
                         <i className="fas fa-times-circle"></i>
                       </Button>
@@ -240,7 +246,7 @@ export default function SearchScreen() {
                   </div>
                 </Grid>
                 <Grid item className="text-end">
-                  Sort by{' '}
+                  Sort by{" "}
                   <select
                     value={order}
                     onChange={(e) => {
@@ -260,22 +266,22 @@ export default function SearchScreen() {
 
               <Grid container spacing={1.5}>
                 {products.map((product) => (
-                    <Product product={product}></Product>
+                  <Product product={product}></Product>
                 ))}
-              </Grid >
+              </Grid>
 
               <div>
                 {[...Array(pages).keys()].map((x) => (
                   <Link
                     key={x + 1}
-                    style={{marginLeft:'1rem'}}
+                    style={{ marginLeft: "1rem" }}
                     to={{
-                      pathname: '/search',
+                      pathname: "/search",
                       seacrh: getFilterUrl({ page: x + 1 }, true),
                     }}
                   >
                     <Button
-                      className={Number(page) === x + 1 ? 'text-bold' : ''}
+                      className={Number(page) === x + 1 ? "text-bold" : ""}
                       variant="light"
                     >
                       {x + 1}

@@ -7,6 +7,7 @@ import axios from "axios";
 import TextField from "@mui/material/TextField";
 import { setSnackbar, Store } from "../store";
 import { getError } from "../utils";
+import StyledH1 from "../ui/pageTitle/PageTitle";
 
 export default function SignInPage() {
   const { search } = useLocation();
@@ -58,7 +59,7 @@ export default function SignInPage() {
       <Helmet>
         <title>Sign In</title>
       </Helmet>
-      <h1
+      {/* <h1
         style={{
           marginBottom: "3rem",
           textAlign: "left",
@@ -66,7 +67,12 @@ export default function SignInPage() {
         }}
       >
         Sign In
-      </h1>
+      </h1> */}
+      <StyledH1
+        style={{ marginBottom: "3rem", textAlign: "left", width: "100%" }}
+      >
+        SignIn Page
+      </StyledH1>
       <form
         style={{
           display: "flex",

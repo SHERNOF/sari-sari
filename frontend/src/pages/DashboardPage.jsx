@@ -9,6 +9,7 @@ import { getError } from "../utils";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Chart from "react-google-charts";
+import StyledH1 from "../ui/pageTitle/PageTitle";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -55,7 +56,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1>Dashboard</h1>
+      <StyledH1>Dashboard</StyledH1>
       {loading ? (
         <Loading />
       ) : error ? (

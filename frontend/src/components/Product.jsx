@@ -5,11 +5,12 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 // import Button from "@mui/material/Button";
-import Button from '../ui/button/Button'
+import Button from "../ui/button/Button";
 import RatingComponent from "./RatingComponent";
 import axios from "axios";
 import { Store } from "../store";
 import { Typography } from "@mui/material";
+import StyledLink from "../ui/links/StyledLink";
 
 export default function Product({ product }) {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -36,19 +37,23 @@ export default function Product({ product }) {
       <Card>
         <CardContent className="product">
           <CardMedia>
-            <Link to={`/product/${product.desc}`}>
-              <div style={{height:'300px'}}>
-              <img src={product.image} alt={product.name} style={{minHeight:'100%'}} />
+            <StyledLink to={`/product/${product.desc}`}>
+              <div style={{ height: "300px" }}>
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  style={{ minHeight: "100%" }}
+                />
               </div>
-            </Link>
+            </StyledLink>
           </CardMedia>
           <CardContent className="product-info">
-            <Link
+            <StyledLink
               style={{ textDecoration: "none" }}
               to={`/product/${product.desc}`}
             >
-              <Typography sx={{color:'primary'}}>{product.name}</Typography>
-            </Link>
+              <Typography>{product.name}</Typography>
+            </StyledLink>
             <RatingComponent rating={product.rating}></RatingComponent>
             <p style={{ marginTop: "-0.3rem" }}>
               <strong>{product.numReviews} reviews</strong>

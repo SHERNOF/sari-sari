@@ -11,12 +11,13 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 // import Button from "@mui/material/Button";
-import Button from '../ui/button/Button'
+import Button from "../ui/button/Button";
 import { Helmet } from "react-helmet-async";
 import Loading from "../components/Loading";
 import MessageBox from "../components/MessageBox";
 import { getError } from "../utils";
 import { Store } from "../store";
+import StyledH1 from "../ui/pageTitle/PageTitle";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -75,14 +76,14 @@ export default function ProductPage() {
   };
 
   return (
-    <Box sx={{ marginTop: "2rem" }}>
+    <Box sx={{ marginTop: "10rem", minHeight: "100vh" }}>
       {loading ? (
         <Loading />
       ) : error ? (
         // <div>{error}</div>
         <MessageBox severity="error">{error}</MessageBox>
       ) : (
-        <Grid container spacing={2}>
+        <Grid container spacing={6}>
           <Grid item md={4} xs={12}>
             <img
               src={product.image}
@@ -90,7 +91,7 @@ export default function ProductPage() {
               style={{ maxWidth: "100%" }}
             ></img>
           </Grid>
-          <Grid item md={3} xs={12}>
+          <Grid item md={4} xs={12}>
             <List
               sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
             >
@@ -113,7 +114,7 @@ export default function ProductPage() {
               <Divider />
             </List>
           </Grid>
-          <Grid item md={3} xs={12}>
+          <Grid item md={4} xs={12} sx={{ widt: "100%" }}>
             <Card>
               <CardContent>
                 <List>

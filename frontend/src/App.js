@@ -19,123 +19,55 @@ import PlaceOrderPage from "./pages/PlaceOrderPage";
 import OrderPage from "./pages/OrderPage";
 import OrderHistoryPage from "./pages/OrderHistoryPage";
 import ProfilePage from "./pages/ProfilePage";
-import MenuIcon from "@mui/icons-material/Menu";
-import { Card, IconButton, SpeedDial, ThemeProvider } from "@mui/material";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import {
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
+
+import { Card, ThemeProvider } from "@mui/material";
 
 import axios from "axios";
 import { getError } from "./utils";
-import SearchBox from "./components/SearchBox";
+
 import SearchPage from "./pages/SearchPage";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Admin from "./components/Admin";
 import AdminRoute from "./components/AdminRoute";
 import DashboardPage from "./pages/DashboardPage";
 import ProductListPage from "./pages/ProductListPage";
 import ProductEditPage from "./pages/ProductEditPage";
 import HideAppBar from "./components/Header.jsx";
 import SDial from "./components/Sdial";
-import { styled } from "@mui/material/styles";
-import { blue, green, red } from "@mui/material/colors";
-import { ThemeOptions } from "@mui/material/styles";
+
 import { createTheme } from "@mui/material/styles";
+import MyDrawer from "./components/Drawer";
 
 const theme = createTheme({
   palette: {
-    mode: "dark",
+    mode: "light",
     primary: {
       main: "#673ab7",
     },
     secondary: {
       main: "#ce93d8",
     },
-    background: {
-      default: "#121212",
-      paper: "#121212",
-    },
   },
 });
 
 function App() {
-  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { state } = useContext(Store);
   const { sideBarIsOpen } = state;
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const { data } = await axios.get(`/api/products/categories`);
-        setCategories(data);
-      } catch (err) {
-        ctxDispatch(setSnackbar(true, "error", getError(err)));
-      }
-    };
-    fetchCategories();
-  }, []);
-  console.log(typeof setSideBarIsOpen);
 
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <div
+        <Box
+          style={{ minHeight: "100vh" }}
           className={
             sideBarIsOpen ? "site-container active-cont" : "site-container"
           }
         >
           <SnackBar />
-          <HideAppBar></HideAppBar>
-          <Drawer
-            sx={{
-              flexShrink: 0,
-              "& .MuiDrawer-paper": {
-                width: 240,
-                boxSizing: "border-box",
-              },
-            }}
-            variant="persistent"
-            open={sideBarIsOpen}
-          >
-            <div
-              // onClick={() => setSideBarIsOpen(false)}
-              onClick={() => ctxDispatch(setSideBarIsOpen(false))}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "1rem",
-              }}
-            >
-              <strong>Categories</strong>
-              <ChevronLeftIcon className="custom-icons" />
-            </div>
-            <Divider></Divider>
-            <List>
-              {categories.map((category) => (
-                <ListItem key={category} disablePadding>
-                  <ListItemButton>
-                    <Link
-                      to={`/search?category=${category}`}
-                      // onClick={() => setSideBarIsOpen(false)}
-                      onClick={() => ctxDispatch(setSideBarIsOpen(false))}
-                    ></Link>
-                    <ListItemText primary={category}></ListItemText>
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </Drawer>
+          <MyDrawer />
           <SDial></SDial>
-          <div />
-          <Card style={{ marginTop: "2rem" }}>
+          <Box />
+          <HideAppBar></HideAppBar>
+          <Card>
             <Container>
               <Routes>
                 <Route path="/" element={<Home />} />
@@ -154,7 +86,7 @@ function App() {
                 />
                 <Route path="/shipping" element={<ShippingPage />} />
                 <Route path="/payment" element={<PaymentMethodPage />} />
-                {/* admin routes */}
+
                 <Route
                   path="/admin/dashboard"
                   element={
@@ -199,18 +131,8 @@ function App() {
               </Routes>
             </Container>
           </Card>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: "1rem",
-              border: "1px solid red",
-            }}
-          >
-            SHERNOF
-          </Box>
-        </div>
+          <Box className="footer">SHERNOF</Box>
+        </Box>
       </ThemeProvider>
     </BrowserRouter>
   );

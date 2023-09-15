@@ -1,8 +1,10 @@
 import {
+  Box,
   Grid,
   Table,
   TableContainer,
   TableHead,
+  Button,
   TableRow,
 } from "@mui/material";
 import axios from "axios";
@@ -15,8 +17,10 @@ import { getError } from "../utils";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { styled } from "@mui/material/styles";
-import Button from "../ui/button/Button";
+// import Button from "../ui/button/Button";
 import StyledButton from "../ui/button/Button";
+import StyledH1 from "../ui/pageTitle/PageTitle";
+import CreateIcon from "@mui/icons-material/Create";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -113,30 +117,32 @@ export default function ProductListPage() {
   };
 
   return (
-    <div>
+    <Box sx={{ minHeight: "100vh" }}>
       <Grid
         container
         sx={{
           display: "flex",
-          // alignItems: "center",
+          alignItems: "flex-end",
           justifyContent: "space-between",
         }}
       >
         <Grid item>
-          <h1>Products</h1>
+          <StyledH1>Product</StyledH1>
         </Grid>
-        <Grid item>
+        <Grid item sx={{ marginRight: "1rem", marginBottom: "1rem" }}>
           <div
             style={{
-              textAlign: "flex-end",
-              width: "100px",
-              border: "1px solid red",
+              width: "8rem",
+              display: "flex",
+              justifyContent: "center",
             }}
           >
-            <StyledButton sx={{ marginRight: "-3rem" }} onClick={createHandler}>
-              Create Product
-            </StyledButton>
+            <CreateIcon
+              onClick={createHandler}
+              sx={{ cursor: "pointer" }}
+            ></CreateIcon>
           </div>
+          {/* <StyledButton onClick={createHandler}>Create Product</StyledButton> */}
         </Grid>
       </Grid>
       {loadingCreate && <Loading />}
@@ -196,6 +202,6 @@ export default function ProductListPage() {
           </div>
         </>
       )}
-    </div>
+    </Box>
   );
 }
