@@ -37,21 +37,25 @@ import SDial from "./components/Sdial";
 import { createTheme } from "@mui/material/styles";
 import MyDrawer from "./components/Drawer";
 
-const theme = createTheme({
-  palette: {
-    mode: "light",
-    primary: {
-      main: "#673ab7",
-    },
-    secondary: {
-      main: "#ce93d8",
-    },
-  },
-});
-
 function App() {
   const { state } = useContext(Store);
   const { sideBarIsOpen } = state;
+
+  const [evening, setEvening] = useState(true);
+
+  const getTime = () => {};
+
+  const theme = createTheme({
+    palette: {
+      mode: "dark",
+      primary: {
+        main: "#673ab7",
+      },
+      secondary: {
+        main: "#ce93d8",
+      },
+    },
+  });
 
   return (
     <BrowserRouter>
