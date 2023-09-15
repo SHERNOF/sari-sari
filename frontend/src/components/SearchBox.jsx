@@ -22,7 +22,7 @@ export default function SearchBox() {
         alignItems: "center",
         width: 200,
         height: 25,
-        display: { xs: "none", sm: "block" },
+        display: { xs: "none", sm: "flex" },
       }}
       onSubmit={submitHandler}
     >
