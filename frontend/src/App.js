@@ -44,8 +44,9 @@ function App() {
   const [evening, setEvening] = useState();
   useEffect(() => {
     let hr = new Date().getHours();
-    const getTime = (hr) => {
-      if (hr <= 18 || hr > 6) {
+    console.log(hr);
+    const getTime = () => {
+      if (hr >= 18 || hr <= 6) {
         setEvening(true);
       }
     };
