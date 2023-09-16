@@ -60,7 +60,7 @@ export default function ShippingPage() {
   };
 
   return (
-    <div>
+    <div style={{ minHeight: "100vh", marginTop: "5rem" }}>
       <Helmet>
         <title>Shipping Address</title>
       </Helmet>

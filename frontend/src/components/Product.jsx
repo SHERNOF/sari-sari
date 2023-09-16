@@ -38,22 +38,19 @@ export default function Product({ product }) {
         <CardContent className="product">
           <CardMedia>
             <StyledLink to={`/product/${product.desc}`}>
+              {/* <div style={{ height: { md: "300px", lg: "300px" } }}> */}
               <div style={{ height: "300px" }}>
                 <img
                   src={product.image}
                   alt={product.name}
-                  style={{ minHeight: "100%" }}
+                  style={{ minHeight: { md: "100%", xs: "120%" } }}
                 />
               </div>
             </StyledLink>
           </CardMedia>
           <CardContent className="product-info">
-            <StyledLink
-              style={{ textDecoration: "none" }}
-              to={`/product/${product.desc}`}
-            >
-              <Typography>{product.name}</Typography>
-            </StyledLink>
+            <Typography>{product.name}</Typography>
+
             <RatingComponent rating={product.rating}></RatingComponent>
             <p style={{ marginTop: "-0.3rem" }}>
               <strong>{product.numReviews} reviews</strong>

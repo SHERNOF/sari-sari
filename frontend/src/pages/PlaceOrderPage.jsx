@@ -5,7 +5,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import { useContext, useEffect, useReducer } from "react";
 import { Store, setSnackbar } from "../store";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Loading from "../components/Loading";
 import List from "@mui/material/List";
@@ -18,6 +18,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { getError } from "../utils";
 import StyledH1 from "../ui/pageTitle/PageTitle";
+import StyledLink from "../ui/links/StyledLink";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -88,7 +89,7 @@ export default function PlaceOrderPage() {
     }
   }, [cart, navigate]);
   return (
-    <Box>
+    <Box style={{ minHeight: "100vh", marginTop: "5rem" }}>
       <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>
       <Helmet>
         <title>Preview Order</title>
@@ -106,7 +107,7 @@ export default function PlaceOrderPage() {
               {cart.shippingAddress.postalCode}, {cart.shippingAddress.country}
             </CardContent>
             <CardContent>
-              <Link to="/shipping">Edit</Link>
+              <StyledLink to="/shipping">Edit</StyledLink>
             </CardContent>
           </Card>
           <Card sx={{ marginBottom: "2rem" }} elevation={3}>
@@ -115,7 +116,7 @@ export default function PlaceOrderPage() {
               <strong>Method : </strong> {cart.paymentMethod}
             </CardContent>
             <CardContent>
-              <Link to="/payment">Edit</Link>
+              <StyledLink to="/payment">Edit</StyledLink>
             </CardContent>
           </Card>
           <Card sx={{ marginBottom: "2rem" }} elevation={3}>
@@ -137,12 +138,12 @@ export default function PlaceOrderPage() {
                         alt={item.name}
                         className="img-fluid rounded img-thumbnail"
                       ></img>{" "}
-                      <Link
+                      <StyledLink
                         style={{ marginLeft: "2rem" }}
                         to={`/product/${item.desc}`}
                       >
                         {item.name}
-                      </Link>
+                      </StyledLink>
                     </Grid>
                     <Grid
                       item
@@ -168,7 +169,7 @@ export default function PlaceOrderPage() {
                 </ListItem>
               ))}
               <CardContent>
-                <Link to="/cart">Edit</Link>
+                <StyledLink to="/cart">Edit</StyledLink>
               </CardContent>
             </List>
           </Card>

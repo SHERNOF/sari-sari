@@ -64,7 +64,7 @@ export default function HideAppBar(props) {
                 onClick={() => ctxDispatch(setSideBarIsOpen(true))}
                 edge="end"
                 sx={{
-                  marginRight: 1,
+                  marginRight: 2,
                   ...(sideBarIsOpen && { display: "none" }),
                   flexGrow: 1,
                   display: { xs: "none", sm: "block" },

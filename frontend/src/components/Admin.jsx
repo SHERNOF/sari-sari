@@ -2,13 +2,10 @@ import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
-// import { Link } from "react-router-dom";
-
 import IconButton from "@mui/material/IconButton";
 import { Avatar, Divider, Paper, Tooltip } from "@mui/material";
 import { Store } from "../store";
 import SearchBox from "./SearchBox";
-// import Link from "@mui/material/Link";
 import StyledLink from "../ui/links/StyledLink";
 
 const ITEM_HEIGHT = 48;
@@ -16,7 +13,6 @@ const ITEM_HEIGHT = 48;
 export default function Admin() {
   const { state, dispatch: ctxDispatch } = React.useContext(Store);
   const { userInfo } = state;
-  console.log(userInfo.name);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {

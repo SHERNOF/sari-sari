@@ -132,7 +132,6 @@ export default function OrderPage() {
         <title>Order {orderId}</title>
       </Helmet>
       <StyledH1 style={{ marginBottom: "3rem" }}>Order</StyledH1>
-      {/* <Grid container md={8}> */}
       <Grid container spacing={4}>
         <Grid item md={8}>
           <Card sx={{ marginBottom: "2rem" }} elevation={3}>
@@ -168,13 +167,14 @@ export default function OrderPage() {
           </Card>
           <Card elevation={3} sx={{ marginBottom: "2rem" }}>
             <CardHeader title="Items" />
-            <List>
+            <List sx={{ width: { sm: "100%" } }}>
               {order.orderItems.map((item) => (
                 <ListItem key={item._id}>
                   <Grid container>
                     <Grid
                       item
                       md={6}
+                      xs={8}
                       sx={{
                         display: "flex",
                         alignItems: "center",
@@ -185,12 +185,35 @@ export default function OrderPage() {
                         alt={item.name}
                         className="img-fluid rounded img-thumbnail"
                       ></img>{" "}
-                      <Link to={`/product/${item.desc}`}>{item.name}</Link>
+                      <Link
+                        style={{ marginLeft: "1rem" }}
+                        to={`/product/${item.desc}`}
+                      >
+                        {item.name}
+                      </Link>
                     </Grid>
-                    <Grid item md={3}>
+                    <Grid
+                      item
+                      md={3}
+                      xs={2}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
                       <span>{item.quantity}</span>
                     </Grid>
-                    <Grid item md={3}>
+                    <Grid
+                      item
+                      md={3}
+                      xs={2}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
                       <span>${item.price}</span>
                     </Grid>
                   </Grid>

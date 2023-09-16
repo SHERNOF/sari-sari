@@ -37,21 +37,11 @@ export default function CartPage() {
     });
   };
 
-  // const checkOutHandler = () => {
-  //   if (shippingAddress && paymentMethod) {
-  //     // navigate("/signin?redirect=/shipping");
-  //     navigate("/signin?redirect=/placeorder");
-  //   } else if (!shippingAddress) {
-  //     navigate("/signin?redirect=/shipping");
-  //   } else if (!paymentMethod) {
-  //     navigate("/signin?redirect=/payment");
-  //   }
-  // };
   const checkOutHandler = () => {
     navigate("/signin?redirect=/shipping");
   };
   return (
-    <div>
+    <div style={{ minHeight: "100vh" }}>
       <Helmet>
         <title>Shopping Cart</title>
       </Helmet>

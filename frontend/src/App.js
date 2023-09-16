@@ -41,18 +41,25 @@ function App() {
   const { state } = useContext(Store);
   const { sideBarIsOpen } = state;
 
-  const [evening, setEvening] = useState(true);
-
-  const getTime = () => {};
+  const [evening, setEvening] = useState(false);
+  useEffect(() => {
+    let hr = new Date().getHours();
+    const getTime = () => {
+      if (hr <= 18 || hr > 6) {
+        setEvening(true);
+      }
+    };
+    getTime();
+  }, [evening]);
 
   const theme = createTheme({
     palette: {
-      mode: "dark",
+      mode: `${evening ? "dark" : "light"}`,
       primary: {
-        main: "#673ab7",
+        main: "#f55e0d",
       },
       secondary: {
-        main: "#ce93d8",
+        main: "#f50057",
       },
     },
   });
@@ -68,7 +75,7 @@ function App() {
         >
           <SnackBar />
           <MyDrawer />
-          <SDial></SDial>
+          {/* <SDial></SDial> */}
           <Box />
           <HideAppBar></HideAppBar>
           <Card>

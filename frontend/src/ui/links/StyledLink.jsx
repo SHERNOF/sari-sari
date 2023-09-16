@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { Link as RouterLink, MemoryRouter } from "react-router-dom";
 import { StaticRouter } from "react-router-dom/server";
 import Link from "@mui/material/Link";
-import Box from "@mui/material/Box";
 
 const LinkBehavior = React.forwardRef((props, ref) => (
   <RouterLink
