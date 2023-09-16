@@ -41,17 +41,17 @@ function App() {
   const { state } = useContext(Store);
   const { sideBarIsOpen } = state;
 
-  const [evening, setEvening] = useState(false);
+  const [evening, setEvening] = useState();
   useEffect(() => {
     let hr = new Date().getHours();
-    const getTime = () => {
+    const getTime = (hr) => {
       if (hr <= 18 || hr > 6) {
         setEvening(true);
       }
     };
     getTime();
   }, [evening]);
-
+  console.log(evening);
   const theme = createTheme({
     palette: {
       mode: `${evening ? "dark" : "light"}`,
