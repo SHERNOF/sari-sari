@@ -2461,12 +2461,100 @@ H. Finish off the <CartPage /> and add the followng functionalities
                     import dotenv from "dotenv";
                     dotenv.config();
 
+    10h. Deleting Product - ProductListPage.jsx after Edit Button
+
+        10h1. show delete button
+
+        10h2. implemenet deleteHandler()
+            const deleteHandler = async (product) => {
+                if (window.confirm("Are you sure to delete?")) {
+                try {
+                    await axios.delete(`/api/products/${product._id}`, {
+                    headers: { Authorization: `Bearer ${userInfo.token}` },
+                    });
+                    ctxDispatch(setSnackbar(true, 'error', 'Product Successfully deleted'))
+
+                    dispatch({ type: "DELETE_SUCCESS" });
+                } catch (err) {
+                    ctxDispatch(setSnackbar(true, 'success', getError(err)))
+                    dispatch({
+                    type: "DELETE_FAIL",
+                    });
+                }
+                }
+            };
+
+            - add the delete reducer
+
+                   case 'DELETE_REQUEST':
+                    return { ...state, loadingDelete: true, successDelete: false };
+                    case 'DELETE_SUCCESS':
+                    return {
+                        ...state,
+                        loadingDelete: false,
+                        successDelete: true,
+                    };
+                    case 'DELETE_FAIL':
+                    return { ...state, loadingDelete: false, successDelete: false };
+
+                    case 'DELETE_RESET':
+                    return { ...state, loadingDelete: false, successDelete: false };
 
 
+                use the successDelete as dependency in the useEffect to remove the deleted item immediately from the page
+                    useEffect(() => {
+                        const fetchData = async () => {
+                        try {
+                            const { data } = await axios.get(`/api/products/admin?page=${page}`, {
+                            headers: { Authorization: `Bearer ${userInfo.token}` },
+                            });
+                            dispatch({ type: "FETCH_SUCCESS", payload: data });
+                        } catch (err) {
+                            dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+                        }
+                        };
+                        fetchData();
+                    }, [page, userInfo, successDelete]);
 
-        10g2. use the api in .env
-        10g3. handle upload file
-        10g4. implemet BE api to upload
+            - use the loadingDelete to show the spinner
+
+        10h3. implement bE API in productRoute.js
+
+            productRouter.delete(
+                useEffect(() => {
+                const fetchData = async () => {
+                try {
+                    const { data } = await axios.get(`/api/products/admin?page=${page}`, {
+                    headers: { Authorization: `Bearer ${userInfo.token}` },
+                    });
+                    dispatch({ type: "FETCH_SUCCESS", payload: data });
+                } catch (err) {
+                    dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+                }
+                };
+                // fetchData();
+                if(successDelete){
+                dispatch({ type: 'DELETE_RESET'}) >> this will change the status of successDelete from true to false
+                }else{
+                fetchData()
+                }
+            }, [page, userInfo, successDelete]);
+
+    10I. Implement the <OrderListPage />
+
+        10i1. create the <OrderListPage />
+        10i2. implement BE API
+        10i3. fetch and display orders
+
+            orderRouter.get(
+            "/",
+            isAuth,
+            isAdmin,
+            expressAsyncHandler(async (req, res) => {
+                const orders = await Order.find().populate("user", "name");
+                res.send(orders);
+            })
+            );
 
 -
 -

@@ -57,9 +57,9 @@ export default function Admin() {
         onClose={handleClose}
         TransitionComponent={Fade}
         PaperProps={{
-          style: {
-            maxHeight: { md: ITEM_HEIGHT * 7.5, sm: ITEM_HEIGHT * 5.5 },
-            width: "20ch",
+          sx: {
+            maxHeight: { md: ITEM_HEIGHT * 7.5, xs: ITEM_HEIGHT * 7.5 },
+            width: "30ch",
           },
         }}
       >
@@ -78,10 +78,10 @@ export default function Admin() {
           <StyledLink to="/admin/users">Users</StyledLink>
         </MenuItem>
         <Divider></Divider>
-        <MenuItem>
+        <MenuItem sx={{ display: { sm: "none" } }}>
           <SearchBox></SearchBox>
         </MenuItem>
-        <Divider></Divider>
+        <Divider sx={{ display: { sm: "none" } }}></Divider>
         <MenuItem>
           <StyledLink to="/profile">User Profile</StyledLink>
         </MenuItem>

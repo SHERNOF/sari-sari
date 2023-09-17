@@ -63,8 +63,8 @@ export default function DashboardPage() {
         <MessageBox severity="error">{error}</MessageBox>
       ) : (
         <>
-          <Grid container spacing={3}>
-            <Grid item md={4}>
+          <Grid container spacing={2}>
+            <Grid item md={4} xs={12}>
               <Card>
                 <CardHeader title="Users" />
                 <CardContent>
@@ -74,7 +74,7 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item md={4}>
+            <Grid item md={4} xs={12}>
               <Card>
                 <CardHeader title="Orders" />
                 <CardContent>
@@ -84,7 +84,7 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item md={4}>
+            <Grid item md={4} xs={12}>
               <Card>
                 <CardHeader title="Total Sales" />
                 <CardContent>

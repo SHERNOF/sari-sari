@@ -1,4 +1,5 @@
 import { Button, TextField } from "@mui/material";
+import { Box } from "@mui/system";
 import axios from "axios";
 import { useContext, useReducer, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -73,66 +74,67 @@ export default function ProfilePage() {
           User Info
         </StyledH1>
       </div>
-      <form
-        onSubmit={submitHandler}
-        style={{
+      <Box
+        sx={{
           display: "flex",
-          width: "60%",
+          width: { md: "50%", xs: "100%" },
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <FormElements>
-          <TextField
-            sx={{ width: "100%" }}
-            id="outlined-search"
-            label="Name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </FormElements>
-        <FormElements>
-          <TextField
-            sx={{ width: "100%" }}
-            id="outlined-search"
-            label="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setemail(e.target.value)}
-            required
-          />
-        </FormElements>
-        <FormElements>
-          <TextField
-            sx={{ width: "100%" }}
-            id="outlined-search"
-            label="Password"
-            type="password"
-            value={password || ""}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </FormElements>
-        <FormElements>
-          <TextField
-            sx={{ width: "100%" }}
-            id="outlined-search"
-            label="Confirm Password"
-            type="password"
-            value={confirmPassword || ""}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </FormElements>
-        <FormElements>
-          <Button type="submit" variant="outlined" sx={{ width: "100%" }}>
-            Update
-          </Button>
-        </FormElements>
-      </form>
+        <form onSubmit={submitHandler} style={{ width: "100%" }}>
+          <FormElements>
+            <TextField
+              sx={{ width: "100%" }}
+              id="outlined-search"
+              label="Name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </FormElements>
+          <FormElements>
+            <TextField
+              sx={{ width: "100%" }}
+              id="outlined-search"
+              label="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setemail(e.target.value)}
+              required
+            />
+          </FormElements>
+          <FormElements>
+            <TextField
+              sx={{ width: "100%" }}
+              id="outlined-search"
+              label="Password"
+              type="password"
+              value={password || ""}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </FormElements>
+          <FormElements>
+            <TextField
+              sx={{ width: "100%" }}
+              id="outlined-search"
+              label="Confirm Password"
+              type="password"
+              value={confirmPassword || ""}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </FormElements>
+          <FormElements>
+            <Button type="submit" variant="outlined" sx={{ width: "100%" }}>
+              Update
+            </Button>
+          </FormElements>
+        </form>
+      </Box>
     </div>
   );
 }

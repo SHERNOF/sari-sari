@@ -29,6 +29,7 @@ productRouter.post(
     res.send({ message: "Product Created", product });
   })
 );
+
 productRouter.put(
   "/:id",
   isAuth,
@@ -47,6 +48,21 @@ productRouter.put(
       product.description = req.body.description;
       await product.save();
       res.send({ message: "Product Updated" });
+    } else {
+      res.status(404).send({ message: "Product Not Found" });
+    }
+  })
+);
+
+productRouter.delete(
+  "/:id",
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      await product.deleteOne();
+      res.send({ message: "Product Deleted" });
     } else {
       res.status(404).send({ message: "Product Not Found" });
     }

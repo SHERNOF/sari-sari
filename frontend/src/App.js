@@ -36,6 +36,7 @@ import SDial from "./components/Sdial";
 
 import { createTheme } from "@mui/material/styles";
 import MyDrawer from "./components/Drawer";
+import OrderListScreen from "./pages/OrderListPage";
 
 function App() {
   const { state } = useContext(Store);
@@ -76,7 +77,7 @@ function App() {
         >
           <SnackBar />
           <MyDrawer />
-          {/* <SDial></SDial> */}
+          <SDial></SDial>
           <Box />
           <HideAppBar></HideAppBar>
           <Card>
@@ -107,6 +108,14 @@ function App() {
                     </AdminRoute>
                   }
                 />
+                <Route
+                  path="/admin/orders"
+                  element={
+                    <AdminRoute>
+                      <OrderListScreen />
+                    </AdminRoute>
+                  }
+                ></Route>
                 <Route
                   path="/admin/products"
                   element={

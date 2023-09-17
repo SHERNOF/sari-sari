@@ -4,7 +4,6 @@ import {
   Table,
   TableContainer,
   TableHead,
-  Button,
   TableRow,
 } from "@mui/material";
 import axios from "axios";
@@ -17,7 +16,6 @@ import { getError } from "../utils";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { styled } from "@mui/material/styles";
-// import Button from "../ui/button/Button";
 import StyledButton from "../ui/button/Button";
 import StyledH1 from "../ui/pageTitle/PageTitle";
 import CreateIcon from "@mui/icons-material/Create";
@@ -43,6 +41,20 @@ const reducer = (state, action) => {
       return { ...state, loadingCreate: false };
     case "CREATE_FAIL":
       return { ...state, loadingCreate: false };
+
+    case "DELETE_REQUEST":
+      return { ...state, loadingDelete: true, successDelete: false };
+    case "DELETE_SUCCESS":
+      return {
+        ...state,
+        loadingDelete: false,
+        successDelete: true,
+      };
+    case "DELETE_FAIL":
+      return { ...state, loadingDelete: false, successDelete: false };
+
+    case "DELETE_RESET":
+      return { ...state, loadingDelete: false, successDelete: false };
     default:
       return state;
   }
@@ -70,12 +82,22 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function ProductListPage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
-  const [{ loading, error, products, pages, loadingCreate }, dispatch] =
-    useReducer(reducer, {
-      loading: true,
-      error: "",
-    });
-  const { search, pathname } = useLocation();
+  const [
+    {
+      loading,
+      error,
+      products,
+      pages,
+      loadingCreate,
+      loadingDelete,
+      successDelete,
+    },
+    dispatch,
+  ] = useReducer(reducer, {
+    loading: true,
+    error: "",
+  });
+  const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const page = sp.get("page") || 1;
 
@@ -92,8 +114,13 @@ export default function ProductListPage() {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
       }
     };
-    fetchData();
-  }, [page, userInfo]);
+    // fetchData();
+    if (successDelete) {
+      dispatch({ type: "DELETE_RESET" });
+    } else {
+      fetchData();
+    }
+  }, [page, userInfo, successDelete]);
 
   const createHandler = async () => {
     if (window.confirm("Are you sure you want to create?")) {
@@ -116,6 +143,24 @@ export default function ProductListPage() {
     }
   };
 
+  const deleteHandler = async (product) => {
+    if (window.confirm("Are you sure to delete?")) {
+      try {
+        await axios.delete(`/api/products/${product._id}`, {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        });
+        ctxDispatch(setSnackbar(true, "error", "Product Successfully deleted"));
+
+        dispatch({ type: "DELETE_SUCCESS" });
+      } catch (err) {
+        ctxDispatch(setSnackbar(true, "success", getError(err)));
+        dispatch({
+          type: "DELETE_FAIL",
+        });
+      }
+    }
+  };
+
   return (
     <Box sx={{ minHeight: "100vh" }}>
       <Grid
@@ -130,9 +175,9 @@ export default function ProductListPage() {
           <StyledH1>Product</StyledH1>
         </Grid>
         <Grid item sx={{ marginRight: "1rem", marginBottom: "1rem" }}>
-          <div
-            style={{
-              width: "8rem",
+          <Box
+            sx={{
+              // width: "8rem",
               display: "flex",
               justifyContent: "center",
             }}
@@ -141,11 +186,11 @@ export default function ProductListPage() {
               onClick={createHandler}
               sx={{ cursor: "pointer" }}
             ></CreateIcon>
-          </div>
-          {/* <StyledButton onClick={createHandler}>Create Product</StyledButton> */}
+          </Box>
         </Grid>
       </Grid>
       {loadingCreate && <Loading />}
+      {loadingDelete && <Loading />}
 
       {loading ? (
         <Loading />
@@ -182,6 +227,13 @@ export default function ProductListPage() {
                         }
                       >
                         Edit
+                      </StyledButton>
+                      &nbsp;
+                      <StyledButton
+                        type="button"
+                        onClick={() => deleteHandler(product)}
+                      >
+                        Delete
                       </StyledButton>
                     </StyledTableCell>
                   </StyledTableRow>

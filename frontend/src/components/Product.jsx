@@ -1,16 +1,15 @@
 import React, { useContext } from "react";
 import Grid from "@mui/material/Grid";
-import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-// import Button from "@mui/material/Button";
 import Button from "../ui/button/Button";
 import RatingComponent from "./RatingComponent";
 import axios from "axios";
 import { Store } from "../store";
 import { Typography } from "@mui/material";
 import StyledLink from "../ui/links/StyledLink";
+import { Box } from "@mui/system";
 
 export default function Product({ product }) {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -38,14 +37,17 @@ export default function Product({ product }) {
         <CardContent className="product">
           <CardMedia>
             <StyledLink to={`/product/${product.desc}`}>
-              {/* <div style={{ height: { md: "300px", lg: "300px" } }}> */}
-              <div style={{ height: "300px" }}>
+              <Box
+                sx={{
+                  height: { lg: "300px", sm: "200px" },
+                }}
+              >
                 <img
                   src={product.image}
                   alt={product.name}
-                  style={{ minHeight: { md: "100%", xs: "120%" } }}
+                  style={{ minHeight: "100%" }}
                 />
-              </div>
+              </Box>
             </StyledLink>
           </CardMedia>
           <CardContent className="product-info">
