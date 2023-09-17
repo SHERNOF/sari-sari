@@ -122,9 +122,6 @@ export default function OrderListScreen() {
                   <StyledTableCell>
                     {order.isPaid ? order.paidAt.substring(0, 10) : "No"}
                   </StyledTableCell>
-                  {/* <StyledTableCell>
-                    {order.isPaid ? order.paidAt.substring(0, 10) : "No"}
-                  </StyledTableCell> */}
                   <StyledTableCell>
                     {order.isDelivered
                       ? order.deliveredAt.substring(0, 10)

@@ -2543,10 +2543,9 @@ H. Finish off the <CartPage /> and add the followng functionalities
     10I. Implement the <OrderListPage />
 
         10i1. create the <OrderListPage />
-        10i2. implement BE API
-        10i3. fetch and display orders
+        10i2. implement BE API in orderRoute.js
 
-            orderRouter.get(
+                   orderRouter.get(
             "/",
             isAuth,
             isAdmin,
@@ -2555,6 +2554,9 @@ H. Finish off the <CartPage /> and add the followng functionalities
                 res.send(orders);
             })
             );
+
+
+        10i3. fetch and display orders
 
 -
 -
