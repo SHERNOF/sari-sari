@@ -2558,21 +2558,75 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
         10i3. fetch and display orders
 
-    10J. Deliver Order
-        10J1. add Deliver button and deliverhandler()
-            - define the Deliver reducer in the <OrderPage />
-                    case 'DELIVER_REQUEST':
-                    return { ...state, loadingDeliver: true };
-                    case 'DELIVER_SUCCESS':
-                    return { ...state, loadingDeliver: false, successDeliver: true };
-                    case 'DELIVER_FAIL':
-                    return { ...state, loadingDeliver: false };
-                    case 'DELIVER_RESET':
-                    return {
+    10J. Deliver Order - it is the deliver feature of the app in <OrderListPage />. Deliver Order button will be available in the <OrderPage /> nstead of Paypal if the orders are paid
+
+             10j1. add the button in <OrderPage />
+                  -  {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                        <ListItem>
+                        {loadingDeliver && <Loading></Loading>}
+                        <div
+                            style={{
+                            display: "grid",
+                            width: "100%",
+                            }}
+                        >
+                            <StyledButton type="button" onClick={deliverOrderHandler}>
+                            Deliver Order
+                            </StyledButton>
+                        </div>
+                        </ListItem>
+                    )}
+
+                 - implement the deliverOrderHandler()
+
+                     async function deliverOrderHandler() {
+                        try {
+                        dispatch({ type: 'DELIVER_REQUEST' });
+                        const { data } = await axios.put(
+                            `/api/orders/${order._id}/deliver`,
+                            {},
+                            {
+                            headers: { authorization: `Bearer ${userInfo.token}` },
+                            }
+                        );
+                        dispatch({ type: 'DELIVER_SUCCESS', payload: data });
+                        toast.success('Order is delivered');
+                        } catch (err) {
+                        toast.error(getError(err));
+                        dispatch({ type: 'DELIVER_FAIL' });
+                        }
+                    }
+
+                - create the reducer and add the variable successDeliver
+                       case 'DELIVER_REQUEST':
+                        return { ...state, loadingDeliver: true };
+                        case 'DELIVER_SUCCESS':
+                        return { ...state, loadingDeliver: false, successDeliver: true };
+                        case 'DELIVER_FAIL':
+                        return { ...state, loadingDeliver: false };
+                        case 'DELIVER_RESET':
+                        return {
                         ...state,
                         loadingDeliver: false,
                         successDeliver: false,
-                    };
+                        };
+
+                - add successDeliver as a condition in successful shipment
+
+                  if (
+                    !order._id ||
+                    successPay ||
+                    successDeliver ||
+                    (order._id && order._id !== orderId)
+                    ) {
+                    fetchOrder();
+                    if (successPay) {
+                        dispatch({ type: 'PAY_RESET' });
+                    }
+
+
+             10J2. add Deliver button and deliverhandler() - define the Deliver reducer in the <OrderPage />
+
 
 
                       const [
@@ -2598,23 +2652,7 @@ H. Finish off the <CartPage /> and add the followng functionalities
                         dispatch({ type: 'DELIVER_RESET' });
                     }
 
-                    async function deliverOrderHandler() {
-                        try {
-                        dispatch({ type: 'DELIVER_REQUEST' });
-                        const { data } = await axios.put(
-                            `/api/orders/${order._id}/deliver`,
-                            {},
-                            {
-                            headers: { authorization: `Bearer ${userInfo.token}` },
-                            }
-                        );
-                        dispatch({ type: 'DELIVER_SUCCESS', payload: data });
-                        toast.success('Order is delivered');
-                        } catch (err) {
-                        toast.error(getError(err));
-                        dispatch({ type: 'DELIVER_FAIL' });
-                        }
-                    }
+
 
                      {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
                   <ListGroup.Item>

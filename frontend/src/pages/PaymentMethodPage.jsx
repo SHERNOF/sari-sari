@@ -10,6 +10,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import StyledH1 from "../ui/pageTitle/PageTitle";
+import StyledButton from "../ui/button/Button";
 
 export default function PaymentMethodPage() {
   const navigate = useNavigate();
@@ -66,9 +67,16 @@ export default function PaymentMethodPage() {
                 sx={{ marginBottom: "1rem" }}
               />
             </RadioGroup>
-            <Button variant="contained" type="submit">
-              Continue
-            </Button>
+            <div
+              style={{
+                display: "grid",
+                width: "100%",
+              }}
+            >
+              <StyledButton variant="contained" type="submit">
+                Continue
+              </StyledButton>
+            </div>
           </FormControl>
         </form>
       </div>

@@ -19,6 +19,7 @@ import axios from "axios";
 import { getError } from "../utils";
 import StyledH1 from "../ui/pageTitle/PageTitle";
 import StyledLink from "../ui/links/StyledLink";
+import StyledButton from "../ui/button/Button";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -226,14 +227,14 @@ export default function PlaceOrderPage() {
               <Divider />
               <ListItem>
                 <div style={{ display: "grid", width: "100%" }}>
-                  <Button
+                  <StyledButton
                     // type="button"
                     onClick={placeOrderHandler}
                     disabled={cart.cartItems.length === 0}
                     variant="contained"
                   >
                     Place Order
-                  </Button>
+                  </StyledButton>
                 </div>
                 {loading && <Loading />}
               </ListItem>

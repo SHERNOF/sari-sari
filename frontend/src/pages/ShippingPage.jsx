@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Store } from "../store";
 import CheckoutSteps from "../components/CheckoutSteps";
 import StyledH1 from "../ui/pageTitle/PageTitle";
+import StyledButton from "../ui/button/Button";
 
 export default function ShippingPage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -132,10 +133,18 @@ export default function ShippingPage() {
             onChange={(e) => setCountry(e.target.value)}
             required
           />
-          <div style={{ marginBottom: "3rem", marginTop: "-1rem" }}>
-            <Button type="submit" variant="contained">
+          {/* <div style={{ marginBottom: "3rem", marginTop: "-1rem" }}> */}
+          <div
+            style={{
+              display: "grid",
+              width: "100%",
+              marginBottom: "3rem",
+              // marginTop: "-1rem",
+            }}
+          >
+            <StyledButton type="submit" variant="contained">
               Continue
-            </Button>
+            </StyledButton>
           </div>
         </FormControl>
       </form>

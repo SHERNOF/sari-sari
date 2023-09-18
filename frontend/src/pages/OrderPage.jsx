@@ -12,6 +12,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import StyledH1 from "../ui/pageTitle/PageTitle.jsx";
 import StyledButton from "../ui/button/Button.jsx";
+import StyledLink from "../ui/links/StyledLink.jsx";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -30,18 +31,18 @@ const reducer = (state, action) => {
     case "PAY_RESET":
       return { ...state, loadingPay: false, successPay: false };
 
-      case 'DELIVER_REQUEST':
-        return { ...state, loadingDeliver: true };
-        case 'DELIVER_SUCCESS':
-        return { ...state, loadingDeliver: false, successDeliver: true };
-        case 'DELIVER_FAIL':
-        return { ...state, loadingDeliver: false };
-        case 'DELIVER_RESET':
-        return {
-            ...state,
-            loadingDeliver: false,
-            successDeliver: false,
-        };
+    case "DELIVER_REQUEST":
+      return { ...state, loadingDeliver: true };
+    case "DELIVER_SUCCESS":
+      return { ...state, loadingDeliver: false, successDeliver: true };
+    case "DELIVER_FAIL":
+      return { ...state, loadingDeliver: false };
+    case "DELIVER_RESET":
+      return {
+        ...state,
+        loadingDeliver: false,
+        successDeliver: false,
+      };
     default:
       return state;
   }
@@ -51,14 +52,24 @@ export default function OrderPage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
   const navigate = useNavigate();
-  const [{ loading, error, order, loadingPay, successPay, loadingDeliver, successDeliver, }, dispatch] =
-    useReducer(reducer, {
-      successPay: false,
-      loadingPay: false,
-      loading: true,
-      error: "",
-      order: {},
-    });
+  const [
+    {
+      loading,
+      error,
+      order,
+      successPay,
+      loadingPay,
+      loadingDeliver,
+      successDeliver,
+    },
+    dispatch,
+  ] = useReducer(reducer, {
+    successPay: false,
+    loadingPay: false,
+    loading: true,
+    error: "",
+    order: {},
+  });
 
   const params = useParams();
   const { id: orderId } = params;
@@ -114,13 +125,18 @@ export default function OrderPage() {
     if (!userInfo) {
       return navigate("/login");
     }
-    if (!order._id || successPay || (order._id && order._id !== orderId)) {
+    if (
+      !order._id ||
+      successPay ||
+      successDeliver ||
+      (order._id && order._id !== orderId)
+    ) {
       fetchOrder();
       if (successPay) {
         dispatch({ type: "PAY_RESET" });
       }
       if (successDeliver) {
-        dispatch({ type: 'DELIVER_RESET' });
+        dispatch({ type: "DELIVER_RESET" });
       }
     } else {
       const loadPaypalScript = async () => {
@@ -138,11 +154,19 @@ export default function OrderPage() {
       };
       loadPaypalScript();
     }
-  }, [order, userInfo, navigate, orderId, paypalDispatch, successPay, successDeliver,]);
+  }, [
+    order,
+    userInfo,
+    navigate,
+    orderId,
+    paypalDispatch,
+    successPay,
+    successDeliver,
+  ]);
 
   async function deliverOrderHandler() {
     try {
-      dispatch({ type: 'DELIVER_REQUEST' });
+      dispatch({ type: "DELIVER_REQUEST" });
       const { data } = await axios.put(
         `/api/orders/${order._id}/deliver`,
         {},
@@ -150,15 +174,13 @@ export default function OrderPage() {
           headers: { authorization: `Bearer ${userInfo.token}` },
         }
       );
-      dispatch({ type: 'DELIVER_SUCCESS', payload: data });
-      
-      ctxDispatch(setSnackbar(true, 'success', 'Order is delivered'))
+      dispatch({ type: "DELIVER_SUCCESS", payload: data });
+      ctxDispatch(setSnackbar(true, "success", "Order is delivered"));
     } catch (err) {
-      ctxDispatch(setSnackbar(true, 'error', getError(err)))
-      dispatch({ type: 'DELIVER_FAIL' });
+      ctxDispatch(setSnackbar(true, "error", getError(err)));
+      dispatch({ type: "DELIVER_FAIL" });
     }
   }
-
 
   return loading ? (
     <Loading />
@@ -222,13 +244,14 @@ export default function OrderPage() {
                         src={item.image}
                         alt={item.name}
                         className="img-fluid rounded img-thumbnail"
+                        style={{ marginRight: "1rem" }}
                       ></img>{" "}
-                      <Link
+                      <StyledLink
                         style={{ marginLeft: "1rem" }}
                         to={`/product/${item.desc}`}
                       >
                         {item.name}
-                      </Link>
+                      </StyledLink>
                     </Grid>
                     <Grid
                       item
@@ -299,16 +322,21 @@ export default function OrderPage() {
                   {loadingPay && <Loading />}
                 </ListItem>
               )}
-               {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
-                  <ListItem>
-                    {loadingDeliver && <Loading></Loading>}
-                    <div className="d-grid">
-                      <StyledButton type="button" onClick={deliverOrderHandler}>
-                        Deliver Order
-                      </StyledButton>
-                    </div>
-                  </ListItem>
-                )}
+              {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                <ListItem>
+                  {loadingDeliver && <Loading></Loading>}
+                  <div
+                    style={{
+                      display: "grid",
+                      width: "100%",
+                    }}
+                  >
+                    <StyledButton type="button" onClick={deliverOrderHandler}>
+                      Deliver Order
+                    </StyledButton>
+                  </div>
+                </ListItem>
+              )}
             </List>
           </Card>
         </Grid>

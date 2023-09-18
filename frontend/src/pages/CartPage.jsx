@@ -10,6 +10,7 @@ import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOu
 import axios from "axios";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import StyledH1 from "../ui/pageTitle/PageTitle";
+import StyledLink from "../ui/links/StyledLink";
 
 export default function CartPage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -69,16 +70,16 @@ export default function CartPage() {
                             src={item.image}
                             alt={item.name}
                             className="img-thumbnail"
-                            style={{ maxHeight: "60px" }}
+                            style={{ maxHeight: "60px", marginRight: "1rem" }}
                           />
                         </Card>
                         {""}
-                        <Link
+                        <StyledLink
                           to={`/product/${item.desc}`}
                           style={{ marginLeft: "1rem" }}
                         >
                           {item.name}
-                        </Link>
+                        </StyledLink>
                       </Grid>
                       <Grid
                         item

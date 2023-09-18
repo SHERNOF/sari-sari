@@ -62,19 +62,32 @@ export default function Product({ product }) {
             <p>
               <strong>${product.price}</strong>
             </p>
-            
+
             {product.countInStock === 0 ? (
-              <StyledButton variant="outlined" disabled >
-                OUT OF STOCK
-              </StyledButton>
-            ) : (
-              
-              <StyledButton  
-                variant="contained"
-                onClick={() => addToCartHandler(product)}
+              <div
+                style={{
+                  display: "grid",
+                  width: "100%",
+                }}
               >
-                ADD TO CART
-              </StyledButton>
+                <StyledButton variant="outlined" disabled>
+                  OUT OF STOCK
+                </StyledButton>
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "grid",
+                  width: "100%",
+                }}
+              >
+                <StyledButton
+                  variant="contained"
+                  onClick={() => addToCartHandler(product)}
+                >
+                  ADD TO CART
+                </StyledButton>
+              </div>
             )}
           </CardContent>
         </CardContent>
