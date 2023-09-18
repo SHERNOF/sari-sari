@@ -1,10 +1,20 @@
 import express from "express";
 import User from "../models/userModels.js";
 import expressAsyncHandler from "express-async-handler";
-import { generateToken, isAuth } from "../utils.js";
+import { generateToken, isAdmin, isAuth } from "../utils.js";
 import bcrypt from "bcryptjs";
 
 const userRouter = express.Router();
+
+userRouter.get(
+  "/",
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const users = await User.find({});
+    res.send(users);
+  })
+);
 
 userRouter.post(
   "/signin",

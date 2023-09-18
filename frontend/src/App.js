@@ -37,6 +37,7 @@ import SDial from "./components/Sdial";
 import { createTheme } from "@mui/material/styles";
 import MyDrawer from "./components/Drawer";
 import OrderListScreen from "./pages/OrderListPage";
+import UserListScreen from "./pages/UserListPage";
 
 function App() {
   const { state } = useContext(Store);
@@ -45,7 +46,7 @@ function App() {
   const [evening, setEvening] = useState();
   useEffect(() => {
     let hr = new Date().getHours();
-    
+
     const getTime = () => {
       if (hr >= 18 || hr <= 6) {
         setEvening(true);
@@ -53,7 +54,7 @@ function App() {
     };
     getTime();
   }, [evening]);
-  
+
   const theme = createTheme({
     palette: {
       mode: `${evening ? "dark" : "light"}`,
@@ -141,6 +142,14 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
+                <Route
+                  path="/admin/users"
+                  element={
+                    <AdminRoute>
+                      <UserListScreen />
+                    </AdminRoute>
+                  }
+                ></Route>
                 <Route
                   path="/order/:id"
                   element={

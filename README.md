@@ -2779,6 +2779,55 @@ H. Finish off the <CartPage /> and add the followng functionalities
                 })
                 );
 
+    10L. List users
+
+        - create the <UsersListPage />
+
+            - define the reducer and variables
+
+                const reducer = (state, action) => {
+                    switch (action.type) {
+                        case "FETCH_REQUEST":
+                        return { ...state, loading: true };
+                        case "FETCH_SUCCESS":
+                        return {
+                            ...state,
+                            users: action.payload,
+                            loading: false,
+                        };
+                        case "FETCH_FAIL":
+                        return { ...state, loading: false, error: action.payload };
+
+                        default:
+                        return state;
+                    }
+                    };
+
+            - export default function UserListScreen() {
+            const [{ loading, error, users }, dispatch] = useReducer(reducer, {
+                loading: true,
+                error: "",
+            });
+
+            const { state } = useContext(Store);
+            const { userInfo } = state;
+
+
+        - define the listuserHandler
+        - define the BE API
+
+            - define the route in userRoute.js
+
+                userRouter.get(
+                    '/',
+                    isAuth,
+                    isAdmin,
+                    expressAsyncHandler(async (req, res) => {
+                        const users = await User.find({});
+                        res.send(users);
+                    })
+                    );
+
 -
 -
 -
