@@ -2688,6 +2688,97 @@ H. Finish off the <CartPage /> and add the followng functionalities
                 })
                 );
 
+    10k. Order Deletion
+
+        10k1. Create the delete product button in the <OrderListPage />
+
+            - create the button
+            - define the reducer
+                  case 'DELETE_REQUEST':
+                    return { ...state, loadingDelete: true, successDelete: false };
+                    case 'DELETE_SUCCESS':
+                    return {
+                        ...state,
+                        loadingDelete: false,
+                        successDelete: true,
+                    };
+                    case 'DELETE_FAIL':
+                    return { ...state, loadingDelete: false };
+                    case 'DELETE_RESET':
+                    return { ...state, loadingDelete: false, successDelete: false };
+
+            - add loadingDelete and successDelete in the reducer variable
+
+                 const [{ loading, error, orders, loadingDelete, successDelete }, dispatch] =
+                    useReducer(reducer, {
+                    loading: true,
+                    error: '',
+                    });
+            - modify the reducer to include the successDelete data to be gathered. use successDelete as another dependency
+
+            useEffect(() => {
+                const fetchData = async () => {
+                @@ -48,15 +62,38 @@ export default function OrderListScreen() {
+                    });
+                }
+                };
+                if (successDelete) {
+                dispatch({ type: 'DELETE_RESET' });
+                } else {
+                fetchData();
+                }
+            }, [userInfo, successDelete]);
+
+            - definr the deleteHandler
+
+              const deleteHandler = async (order) => {
+                if (window.confirm('Are you sure to delete?')) {
+                try {
+                    dispatch({ type: 'DELETE_REQUEST' });
+                    await axios.delete(`/api/orders/${order._id}`, {
+                    headers: { Authorization: `Bearer ${userInfo.token}` },
+                    });
+                    toast.success('order deleted successfully');
+                    dispatch({ type: 'DELETE_SUCCESS' });
+                } catch (err) {
+                    toast.error(getError(error));
+                    dispatch({
+                    type: 'DELETE_FAIL',
+                    });
+                }
+                }
+            };
+
+            - implement the spinner
+            {loadingDelete && <LoadingBox></LoadingBox>}
+
+            - add the button
+                   &nbsp; &nbsp;
+                    <StyledButton
+                      type="button"
+                      variant="light"
+                      onClick={() => deleteHandler(order)}
+                    >
+                      Delete
+                    </StyledButton>
+
+        10k2. Create the BE API in orderRputer.js
+
+            - orderRouter.delete(
+                "/:id",
+                isAuth,
+                isAdmin,
+                expressAsyncHandler(async (req, res) => {
+                    const order = await Order.findById(req.params.id);
+                    if (order) {
+                    await order.deleteOne();
+                    res.send({ message: "Order Deleted" });
+                    } else {
+                    res.status(404).send({ message: "Order Not Found" });
+                    }
+                })
+                );
+
 -
 -
 -

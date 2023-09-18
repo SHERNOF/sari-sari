@@ -13,7 +13,7 @@ import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import MessageBox from "../components/MessageBox";
-import { Store } from "../store";
+import { setSnackbar, Store } from "../store";
 import StyledButton from "../ui/button/Button";
 import StyledH1 from "../ui/pageTitle/PageTitle";
 import { getError } from "../utils";
@@ -31,6 +31,20 @@ const reducer = (state, action) => {
       };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
+
+    case "DELETE_REQUEST":
+      return { ...state, loadingDelete: true, successDelete: false };
+    case "DELETE_SUCCESS":
+      return {
+        ...state,
+        loadingDelete: false,
+        successDelete: true,
+      };
+    case "DELETE_FAIL":
+      return { ...state, loadingDelete: false };
+    case "DELETE_RESET":
+      return { ...state, loadingDelete: false, successDelete: false };
+
     default:
       return state;
   }
@@ -55,14 +69,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
+
 export default function OrderListScreen() {
   const navigate = useNavigate();
-  const { state } = useContext(Store);
+  const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
-  const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: "",
-  });
+  const [{ loading, error, orders, loadingDelete, successDelete }, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      error: "",
+    });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,8 +95,33 @@ export default function OrderListScreen() {
         });
       }
     };
-    fetchData();
-  }, [userInfo]);
+    //     fetchData();
+    //   }, [userInfo]);
+    if (successDelete) {
+      dispatch({ type: "DELETE_RESET" });
+    } else {
+      fetchData();
+    }
+  }, [userInfo, successDelete]);
+
+  const deleteHandler = async (order) => {
+    if (window.confirm("Are you sure to delete?")) {
+      try {
+        dispatch({ type: "DELETE_REQUEST" });
+        await axios.delete(`/api/orders/${order._id}`, {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        });
+        // toast.success("order deleted successfully");
+        ctxDispatch(setSnackbar(true, "success", "order deleted successfully"));
+        dispatch({ type: "DELETE_SUCCESS" });
+      } catch (err) {
+        ctxDispatch(setSnackbar(true, "error", getError(error)));
+        dispatch({
+          type: "DELETE_FAIL",
+        });
+      }
+    }
+  };
 
   return (
     <div>
@@ -88,6 +129,7 @@ export default function OrderListScreen() {
         <title>Orders</title>
       </Helmet>
       <StyledH1>Orders</StyledH1>
+      {loadingDelete && <Loading></Loading>}
       {loading ? (
         <Loading></Loading>
       ) : error ? (
@@ -136,6 +178,14 @@ export default function OrderListScreen() {
                       }}
                     >
                       Details
+                    </StyledButton>
+                    &nbsp; &nbsp;
+                    <StyledButton
+                      type="button"
+                      variant="light"
+                      onClick={() => deleteHandler(order)}
+                    >
+                      Delete
                     </StyledButton>
                   </StyledTableCell>
                 </StyledTableRow>
