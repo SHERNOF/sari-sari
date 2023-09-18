@@ -3,13 +3,15 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Button from "../ui/button/Button";
+
 import RatingComponent from "./RatingComponent";
 import axios from "axios";
 import { Store } from "../store";
 import { Typography } from "@mui/material";
 import StyledLink from "../ui/links/StyledLink";
 import { Box } from "@mui/system";
+import StyledButton from "../ui/button/Button";
+import Button from "../ui/button/Button";
 
 export default function Product({ product }) {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -60,17 +62,19 @@ export default function Product({ product }) {
             <p>
               <strong>${product.price}</strong>
             </p>
+            
             {product.countInStock === 0 ? (
-              <Button variant="outlined" disabled>
+              <StyledButton variant="outlined" disabled >
                 OUT OF STOCK
-              </Button>
+              </StyledButton>
             ) : (
-              <Button
+              
+              <StyledButton  
                 variant="contained"
                 onClick={() => addToCartHandler(product)}
               >
                 ADD TO CART
-              </Button>
+              </StyledButton>
             )}
           </CardContent>
         </CardContent>

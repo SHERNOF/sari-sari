@@ -24,8 +24,7 @@ export default function StyledButton(props) {
       type={props.type || "button"}
       disabled={props.disabled || null}
       onClick={props.onClick}
-      // sx={{ display: "block", width: "100%", fontSize: ".7em" }}
-      sx={{ fontSize: ".7em" }}
+      sx={{ fontSize: ".7em"}}
     >
       {props.children}
     </Button>

@@ -11,6 +11,7 @@ import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import StyledH1 from "../ui/pageTitle/PageTitle.jsx";
+import StyledButton from "../ui/button/Button.jsx";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -28,6 +29,19 @@ const reducer = (state, action) => {
       return { ...state, loadingPay: false };
     case "PAY_RESET":
       return { ...state, loadingPay: false, successPay: false };
+
+      case 'DELIVER_REQUEST':
+        return { ...state, loadingDeliver: true };
+        case 'DELIVER_SUCCESS':
+        return { ...state, loadingDeliver: false, successDeliver: true };
+        case 'DELIVER_FAIL':
+        return { ...state, loadingDeliver: false };
+        case 'DELIVER_RESET':
+        return {
+            ...state,
+            loadingDeliver: false,
+            successDeliver: false,
+        };
     default:
       return state;
   }
@@ -37,7 +51,7 @@ export default function OrderPage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
   const navigate = useNavigate();
-  const [{ loading, error, order, loadingPay, successPay }, dispatch] =
+  const [{ loading, error, order, loadingPay, successPay, loadingDeliver, successDeliver, }, dispatch] =
     useReducer(reducer, {
       successPay: false,
       loadingPay: false,
@@ -105,6 +119,9 @@ export default function OrderPage() {
       if (successPay) {
         dispatch({ type: "PAY_RESET" });
       }
+      if (successDeliver) {
+        dispatch({ type: 'DELIVER_RESET' });
+      }
     } else {
       const loadPaypalScript = async () => {
         const { data: clientId } = await axios.get("/api/keys/paypal", {
@@ -121,7 +138,28 @@ export default function OrderPage() {
       };
       loadPaypalScript();
     }
-  }, [order, userInfo, navigate, orderId, paypalDispatch, successPay]);
+  }, [order, userInfo, navigate, orderId, paypalDispatch, successPay, successDeliver,]);
+
+  async function deliverOrderHandler() {
+    try {
+      dispatch({ type: 'DELIVER_REQUEST' });
+      const { data } = await axios.put(
+        `/api/orders/${order._id}/deliver`,
+        {},
+        {
+          headers: { authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+      dispatch({ type: 'DELIVER_SUCCESS', payload: data });
+      
+      ctxDispatch(setSnackbar(true, 'success', 'Order is delivered'))
+    } catch (err) {
+      ctxDispatch(setSnackbar(true, 'error', getError(err)))
+      dispatch({ type: 'DELIVER_FAIL' });
+    }
+  }
+
+
   return loading ? (
     <Loading />
   ) : error ? (
@@ -261,6 +299,16 @@ export default function OrderPage() {
                   {loadingPay && <Loading />}
                 </ListItem>
               )}
+               {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                  <ListItem>
+                    {loadingDeliver && <Loading></Loading>}
+                    <div className="d-grid">
+                      <StyledButton type="button" onClick={deliverOrderHandler}>
+                        Deliver Order
+                      </StyledButton>
+                    </div>
+                  </ListItem>
+                )}
             </List>
           </Card>
         </Grid>

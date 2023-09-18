@@ -45,7 +45,7 @@ function App() {
   const [evening, setEvening] = useState();
   useEffect(() => {
     let hr = new Date().getHours();
-    console.log(hr);
+    
     const getTime = () => {
       if (hr >= 18 || hr <= 6) {
         setEvening(true);
@@ -53,7 +53,7 @@ function App() {
     };
     getTime();
   }, [evening]);
-  console.log(evening);
+  
   const theme = createTheme({
     palette: {
       mode: `${evening ? "dark" : "light"}`,

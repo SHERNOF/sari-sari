@@ -2558,6 +2558,98 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
         10i3. fetch and display orders
 
+    10J. Deliver Order
+        10J1. add Deliver button and deliverhandler()
+            - define the Deliver reducer in the <OrderPage />
+                    case 'DELIVER_REQUEST':
+                    return { ...state, loadingDeliver: true };
+                    case 'DELIVER_SUCCESS':
+                    return { ...state, loadingDeliver: false, successDeliver: true };
+                    case 'DELIVER_FAIL':
+                    return { ...state, loadingDeliver: false };
+                    case 'DELIVER_RESET':
+                    return {
+                        ...state,
+                        loadingDeliver: false,
+                        successDeliver: false,
+                    };
+
+
+                      const [
+                        {
+                        loading,
+                        error,
+                        order,
+                        successPay,
+                        loadingPay,
+                        loadingDeliver,
+                        successDeliver,
+                        },
+                        dispatch,
+                    ] = useReducer(reducer, {
+                        loading: true,
+                        order: {},
+                        error: '',
+                        successPay: false,
+                        loadingPay: false,
+                    });
+
+                     if (successDeliver) {
+                        dispatch({ type: 'DELIVER_RESET' });
+                    }
+
+                    async function deliverOrderHandler() {
+                        try {
+                        dispatch({ type: 'DELIVER_REQUEST' });
+                        const { data } = await axios.put(
+                            `/api/orders/${order._id}/deliver`,
+                            {},
+                            {
+                            headers: { authorization: `Bearer ${userInfo.token}` },
+                            }
+                        );
+                        dispatch({ type: 'DELIVER_SUCCESS', payload: data });
+                        toast.success('Order is delivered');
+                        } catch (err) {
+                        toast.error(getError(err));
+                        dispatch({ type: 'DELIVER_FAIL' });
+                        }
+                    }
+
+                     {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                  <ListGroup.Item>
+                    {loadingDeliver && <LoadingBox></LoadingBox>}
+                    <div className="d-grid">
+                      <Button type="button" onClick={deliverOrderHandler}>
+                        Deliver Order
+                      </Button>
+                    </div>
+                  </ListGroup.Item>
+                )}
+
+
+
+
+        10j3. Implement BE API to deliver
+
+            implement the route in orderRoute.js
+
+                orderRouter.put(
+                '/:id/deliver',
+                isAuth,
+                expressAsyncHandler(async (req, res) => {
+                    const order = await Order.findById(req.params.id);
+                    if (order) {
+                    order.isDelivered = true;
+                    order.deliveredAt = Date.now();
+                    await order.save();
+                    res.send({ message: 'Order Delivered' });
+                    } else {
+                    res.status(404).send({ message: 'Order Not Found' });
+                    }
+                })
+                );
+
 -
 -
 -
