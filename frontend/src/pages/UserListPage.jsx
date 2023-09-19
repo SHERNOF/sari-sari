@@ -15,8 +15,11 @@ import Loading from "../components/Loading";
 import MessageBox from "../components/MessageBox";
 import { Store } from "../store";
 import { getError } from "../utils";
+import StyledButton from "../ui/button/Button";
+import { useNavigate } from "react-router-dom";
 
 const reducer = (state, action) => {
+  
   switch (action.type) {
     case "FETCH_REQUEST":
       return { ...state, loading: true };
@@ -33,6 +36,8 @@ const reducer = (state, action) => {
       return state;
   }
 };
+
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -53,6 +58,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 export default function UserListScreen() {
+  const navigate = useNavigate();
   const [{ loading, error, users }, dispatch] = useReducer(reducer, {
     loading: true,
     error: "",
@@ -106,7 +112,15 @@ export default function UserListScreen() {
                 <StyledTableCell>{user.name}</StyledTableCell>
                 <StyledTableCell>{user.email}</StyledTableCell>
                 <StyledTableCell>{user.isAdmin ? "YES" : "NO"}</StyledTableCell>
-                <StyledTableCell></StyledTableCell>
+                <StyledTableCell>
+                <StyledButton
+                    type="button"
+                    variant="light"
+                    onClick={() => navigate(`/admin/user/${user._id}`)}
+                  >
+                    Edit
+                  </StyledButton>
+                </StyledTableCell>
               </TableRow>
             ))}
           </TableBody>

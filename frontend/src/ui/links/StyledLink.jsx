@@ -31,7 +31,7 @@ export default function StyledLink(props) {
     <Link
       component={RouterLink}
       to={props.to}
-      style={{ textDecoration: "none", fontSize: ".7em" }}
+      style={{ textDecoration: "none", fontSize: ".3em" }}
     >
       {props.children}
     </Link>

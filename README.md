@@ -2827,7 +2827,56 @@ H. Finish off the <CartPage /> and add the followng functionalities
                         res.send(users);
                     })
                     );
+    10l. Implement Edit user button. It will enable the admin to change the status of user whether admin or not admin
 
+         1. create edit button - <UserListPage />
+           <td>
+            <Button
+            type="button"
+            variant="light"
+            onClick={() => navigate(`/admin/user/${user._id}`)}
+            >
+            Edit
+            </Button>
+        </td>
+        2. create edit product ui - <EditUserPage.jsx />
+        3. dispaly product info in the input boxes
+        4. implement backend api in userRouter.js
+
+            userRouter.get(
+                '/:id',
+                isAuth,
+                isAdmin,
+                expressAsyncHandler(async (req, res) => {
+                    const user = await User.findById(req.params.id);
+                    if (user) {
+                    res.send(user);
+                    } else {
+                    res.status(404).send({ message: 'User Not Found' });
+                    }
+                })
+                );
+
+                userRouter.put(
+                '/:id',
+                isAuth,
+                isAdmin,
+                expressAsyncHandler(async (req, res) => {
+                    const user = await User.findById(req.params.id);
+                    if (user) {
+                    user.name = req.body.name || user.name;
+                    user.email = req.body.email || user.email;
+                    user.isAdmin = Boolean(req.body.isAdmin);
+                    const updatedUser = await user.save();
+                    res.send({ message: 'User Updated', user: updatedUser });
+                    } else {
+                    res.status(404).send({ message: 'User Not Found' });
+                    }
+                })
+                );
+
+
+        5. handle edit click
 -
 -
 -
