@@ -8,7 +8,7 @@ import { Helmet } from "react-helmet-async";
 import MessageBox from "../components/MessageBox";
 import Loading from "../components/Loading";
 import FormElements from "../ui/formElements/FormElements";
-import { TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import Button from "../ui/button/Button";
 import StyledH1 from "../ui/pageTitle/PageTitle";
 
@@ -130,21 +130,42 @@ export default function ProductEditPage() {
     }
   };
   return (
-    <div>
-      <Container>
-        <Helmet>
-          <title>Edit Product ${productId}</title>
-        </Helmet>
-        <StyledH1>Edit Product</StyledH1>
-        {loading ? (
-          <Loading />
-        ) : error ? (
-          <MessageBox severity="error">{error}</MessageBox>
-        ) : (
+    <Box
+      sx={{
+        minHeight: "100%",
+        maxWidth: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      {/* <Container> */}
+      <Helmet>
+        <title>Edit Product ${productId}</title>
+      </Helmet>
+      <div style={{ width: "100%" }}>
+        <StyledH1 style={{ textAlign: "left", width: "100%" }}>
+          Edit Product
+        </StyledH1>
+      </div>
+      {loading ? (
+        <Loading />
+      ) : error ? (
+        <MessageBox severity="error">{error}</MessageBox>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            width: { md: "50%", xs: "100%" },
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <form
             style={{
               display: "flex",
-              width: "40%",
+              width: "100%",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
@@ -260,8 +281,9 @@ export default function ProductEditPage() {
               {loadingUpdate && <Loading />}
             </FormElements>
           </form>
-        )}
-      </Container>
-    </div>
+        </Box>
+      )}
+      {/* </Container> */}
+    </Box>
   );
 }

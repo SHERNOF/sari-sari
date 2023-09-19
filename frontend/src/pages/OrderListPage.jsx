@@ -70,7 +70,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function OrderListScreen() {
+export default function OrderListPage() {
   const navigate = useNavigate();
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
@@ -172,17 +172,15 @@ export default function OrderListScreen() {
                   <StyledTableCell>
                     <StyledButton
                       type="button"
-                      variant="light"
                       onClick={() => {
                         navigate(`/order/${order._id}`);
                       }}
                     >
                       Details
                     </StyledButton>
-                    &nbsp; &nbsp;
+                    &nbsp;
                     <StyledButton
                       type="button"
-                      variant="light"
                       onClick={() => deleteHandler(order)}
                     >
                       Delete

@@ -38,7 +38,8 @@ import { createTheme } from "@mui/material/styles";
 import MyDrawer from "./components/Drawer";
 import OrderListScreen from "./pages/OrderListPage";
 import UserListScreen from "./pages/UserListPage";
-import UserEditScreen from "./pages/UserEditScreen";
+import UserEditScreen from "./pages/UserEditPage";
+import OrderListPage from "./pages/OrderListPage";
 
 function App() {
   const { state } = useContext(Store);
@@ -114,7 +115,7 @@ function App() {
                   path="/admin/orders"
                   element={
                     <AdminRoute>
-                      <OrderListScreen />
+                      <OrderListPage />
                     </AdminRoute>
                   }
                 ></Route>
@@ -151,14 +152,14 @@ function App() {
                     </AdminRoute>
                   }
                 ></Route>
-                      <Route
-                path="/admin/user/:id"
-                element={
-                  <AdminRoute>
-                    <UserEditScreen />
-                  </AdminRoute>
-                }
-              ></Route>
+                <Route
+                  path="/admin/user/:id"
+                  element={
+                    <AdminRoute>
+                      <UserEditScreen />
+                    </AdminRoute>
+                  }
+                ></Route>
                 <Route
                   path="/order/:id"
                   element={

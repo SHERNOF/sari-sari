@@ -210,7 +210,6 @@ export default function ProductListPage() {
                   <StyledTableCell>ACTIONS</StyledTableCell>
                 </TableRow>
               </TableHead>
-
               <TableBody>
                 {products.map((product) => (
                   <StyledTableRow key={product._id}>
@@ -225,10 +224,12 @@ export default function ProductListPage() {
                         onClick={() =>
                           navigate(`/admin/product/${product._id}`)
                         }
+                        sx={{ width: "100%" }}
                       >
+                        {" "}
                         Edit
                       </StyledButton>
-                      &nbsp;
+                      &nbsp; &nbsp;
                       <StyledButton
                         type="button"
                         onClick={() => deleteHandler(product)}

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useContext, useReducer, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { setSnackbar, Store } from "../store";
+import StyledButton from "../ui/button/Button";
 import FormElements from "../ui/formElements/FormElements";
 import StyledH1 from "../ui/pageTitle/PageTitle";
 import { getError } from "../utils";
@@ -59,7 +60,6 @@ export default function ProfilePage() {
         maxWidth: "100%",
         display: "flex",
         flexDirection: "column",
-        // justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
       }}
@@ -129,9 +129,13 @@ export default function ProfilePage() {
             />
           </FormElements>
           <FormElements>
-            <Button type="submit" variant="outlined" sx={{ width: "100%" }}>
+            <StyledButton
+              type="submit"
+              variant="outlined"
+              sx={{ width: "100%" }}
+            >
               Update
-            </Button>
+            </StyledButton>
           </FormElements>
         </form>
       </Box>

@@ -65,15 +65,6 @@ export default function SignUpPage() {
       <Helmet>
         <title>Sign Up</title>
       </Helmet>
-      {/* <h1
-        style={{
-          marginBottom: "3rem",
-          textAlign: "left",
-          width: "100%",
-        }}
-      >
-        Sign Up
-      </h1> */}
       <StyledH1
         style={{ marginBottom: "3rem", textAlign: "left", width: "100%" }}
       >
@@ -142,8 +133,6 @@ export default function SignUpPage() {
           <Link to={`/signin?redirect=${redirect}`}>Sign In</Link>
         </div>
       </form>
-      {/* </div> */}
-      {/* <Button onClick={handleClick}>Test</Button> */}
     </div>
   );
 }
