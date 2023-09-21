@@ -10,6 +10,7 @@ import FormElements from "../ui/formElements/FormElements";
 import { Container, TextField } from "@mui/material";
 import StyledButton from "../ui/button/Button";
 import StyledH1 from "../ui/pageTitle/PageTitle";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { Box } from "@mui/system";
 
@@ -125,7 +126,6 @@ export default function UserEditPage() {
         >
           <form onSubmit={submitHandler} style={{ width: "100%" }}>
             <FormElements className="mb-3" controlId="name">
-              {/* <Form.Label>Name</Form.Label> */}
               <TextField
                 sx={{ width: "100%" }}
                 value={name}
@@ -137,7 +137,6 @@ export default function UserEditPage() {
               />
             </FormElements>
             <FormElements className="mb-3" controlId="email">
-              {/* <Form.Label>Email</Form.Label> */}
               <TextField
                 sx={{ width: "100%" }}
                 value={email}
@@ -148,15 +147,27 @@ export default function UserEditPage() {
                 label="Email"
               />
             </FormElements>
-
-            <Checkbox
-              sx={{ marginBottom: "2rem" }}
-              // type="checkbox"
-              id="isAdmin"
-              name="isAdmin"
-              checked={isAdmin}
-              onChange={(e) => setIsAdmin(e.target.checked)}
-            />
+            <FormElements>
+              <Box
+                sx={{
+                  width: "100%",
+                }}
+              >
+                <FormControlLabel
+                  sx={{ marginLeft: ".2rem" }}
+                  aria-label="position"
+                  label="isAdmin?"
+                  control={
+                    <Checkbox
+                      id="isAdmin"
+                      name="isAdmin"
+                      checked={isAdmin}
+                      onChange={(e) => setIsAdmin(e.target.checked)}
+                    />
+                  }
+                ></FormControlLabel>
+              </Box>
+            </FormElements>
             <FormElements>
               <div style={{ marginBottom: "2rem", width: "100%" }}>
                 <StyledButton disabled={loadingUpdate} type="submit">

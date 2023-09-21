@@ -2938,6 +2938,88 @@ H. Finish off the <CartPage /> and add the followng functionalities
                     }
                 };
 
+    10m. Delete User
+
+        1. add delete button in <UserListPage />
+
+              &nbsp;
+                  <StyledButton
+                    type="button"
+                    variant="light"
+                    onClick={() => deleteHandler(user)}
+                  >
+                    Delete
+                  </StyledButton>
+
+        2. handle click action
+
+            - define the reducer
+                 case 'DELETE_REQUEST':
+                    return { ...state, loadingDelete: true, successDelete: false };
+                    case 'DELETE_SUCCESS':
+                    return {
+                        ...state,
+                        loadingDelete: false,
+                        successDelete: true,
+                    };
+                    case 'DELETE_FAIL':
+                    return { ...state, loadingDelete: false };
+                    case 'DELETE_RESET':
+                    return { ...state, loadingDelete: false, successDelete: false };
+
+
+            - add the successDelete as a variable in the reducer
+
+                  const [{ loading, error, users, loadingDelete, successDelete }, dispatch] = useReducer(reducer, {
+                    loading: true,
+                    error: '',
+                    });
+
+            - update the useEffect and use successDelete as another dependency
+                  if (successDelete) {
+                    dispatch({ type: 'DELETE_RESET' });
+                    } else {
+                    fetchData();
+                    }
+
+            - deleteHandler()
+             const deleteHandler = async (user) => {
+                if (window.confirm('Are you sure to delete?')) {
+                try {
+                    dispatch({ type: 'DELETE_REQUEST' });
+                    await axios.delete(`/api/users/${user._id}`, {
+                    headers: { Authorization: `Bearer ${userInfo.token}` },
+                    });
+                    toast.success('user deleted successfully');
+                    dispatch({ type: 'DELETE_SUCCESS' });
+                } catch (error) {
+                    toast.error(getError(error));
+                    dispatch({
+                    type: 'DELETE_FAIL',
+                    });
+                }
+                }
+            };
+
+            - implement a loading box upon execution
+
+            {loadingDelete && <Loading></Loading>}
+
+        3. implement backen api for delete
+
+            userRouter.delete(
+            '/:id',
+            isAuth,
+            isAdmin,
+            expressAsyncHandler(async (req, res) => {
+                const user = await User.findById(req.params.id);
+                if (user) {
+                if (user.email === 'admin@example.com') {
+                    res.status(400).send({ message: 'Can Not Delete Admin User' });
+                    return;
+                }
+                await user.remove();
+
 -
 -
 -

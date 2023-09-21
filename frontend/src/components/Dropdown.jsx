@@ -3,9 +3,10 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Link } from "react-router-dom";
 import { Divider, Tooltip } from "@mui/material";
 import { Store } from "../store";
+import StyledLink from "../ui/links/StyledLink";
+import { Link } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
 
@@ -54,30 +55,21 @@ export default function LongMenu() {
         PaperProps={{
           style: {
             maxHeight: ITEM_HEIGHT * 4.5,
-            width: "15ch",
+            width: "20ch",
           },
         }}
       >
-        <MenuItem>
-          <Link style={{ fontSize: ".7em" }} to="/profile">
-            User Profile
-          </Link>
-        </MenuItem>
-        <MenuItem>
-          <Link style={{ fontSize: ".7em" }} to="/orderhistory">
-            Order History
-          </Link>
-        </MenuItem>
+        <StyledLink style={{ fontSize: ".7em" }} to="/profile">
+          <MenuItem>User Profile</MenuItem>
+        </StyledLink>
+        <StyledLink style={{ fontSize: ".7em" }} to="/orderhistory">
+          <MenuItem>Order History</MenuItem>
+        </StyledLink>
         <Divider></Divider>
-        <MenuItem>
-          <Link
-            style={{ fontSize: ".7em" }}
-            to="#signout"
-            onClick={signOutHandler}
-          >
-            Sign Out
-          </Link>
-        </MenuItem>
+        <StyledLink style={{ fontSize: ".7em" }} to="#signout">
+          <MenuItem onClick={signOutHandler}>Sign Out</MenuItem>
+        </StyledLink>
+        <MenuItem>{userInfo.name}</MenuItem>
       </Menu>
     </div>
   );

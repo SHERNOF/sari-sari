@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import { setSnackbar, Store } from "../store";
 import { getError } from "../utils";
 import StyledH1 from "../ui/pageTitle/PageTitle";
+import { Box } from "@mui/system";
 
 export default function SignInPage() {
   const { search } = useLocation();
@@ -34,9 +35,6 @@ export default function SignInPage() {
     } catch (err) {
       ctxDispatch(setSnackbar(true, "error", getError(err)));
     }
-
-    setemail("");
-    setpassword("");
   };
 
   const navigate = useNavigate();
@@ -47,73 +45,73 @@ export default function SignInPage() {
   }, [navigate, redirect, userInfo]);
 
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         maxWidth: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
         alignItems: "center",
+        minHeight: "100vh",
       }}
     >
       <Helmet>
         <title>Sign In</title>
       </Helmet>
-      {/* <h1
-        style={{
-          marginBottom: "3rem",
-          textAlign: "left",
+      <Box
+        sx={{
           width: "100%",
+
+          textAlign: "left",
+          marginBottom: "3rem",
         }}
       >
-        Sign In
-      </h1> */}
-      <StyledH1
-        style={{ marginBottom: "3rem", textAlign: "left", width: "100%" }}
-      >
-        SignIn Page
-      </StyledH1>
-      <form
-        style={{
+        <StyledH1
+          style={{ marginBottom: "3rem", textAlign: "left", width: "100%" }}
+        >
+          Sign In Page
+        </StyledH1>
+      </Box>
+      <Box
+        sx={{
           display: "flex",
-          width: "40%",
+          width: { md: "40%", xs: "100%" },
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
         }}
-        onSubmit={submitHandler}
       >
-        <FormElements>
-          <TextField
-            sx={{ width: "100%" }}
-            id="outlined-search"
-            label="Email"
-            type="email"
-            value={email || ""}
-            onChange={(e) => setemail(e.target.value)}
-            required
-          />
-        </FormElements>
-        <FormElements>
-          <TextField
-            sx={{ width: "100%" }}
-            id="outlined-search"
-            label="Password"
-            type="password"
-            value={password || ""}
-            onChange={(e) => setpassword(e.target.value)}
-            required
-          />
-        </FormElements>
-        <FormElements>
-          <Button type="submit">Sign In</Button>
-        </FormElements>
-        <div style={{ textAlign: "left", width: "100%" }}>
-          New Customer?{" "}
-          <Link to={`/signup?redirect=${redirect}`}>Create your account</Link>
-        </div>
-      </form>
-      {/* <Button onClick={handleClick}>Test</Button> */}
-    </div>
+        <form onSubmit={submitHandler} style={{ width: "100%" }}>
+          <FormElements>
+            <TextField
+              sx={{ width: "100%" }}
+              id="outlined-search"
+              label="Email"
+              type="email"
+              value={email || ""}
+              onChange={(e) => setemail(e.target.value)}
+              required
+            />
+          </FormElements>
+          <FormElements>
+            <TextField
+              sx={{ width: "100%" }}
+              id="outlined-search"
+              label="Password"
+              type="password"
+              value={password || ""}
+              onChange={(e) => setpassword(e.target.value)}
+              required
+            />
+          </FormElements>
+          <FormElements>
+            <Button type="submit">Sign In</Button>
+          </FormElements>
+          <div style={{ textAlign: "left", width: "100%" }}>
+            New Customer?{" "}
+            <Link to={`/signup?redirect=${redirect}`}>Create your account</Link>
+          </div>
+        </form>
+      </Box>
+    </Box>
   );
 }

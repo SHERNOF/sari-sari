@@ -51,8 +51,7 @@ export default function CartPage() {
         <Grid item md={8}>
           {cartItems.length === 0 ? (
             <MessageBox>
-              Cart is Empty
-              <Link to="/">Go Shopping</Link>
+              Cart is Empty <StyledLink to="/"> Go Shopping</StyledLink>
             </MessageBox>
           ) : (
             <List>

@@ -8,16 +8,19 @@ import TextField from "@mui/material/TextField";
 import { setSnackbar, Store } from "../store";
 import { getError } from "../utils";
 import StyledH1 from "../ui/pageTitle/PageTitle";
+import { Box } from "@mui/system";
 
 export default function SignUpPage() {
+  const navigate = useNavigate();
   const { search } = useLocation();
   const redirectInUrl = new URLSearchParams(search).get("redirect");
   const redirect = redirectInUrl ? redirectInUrl : "/";
-  const [isAdmin, setisAdmin] = useState("");
+
   const [name, setName] = useState("");
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
 
@@ -32,20 +35,16 @@ export default function SignUpPage() {
         name,
         email,
         password,
-        // isAdmin: false,
       });
-      console.log(data);
       ctxDispatch({ type: "USER_SIGNIN", payload: data });
       localStorage.setItem("userInfo", JSON.stringify(data));
       navigate(redirect || "");
       ctxDispatch(setSnackbar(true, "success", "Welcome to Your Page"));
     } catch (err) {
       ctxDispatch(setSnackbar(true, "error", getError(err)));
-      console.log(typeof err);
     }
   };
 
-  const navigate = useNavigate();
   useEffect(() => {
     if (userInfo) {
       navigate(redirect);
@@ -53,24 +52,25 @@ export default function SignUpPage() {
   }, [navigate, redirect, userInfo]);
 
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         maxWidth: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
         alignItems: "center",
+        minHeight: "100vh",
       }}
     >
       <Helmet>
         <title>Sign Up</title>
       </Helmet>
-      <StyledH1
-        style={{ marginBottom: "3rem", textAlign: "left", width: "100%" }}
-      >
-        Sign Up
-      </StyledH1>
-
+      <Box sx={{ width: "100%", textAlign: "left", marginBottom: "3rem" }}>
+        <StyledH1
+          style={{ marginBottom: "3rem", textAlign: "left", width: "100%" }}
+        >
+          Sign Up
+        </StyledH1>
+      </Box>
       <form
         style={{
           display: "flex",
@@ -133,6 +133,6 @@ export default function SignUpPage() {
           <Link to={`/signin?redirect=${redirect}`}>Sign In</Link>
         </div>
       </form>
-    </div>
+    </Box>
   );
 }

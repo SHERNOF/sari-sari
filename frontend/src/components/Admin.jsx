@@ -64,55 +64,47 @@ export default function Admin() {
         }}
       >
         <StyledLink to="/admin/dashboard">
-          <MenuItem sx={{fontSize:'.7rem'}} >
-          Dashboard
-        </MenuItem>
+          <MenuItem>Dashboard</MenuItem>
         </StyledLink>
 
         <StyledLink to="/admin/products">
-        <MenuItem sx={{fontSize:'.7rem'}} value={"Products"}>
-          Products
-        </MenuItem>
+          <MenuItem value={"Products"}>Products</MenuItem>
         </StyledLink>
 
         <StyledLink to="/admin/orders">
-          <MenuItem sx={{fontSize:'.7rem'}} value={"Order List"}>
-          Order List
-        </MenuItem>
+          <MenuItem /*sx={{ fontSize: ".7rem" }}*/ value={"Order List"}>
+            Order List
+          </MenuItem>
         </StyledLink>
 
         <StyledLink to="/admin/users">
-          <MenuItem sx={{fontSize:'.7rem'}} value={"User List"}>
-          Users
-        </MenuItem>
+          <MenuItem value={"User List"}>Users</MenuItem>
         </StyledLink>
-        
+
         <Divider></Divider>
 
-        <MenuItem  sx={{ display: { sm: "none" }, fontSize:'.7rem' }}>
+        <MenuItem sx={{ display: { sm: "none" } }}>
           <SearchBox></SearchBox>
         </MenuItem>
 
         <Divider sx={{ display: { sm: "none" } }}></Divider>
 
-        <StyledLink to="/profile"> <MenuItem sx={{fontSize:'.7rem'}}>
-          User Profile
-        </MenuItem>
+        {/* <StyledLink to="/profile">
+          {" "}
+          <MenuItem sx={{ fontSize: ".7rem" }}>User Profile</MenuItem>
         </StyledLink>
 
         <StyledLink to="/orderhistory">
-          <MenuItem sx={{fontSize:'.7rem'}}>
-         Order History
-        </MenuItem>
-        </StyledLink>
+          <MenuItem sx={{ fontSize: ".7rem" }}>Order History</MenuItem>
+        </StyledLink> */}
 
-        <Divider></Divider>
+        {/* <Divider></Divider> */}
 
-          <StyledLink to="#signout" onClick={signOutHandler}>
-            <MenuItem sx={{fontSize:'.7rem'}}>
-                Sign Out
-            </MenuItem>
-          </StyledLink>
+        {/* <StyledLink to="#signout" onClick={signOutHandler}>
+          <MenuItem sx={{ fontSize: ".7rem" }} onClick={signOutHandler}>
+            Sign Out
+          </MenuItem>
+        </StyledLink> */}
       </Menu>
     </div>
   );

@@ -13,6 +13,8 @@ import { Stack } from "@mui/system";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { setSideBarIsOpen, Store } from "../store";
 import Admin from "../components/Admin";
+import Dropdown from "./Dropdown";
+import StyledLink from "../ui/links/StyledLink";
 
 function Header(props) {
   const { children, window } = props;
@@ -103,20 +105,28 @@ export default function HideAppBar(props) {
                   </Stack>
                 )}
               </Link>
-              {userInfo && userInfo.isAdmin ? (
-                <Admin />
-              ) : (
-                <Link
-                  to="/signin"
-                  style={{
-                    marginLeft: "1rem",
-                    color: "white",
-                  }}
-                >
-                  Sign In
-                </Link>
-              )}
-              {/* {userInfo ? <Dropdown /> : <Link to="/signin">Sign In</Link>} */}
+              {
+                userInfo ? (
+                  <Dropdown />
+                ) : (
+                  <StyledLink to="/signin">Sign In</StyledLink>
+                )
+                // null
+              }
+
+              {
+                userInfo && userInfo.isAdmin && <Admin />
+                //  :
+                //   <Link
+                //     to="/signin"
+                //     style={{
+                //       marginLeft: "1rem",
+                //       color: "white",
+                //     }}
+                //   >
+                //     Sign In
+                //   </Link>
+              }
             </div>
           </Container>
         </AppBar>
