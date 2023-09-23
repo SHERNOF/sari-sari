@@ -9,6 +9,7 @@ import { setSnackbar, Store } from "../store";
 import { getError } from "../utils";
 import StyledH1 from "../ui/pageTitle/PageTitle";
 import { Box } from "@mui/system";
+import StyledLink from "../ui/links/StyledLink";
 
 export default function SignInPage() {
   const { search } = useLocation();
@@ -107,8 +108,10 @@ export default function SignInPage() {
             <Button type="submit">Sign In</Button>
           </FormElements>
           <div style={{ textAlign: "left", width: "100%" }}>
-            New Customer?{" "}
-            <Link to={`/signup?redirect=${redirect}`}>Create your account</Link>
+            New Customer?{"  "}
+            <StyledLink to={`/signup?redirect=${redirect}`}>
+              Create your account
+            </StyledLink>
           </div>
         </form>
       </Box>

@@ -3,9 +3,9 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
 import IconButton from "@mui/material/IconButton";
-import { Avatar, Tooltip } from "@mui/material";
+import { Avatar, Divider, Paper, Tooltip } from "@mui/material";
 import { Store } from "../store";
-
+import SearchBox from "./SearchBox";
 import StyledLink from "../ui/links/StyledLink";
 
 const ITEM_HEIGHT = 48;
@@ -13,15 +13,13 @@ const ITEM_HEIGHT = 48;
 export default function Admin() {
   const { state, dispatch: ctxDispatch } = React.useContext(Store);
   const { userInfo } = state;
-
   const [anchorEl, setAnchorEl] = React.useState(null);
-
   const open = Boolean(anchorEl);
-
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
+    const handleClose = () => {
     setAnchorEl(null);
   };
 
@@ -67,37 +65,30 @@ export default function Admin() {
         }}
       >
         <StyledLink to="/admin/dashboard">
-          <MenuItem onClick={handleClose}>Dashboard</MenuItem>
+          <MenuItem>Dashboard</MenuItem>
         </StyledLink>
 
         <StyledLink to="/admin/products">
-          <MenuItem onClick={handleClose} value={"Products"}>
-            Products
-          </MenuItem>
+          <MenuItem value={"Products"}>Products</MenuItem>
         </StyledLink>
 
         <StyledLink to="/admin/orders">
-          <MenuItem
-            onClick={handleClose}
-            /*sx={{ fontSize: ".7rem" }}*/ value={"Order List"}
-          >
+          <MenuItem /*sx={{ fontSize: ".7rem" }}*/ value={"Order List"}>
             Order List
           </MenuItem>
         </StyledLink>
 
         <StyledLink to="/admin/users">
-          <MenuItem onClick={handleClose} value={"User List"}>
-            Users
-          </MenuItem>
+          <MenuItem value={"User List"}>Users</MenuItem>
         </StyledLink>
 
         {/* <Divider></Divider> */}
 
-        {/* <MenuItem sx={{ display: { sm: "none" } }}>
+        <MenuItem sx={{ display: { sm: "none" } }}>
           <SearchBox></SearchBox>
-        </MenuItem> */}
+        </MenuItem>
 
-        {/* <Divider sx={{ display: { sm: "none" } }}></Divider> */}
+        <Divider sx={{ display: { sm: "none" } }}></Divider>
 
         {/* <StyledLink to="/profile">
           {" "}

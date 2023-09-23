@@ -12,6 +12,7 @@ import { Button, Grid } from "@mui/material";
 import RatingComponent from "../components/RatingComponent";
 import MessageBox from "../components/MessageBox";
 import Loading from "../components/Loading";
+import StyledLink from "../ui/links/StyledLink";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -71,7 +72,7 @@ export const ratings = [
   },
 ];
 
-export default function SearchScreen() {
+export default function SearchPage() {
   const { dispatch: ctxDispatch } = useContext(Store);
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -266,7 +267,7 @@ export default function SearchScreen() {
 
               <Grid container spacing={1.5}>
                 {products.map((product) => (
-                  <Product product={product}></Product>
+                  <Product key={product._id} product={product}></Product>
                 ))}
               </Grid>
 
@@ -274,14 +275,15 @@ export default function SearchScreen() {
                 {[...Array(pages).keys()].map((x) => (
                   <Link
                     key={x + 1}
-                    style={{ marginLeft: "1rem" }}
+                    // style={{ marginLeft: "1rem" }}
                     to={{
                       pathname: "/search",
                       seacrh: getFilterUrl({ page: x + 1 }, true),
                     }}
+                    // className={Number(page) === x + 1 ? "btn text-bold" : "btn"}
                   >
                     <Button
-                      className={Number(page) === x + 1 ? "text-bold" : ""}
+                      className={Number(page) === x + 1 ? " btn text-bold" : ""}
                       variant="light"
                     >
                       {x + 1}

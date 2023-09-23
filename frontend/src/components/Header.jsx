@@ -5,7 +5,7 @@ import AppBar from "@mui/material/AppBar";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Container from "@mui/material/Container";
 import Slide from "@mui/material/Slide";
-import { Badge, IconButton } from "@mui/material";
+import { Badge, IconButton, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import SearchBox from "./SearchBox";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -32,14 +32,14 @@ function Header(props) {
   );
 }
 
-Header.propTypes = {
-  children: PropTypes.element.isRequired,
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
-};
+// Header.propTypes = {
+//   children: PropTypes.element.isRequired,
+//   /**
+//    * Injected by the documentation to work in an iframe.
+//    * You won't need it on your project.
+//    */
+//   window: PropTypes.func,
+// };
 
 export default function HideAppBar(props) {
   const { state, dispatch: ctxDispatch } = React.useContext(Store);
@@ -105,14 +105,13 @@ export default function HideAppBar(props) {
                   </Stack>
                 )}
               </Link>
-              {
-                userInfo ? (
-                  <Dropdown />
-                ) : (
-                  <StyledLink to="/signin">Sign In</StyledLink>
-                )
-                // null
-              }
+              {userInfo ? (
+                <Dropdown />
+              ) : (
+                <Link to="/signin" style={{ color: "white" }}>
+                  Sign In
+                </Link>
+              )}
 
               {
                 userInfo && userInfo.isAdmin && <Admin />

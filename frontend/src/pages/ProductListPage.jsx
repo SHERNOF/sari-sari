@@ -19,6 +19,7 @@ import { styled } from "@mui/material/styles";
 import StyledButton from "../ui/button/Button";
 import StyledH1 from "../ui/pageTitle/PageTitle";
 import CreateIcon from "@mui/icons-material/Create";
+import AddIcon from "@mui/icons-material/Add";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -100,6 +101,7 @@ export default function ProductListPage() {
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const page = sp.get("page") || 1;
+  console.log(sp);
 
   const navigate = useNavigate();
 
@@ -177,15 +179,14 @@ export default function ProductListPage() {
         <Grid item sx={{ marginRight: "1rem", marginBottom: "1rem" }}>
           <Box
             sx={{
-              // width: "8rem",
               display: "flex",
               justifyContent: "center",
             }}
           >
-            <CreateIcon
+            <AddIcon
               onClick={createHandler}
               sx={{ cursor: "pointer" }}
-            ></CreateIcon>
+            ></AddIcon>
           </Box>
         </Grid>
       </Grid>
