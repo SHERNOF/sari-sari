@@ -7,6 +7,7 @@ import Loading from "../components/Loading";
 import MessageBox from "../components/MessageBox";
 import { getError } from "../utils";
 import StyledH1 from "../ui/pageTitle/PageTitle";
+import { Box } from "@mui/material";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -42,7 +43,7 @@ export default function Home() {
     fetchData();
   }, []);
   return (
-    <div>
+    <div style={{ minHeight: "100vh" }}>
       <Helmet>
         <title>sari-sari</title>
       </Helmet>

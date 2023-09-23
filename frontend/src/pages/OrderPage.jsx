@@ -187,7 +187,7 @@ export default function OrderPage() {
   ) : error ? (
     <MessageBox variant="danger">{error}</MessageBox>
   ) : (
-    <div>
+    <div style={{ minHeight: "85vh" }}>
       <Helmet>
         <title>Order {orderId}</title>
       </Helmet>

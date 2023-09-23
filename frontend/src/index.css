@@ -48,13 +48,7 @@ main {
 .product-info {
   padding: 1rem;
 }
-.footer {
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-}
+
 li {
   list-style: none;
   margin-bottom: 0.3rem;

@@ -3020,6 +3020,212 @@ H. Finish off the <CartPage /> and add the followng functionalities
                 }
                 await user.remove();
 
+11. Advance Features
+
+    11a. Choose location on Google Map - this will add the button in the <ShippingPage /> that shows that longtitude and latitude of the user. The user will be redirected to google map and if the button save is press, the location will then be save.
+
+    There will also be a "Show on Map" link in the <PaymentPage /> that will redirect the user to google map
+
+        1. create google map credentials - https://developers.google.com/maps
+
+            - click get started
+            -
+
+
+        2. update .env file with Google Api Key
+        3. create api to send google api to frontend
+        4. create map screen
+        5. fetch google api
+        6. getUserLocation
+        7. install @react-google-maps/api
+        8. use it in shipping screen
+        9. apply map to the checkout screen
+
+    11b. Send Email Order Receipt - this will have the feature to send email to user after payment. It will show order details. This uses mailGun
+
+        1. create mailgun account
+            - go to dashboard
+
+        2. add and verify your domain to mailgun
+            - go to sending and add new domain
+            - add new domain if ready for live account. use the sandbox account
+            - click the sandbox mail and copy the domain
+
+        3. set api key in env file
+            - in .env
+                MAILGUN_DOMAIN=sandboxe7972a008b34402abc766dd7174665bf.mailgun.org
+            - create an API Key. click and copy the the API key and paste it to .env
+                MAILGUN_API_KEY=
+            - enter the recipient email address in the Overview page. Click Save Recipient
+            - go to email account and click the link from mailgun if available. i used sherwin.nofuente@gmail.com as shernof@yahoo.com did not receive a
+                verification mail
+            -
+        4. in backend, npm install mailgun-js
+            - import mg from "mailgun-js" in utils.js
+            - create the email template
+
+                export const mailgun = () =>
+                mg({
+                    apiKey: process.env.MAILGUN_API_KEY,
+                    domain: process.env.MAILGUN_DOMIAN,
+                });
+
+                export const payOrderEmailTemplate = (order) => {
+                return `<h1>Thanks for shopping with us</h1>
+                <p>
+                Hi ${order.user.name},</p>
+                <p>We have finished processing your order.</p>
+                <h2>[Order ${order._id}] (${order.createdAt.toString().substring(0, 10)})</h2>
+                <table>
+                <thead>
+                <tr>
+                <td><strong>Product</strong></td>
+                <td><strong>Quantity</strong></td>
+                <td><strong align="right">Price</strong></td>
+                </thead>
+                <tbody>
+                ${order.orderItems
+                    .map(
+                    (item) => `
+                    <tr>
+                    <td>${item.name}</td>
+                    <td align="center">${item.quantity}</td>
+                    <td align="right"> $${item.price.toFixed(2)}</td>
+                    </tr>
+                `
+                    )
+                    .join('\n')}
+                </tbody>
+                <tfoot>
+                <tr>
+                <td colspan="2">Items Price:</td>
+                <td align="right"> $${order.itemsPrice.toFixed(2)}</td>
+                </tr>
+                <tr>
+                <td colspan="2">Shipping Price:</td>
+                <td align="right"> $${order.shippingPrice.toFixed(2)}</td>
+                </tr>
+                <tr>
+                <td colspan="2"><strong>Total Price:</strong></td>
+                <td align="right"><strong> $${order.totalPrice.toFixed(2)}</strong></td>
+                </tr>
+                <tr>
+                <td colspan="2">Payment Method:</td>
+                <td align="right">${order.paymentMethod}</td>
+                </tr>
+                </table>
+                <h2>Shipping address</h2>
+                <p>
+                ${order.shippingAddress.fullName},<br/>
+                ${order.shippingAddress.address},<br/>
+                ${order.shippingAddress.city},<br/>
+                ${order.shippingAddress.country},<br/>
+                ${order.shippingAddress.postalCode}<br/>
+                </p>
+                <hr/>
+                <p>
+                Thanks for shopping with us.
+                </p>
+                `;
+                };
+
+        5. change pay order in orderRouter
+
+            orderRouter.put(
+            "/:id/pay",
+            isAuth,
+            expressAsyncHandler(async (req, res) => {
+                // const order = await Order.findById(req.params.id);
+                const order = await Order.findById(req.params.id).populate(
+                'user',
+                'email name'
+                );
+                if (order) {
+                order.isPaid = true;
+                order.paidAt = Date.now();
+                order.paymentResult = {
+                    id: req.body.id,
+                    status: req.body.status,
+                    update_time: req.body.update_time,
+                    mail_address: req.body.email_address,
+                };
+                const updateOrder = await order.save();
+                res.send({ message: "Order Paid", order: updateOrder });
+                } else {
+                res.status(404).send({ message: "Order Not Found" });
+                }
+            })
+            );
+
+
+            >>> to
+
+            orderRouter.put(
+            "/:id/pay",
+            isAuth,
+            expressAsyncHandler(async (req, res) => {
+                // const order = await Order.findById(req.params.id);
+                const order = await Order.findById(req.params.id).populate(
+                'user',
+                'email name'
+                );
+                if (order) {
+                order.isPaid = true;
+                order.paidAt = Date.now();
+                order.paymentResult = {
+                    id: req.body.id,
+                    status: req.body.status,
+                    update_time: req.body.update_time,
+                    mail_address: req.body.email_address,
+                };
+                const updateOrder = await order.save();
+                mailgun()
+                    .messages()
+                    .send(
+                    {
+                        from: 'Amazona <amazona@mg.yourdomain.com>',
+                        to: `${order.user.name} <${order.user.email}>`,
+                        subject: `New order ${order._id}`,
+                        html: payOrderEmailTemplate(order),
+                    },
+                    (error, body) => {
+                        if (error) {
+                        console.log(error);
+                        } else {
+                        console.log(body);
+                        }
+                    }
+                    );
+                res.send({ message: "Order Paid", order: updateOrder });
+                } else {
+                res.status(404).send({ message: "Order Not Found" });
+                }
+            })
+            );
+
+            - import the mailgun and payOrderEmailTemplate
+                import { isAuth, isAdmin, mailgun, payOrderEmailTemplate } from "../utils.js";
+
+                restart the backend
+
+            - encountered
+
+            Error: Forbidden
+                at IncomingMessage.<anonymous> (/Users/shernof/Desktop/sari-sari/backend/node_modules/mailgun-js/lib/request.js:327:17)
+                at IncomingMessage.emit (node:events:538:35)
+                at endReadableNT (node:internal/streams/readable:1345:12)
+                at processTicksAndRejections (node:internal/process/task_queues:83:21) {
+            statusCode: 401
+            }
+
+            - its because i used the API key from HTTP webhook signing key. it should be the generated key for the app
+
+
+        6. send email order receipt
+
+    11c. Rate and Review products
+    11d. Upload Multiple Images of a product
+
 -
 -
 -

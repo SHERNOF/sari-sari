@@ -12,6 +12,7 @@ import StyledLink from "../ui/links/StyledLink";
 import { Box } from "@mui/system";
 import StyledButton from "../ui/button/Button";
 import Button from "../ui/button/Button";
+import Rating from "./Rating";
 
 export default function Product({ product }) {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -55,7 +56,7 @@ export default function Product({ product }) {
           <CardContent className="product-info">
             <Typography>{product.name}</Typography>
 
-            <RatingComponent rating={product.rating}></RatingComponent>
+            <Rating rating={product.rating}></Rating>
             <p style={{ marginTop: "-0.3rem" }}>
               <strong>{product.numReviews} reviews</strong>
             </p>

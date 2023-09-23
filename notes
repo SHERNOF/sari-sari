@@ -36,3 +36,5 @@ Libraries methods used
 22. cloudinary to upload image files (https://cloudinary.com/) - npm i cloudinary in the backend
 23. npm i streamifier in be
 24. npm i multer - is a package to handle file uploading to server
+25. mailgun - mailgun.com - this will send email to user after payment
+26. in baeckend folder npm i mailgun-js

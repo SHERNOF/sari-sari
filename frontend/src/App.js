@@ -20,7 +20,7 @@ import OrderPage from "./pages/OrderPage";
 import OrderHistoryPage from "./pages/OrderHistoryPage";
 import ProfilePage from "./pages/ProfilePage";
 
-import { Card, ThemeProvider } from "@mui/material";
+import { Card, Paper, ThemeProvider } from "@mui/material";
 
 import axios from "axios";
 import { getError } from "./utils";
@@ -72,7 +72,7 @@ function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <Box
+        <div
           style={{ minHeight: "100vh" }}
           className={
             sideBarIsOpen ? "site-container active-cont" : "site-container"
@@ -171,8 +171,19 @@ function App() {
               </Routes>
             </Container>
           </Card>
-          <Box className="footer">SHERNOF</Box>
-        </Box>
+          <Paper
+            sx={{
+              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: " 1rem",
+              borderRadius: "0",
+            }}
+          >
+            SHERNOF
+          </Paper>
+        </div>
       </ThemeProvider>
     </BrowserRouter>
   );
