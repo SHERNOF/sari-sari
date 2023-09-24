@@ -39,7 +39,7 @@ productRouter.put(
     const product = await Product.findById(productId);
     if (product) {
       product.name = req.body.name;
-      product.slug = req.body.slug;
+      product.desc = req.body.desc;
       product.price = req.body.price;
       product.image = req.body.image;
       product.category = req.body.category;
@@ -75,6 +75,7 @@ productRouter.post(
   expressAsyncHandler(async (req, res) => {
     const productId = req.params.id;
     const product = await Product.findById(productId);
+    console.log(product);
     if (product) {
       if (product.reviews.find((x) => x.name === req.user.name)) {
         return res

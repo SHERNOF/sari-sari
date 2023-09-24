@@ -16,6 +16,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
+
 import Button from "../ui/button/Button";
 import { Helmet } from "react-helmet-async";
 import Loading from "../components/Loading";
@@ -24,15 +25,19 @@ import { getError } from "../utils";
 import { setSnackbar, Store } from "../store";
 import StyledButton from "../ui/button/Button";
 import Rating from "../components/Rating";
+import FloatingLabel from "../components/FloatingLabel";
+import Textarea from "@mui/joy/Textarea";
+
 import {
   FormControl,
   FormGroup,
   FormLabel,
+  InputLabel,
   MenuItem,
   Select,
-  TextField,
+  TextareaAutosize,
 } from "@mui/material";
-import { Badge } from "@mui/base";
+import StyledLink from "../ui/links/StyledLink";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -57,6 +62,11 @@ const reducer = (state, action) => {
 };
 
 export default function ProductPage() {
+  // const [rating, setRating] = React.useState("");
+
+  // const handleChange = (event) => {
+  //   setAge(event.target.value);
+  // };
   let reviewsRef = useRef();
 
   const [rating, setRating] = useState(0);
@@ -72,6 +82,7 @@ export default function ProductPage() {
       error: "",
       product: [],
     });
+  console.log(product);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -121,9 +132,12 @@ export default function ProductPage() {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         }
       );
+      console.log(data);
+
       dispatch({
         type: "CREATE_SUCCESS",
       });
+
       ctxDispatch(
         setSnackbar(true, "success", "Review submitted successfully")
       );
@@ -173,7 +187,7 @@ export default function ProductPage() {
             <ListItemText>${product.price}</ListItemText>
             <Divider />
             <ListItemText>
-              Description : {product.detailedDescription}
+              Description: {product.detailedDescription}
             </ListItemText>
             <Divider />
           </List>
@@ -201,9 +215,22 @@ export default function ProductPage() {
                         }}
                       >
                         {product.countInStock > 0 ? (
-                          <Badge>In Stock</Badge>
+                          <StyledButton
+                            variant="contained"
+                            color="primary"
+                            size="small"
+                          >
+                            {product.countInStock}
+                          </StyledButton>
                         ) : (
-                          <Badge>Unavailable</Badge>
+                          <StyledButton
+                            variant="contained"
+                            color="error"
+                            disableRipple
+                            size="small"
+                          >
+                            {product.countInStock}
+                          </StyledButton>
                         )}
                       </div>
                     </Grid>
@@ -231,115 +258,90 @@ export default function ProductPage() {
         </Grid>
       </Grid>
 
-      <div>
+      <div className="my-3">
         <h2 ref={reviewsRef}>Reviews</h2>
-        <div className="mb-3">
+        <div>
           {product.reviews.length === 0 && (
             <MessageBox>There is no review</MessageBox>
           )}
         </div>
-        <Grid container spacing={6}>
-          <Grid item md={6} xs={12}>
-            <List>
-              {product.reviews.map((review) => (
-                <ListItem
-                  key={review._id}
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                  }}
+        <List>
+          {product.reviews.map((review) => (
+            <ListItem key={review._id}>
+              <strong>{review.name}</strong>
+              <Rating rating={review.rating} caption=" "></Rating>
+              <p>{review.createdAt.substring(0, 10)}</p>
+              <p>{review.comment}</p>
+            </ListItem>
+          ))}
+        </List>
+        <div>
+          {userInfo ? (
+            <form onSubmit={submitHandler}>
+              <h2>Write a customer review</h2>
+              <FormGroup
+                className="mb-3"
+                // controlId="rating"
+              >
+                <FormLabel>Rating</FormLabel>
+                <Select
+                  value={rating}
+                  onChange={(e) => setRating(e.target.value)}
+                  labelId="demo-simple-select-autowidth-label"
+                  id="demo-simple-select-autowidth"
+                  autoWidth
+                  label="Rating"
+                  sx={{ marginBottom: "2rem" }}
                 >
-                  <strong>{review.name}</strong>
+                  <option value="">Select...</option>
+                  <option value="1">1- Poor</option>
+                  <option value="2">2- Fair</option>
+                  <option value="3">3- Good</option>
+                  <option value="4">4- Very good</option>
+                  <option value="5">5- Excelent</option>
+                </Select>
+              </FormGroup>
+              {/* <FloatingLabel
+                controlId="floatingTextarea"
+                label="Comments"
+                sx={{ marginTop: "2rem" }}
+               >
+                <FormControl
+                as="textarea"
+                placeholder="Leave a comment here"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+              </FloatingLabel> */}
 
-                  <p>{review.comment}</p>
-                  <Rating rating={review.rating} caption=" "></Rating>
-                  <p>{review.createdAt.substring(0, 10)}</p>
-                </ListItem>
-              ))}
-            </List>
-          </Grid>
+              {/* <FloatingLabel></FloatingLabel> */}
+              {/* 
+              <Textarea
+                color="neutral"
+                minRows={2}
+                size="lg"
+                variant="outlined"
+                label="Comments"
+                sx={{ marginTop: "2rem" }}
+              /> */}
 
-          <Grid item md={6} xs={12}>
-            <div>
-              {userInfo ? (
-                <form onSubmit={submitHandler}>
-                  <h2>Write a product review</h2>
-                  <FormGroup
-                    sx={{
-                      marginBottom: "1rem",
-                    }}
-                    controlId="rating"
-                  >
-                    <FormLabel>Rating</FormLabel>
-                    <Select
-                      aria-label="Rating"
-                      value={rating}
-                      onChange={(e) => setRating(e.target.value)}
-                      sx={{
-                        marginBottom: "1rem",
-                        maxWidth: "100%",
-                        width: 500,
-                      }}
-                    >
-                      <MenuItem value="1">1- Poor</MenuItem>
-                      <MenuItem value="2">2- Fair</MenuItem>
-                      <MenuItem value="3">3- Good</MenuItem>
-                      <MenuItem value="4">4- Very good</MenuItem>
-                      <MenuItem value="5">5- Excelent</MenuItem>
-                    </Select>
-                  </FormGroup>
-                  <FormControl
-                    sx={{
-                      maxWidth: "100%",
-                      width: 500,
-                    }}
-                  >
-                    <TextField
-                      noValidate
-                      fullWidth
-                      autoComplete="off"
-                      // id="outlined-basic"
-                      rows={5}
-                      multiline
-                      id="fullWidth"
-                      controlId="floatingTextarea"
-                      label="Leave a comment here"
-                      variant="outlined"
-                      sx={{
-                        marginBottom: "1rem",
-                        height: "100%",
-                      }}
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                    />
-                  </FormControl>
-                  <Box
-                    sx={{ maxWidth: "100%", width: 500, marginBottom: "2rem" }}
-                  >
-                    <Button
-                      fullWidth
-                      disabled={loadingCreateReview}
-                      type="submit"
-                    >
-                      Submit
-                    </Button>
-                    {loadingCreateReview && <Loading></Loading>}
-                  </Box>
-                </form>
-              ) : (
-                <MessageBox>
-                  Please{" "}
-                  <Link to={`/signin?redirect=/product/${product.desc}`}>
-                    Sign In
-                  </Link>{" "}
-                  to write a review
-                </MessageBox>
-              )}
-            </div>
-          </Grid>
-        </Grid>
+              <div style={{ marginTop: "1rem" }}>
+                <Button disabled={loadingCreateReview} type="submit">
+                  Submit
+                </Button>
+                {loadingCreateReview && <Loading></Loading>}
+              </div>
+            </form>
+          ) : (
+            <MessageBox>
+              Please{" "}
+              <Link to={`/signin?redirect=/product/${product.desc}`}>
+                Sign In
+              </Link>{" "}
+              to write a review
+            </MessageBox>
+          )}
+        </div>
       </div>
     </Box>
   );
