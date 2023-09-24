@@ -3,7 +3,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
 
 function Rating(props) {
-  const { rating, numReviews, caption } = props;
+  const { rating, caption } = props;
   return (
     <div>
       <span>
@@ -51,11 +51,11 @@ function Rating(props) {
           <StarBorderIcon />
         )}
       </span>
-      {caption ? (
+      {/* {caption ? (
         <span>{caption}</span>
       ) : (
         <span>{" " + numReviews + " reviews"}</span>
-      )}
+      )} */}
     </div>
   );
 }

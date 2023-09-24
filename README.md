@@ -3223,7 +3223,126 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
         6. send email order receipt
 
-    11c. Rate and Review products
+    11c. Rate and Review products - this will festure and comments and review by customer in <Product />
+
+        1. create submit review form
+
+            - create the form in <ProdctPage />
+            - define the reducer
+                    case 'REFRESH_PRODUCT':
+                    return { ...state, product: action.payload };
+                    case 'CREATE_REQUEST':
+                    return { ...state, loadingCreateReview: true };
+                    case 'CREATE_SUCCESS':
+                    return { ...state, loadingCreateReview: false };
+                    case 'CREATE_FAIL':
+                    return { ...state, loadingCreateReview: false };
+
+            - create the variables
+                let reviewsRef = useRef();
+
+                const [rating, setRating] = useState(0);
+                const [comment, setComment] = useState('');
+
+            - add loadingCreateReview as a dispatch variable
+
+            - add userInfo as a state const { cart, userInfo } = state;
+
+            - define the submitHandler
+
+              const submitHandler = async (e) => {
+                e.preventDefault();
+                if (!comment || !rating) {
+                toast.error('Please enter comment and rating');
+                return;
+                }
+                try {
+                const { data } = await axios.post(
+                    `/api/products/${product._id}/reviews`,
+                    { rating, comment, name: userInfo.name },
+                    {
+                    headers: { Authorization: `Bearer ${userInfo.token}` },
+                    }
+                );
+
+                dispatch({
+                    type: 'CREATE_SUCCESS',
+                });
+                toast.success('Review submitted successfully');
+                product.reviews.unshift(data.review);
+                product.numReviews = data.numReviews;
+                product.rating = data.rating;
+                dispatch({ type: 'REFRESH_PRODUCT', payload: product });
+                window.scrollTo({
+                    behavior: 'smooth',
+                    top: reviewsRef.current.offsetTop,
+                });
+                } catch (error) {
+                toast.error(getError(error));
+                dispatch({ type: 'CREATE_FAIL' });
+                }
+            };
+
+        - create the form and rating parts
+
+
+        2. handle submit
+        3. implement backend api for review
+            - create a reviewSchema in productModel.js before the productSchema
+
+                const reviewSchema = new mongoose.Schema(
+                {
+                    name: { type: String, required: true },
+                    comment: { type: String, required: true },
+                    rating: { type: Number, required: true },
+                },
+                {
+                    timestamps: true,
+                }
+                );
+
+            - add reviews: [reviewSchema], in productSchema
+
+            - define the route in productRoutes.js
+
+                productRouter.post(
+                    '/:id/reviews',
+                    isAuth,
+                    expressAsyncHandler(async (req, res) => {
+                        const productId = req.params.id;
+                        const product = await Product.findById(productId);
+                        if (product) {
+                        if (product.reviews.find((x) => x.name === req.user.name)) {
+                            return res
+                            .status(400)
+                            .send({ message: 'You already submitted a review' });
+                        }
+
+                        const review = {
+                            name: req.user.name,
+                            rating: Number(req.body.rating),
+                            comment: req.body.comment,
+                        };
+                        product.reviews.push(review);
+                        product.numReviews = product.reviews.length;
+                        product.rating =
+                            product.reviews.reduce((a, c) => c.rating + a, 0) /
+                            product.reviews.length;
+                        const updatedProduct = await product.save();
+                        res.status(201).send({
+                            message: 'Review Created',
+                            review: updatedProduct.reviews[updatedProduct.reviews.length - 1],
+                            numReviews: product.numReviews,
+                            rating: product.rating,
+                        });
+                        } else {
+                        res.status(404).send({ message: 'Product Not Found' });
+                        }
+                    })
+                    );
+
+            - add the reviews: [reviewSchema],
+
     11d. Upload Multiple Images of a product
 
 -

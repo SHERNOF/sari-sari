@@ -56,7 +56,10 @@ export default function Product({ product }) {
           <CardContent className="product-info">
             <Typography>{product.name}</Typography>
 
-            <Rating rating={product.rating}></Rating>
+            <Rating
+              rating={product.rating}
+              numReviews={product.numReviews}
+            ></Rating>
             <p style={{ marginTop: "-0.3rem" }}>
               <strong>{product.numReviews} reviews</strong>
             </p>
