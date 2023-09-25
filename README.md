@@ -3345,6 +3345,48 @@ H. Finish off the <CartPage /> and add the followng functionalities
 
     11d. Upload Multiple Images of a product
 
+        1. add images to productModels.js
+            - images: [String],
+            - add product to productRouter.js
+                product.images = req.body.images;
+
+            - in <ProductEditPage />
+                - const [images, setImages] = useState([]);
+                - setImages(data.images);
+                - const uploadFileHandler = async (e)  to >>> const uploadFileHandler = async (e, forImages) => {
+
+                -   // ctxDispatch(setSnackbar(true, "success", "Image uploaded successfully"));
+                    // setImage(data.secure_url);
+
+                    to
+
+                    if (forImages) {
+                        setImages([...images, data.secure_url]);
+                    } else {
+                        setImage(data.secure_url);
+                    }
+                    ctxDispatch(setSnackbar(true, "success", "Image uploaded successfully"));
+
+
+
+                -   const deleteFileHandler = async (fileName, f) => {
+                    console.log(fileName, f);
+                    console.log(images);
+                    console.log(images.filter((x) => x !== fileName));
+                    setImages(images.filter((x) => x !== fileName));
+                    ctxDispatch(
+                    setSnackbar(
+                        true,
+                        "success",
+                        "Image removed successfully. click Update to apply it"
+                    )
+                    );
+                };
+
+
+        2. get images in edit screen
+        3. show images in product screen
+
 -
 -
 -

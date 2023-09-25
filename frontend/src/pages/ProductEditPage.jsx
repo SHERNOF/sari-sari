@@ -8,9 +8,10 @@ import { Helmet } from "react-helmet-async";
 import MessageBox from "../components/MessageBox";
 import Loading from "../components/Loading";
 import FormElements from "../ui/formElements/FormElements";
-import { Box, TextField } from "@mui/material";
+import { Box, FormLabel, List, ListItem, TextField } from "@mui/material";
 import Button from "../ui/button/Button";
 import StyledH1 from "../ui/pageTitle/PageTitle";
+import { FormControl } from "@mui/base";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -54,6 +55,7 @@ export default function ProductEditPage() {
   const [desc, setDesc] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
+  const [images, setImages] = useState([]);
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState("");
   const [brand, setBrand] = useState("");
@@ -68,6 +70,7 @@ export default function ProductEditPage() {
         setDesc(data.desc);
         setPrice(data.price);
         setImage(data.image);
+        setImages(data.images);
         setCategory(data.category);
         setCountInStock(data.countInStock);
         setBrand(data.brand);
@@ -90,6 +93,7 @@ export default function ProductEditPage() {
           desc,
           price,
           image,
+          images,
           category,
           brand,
           countInStock,
@@ -109,7 +113,7 @@ export default function ProductEditPage() {
       dispatch({ type: "UPDATE_FAIL" });
     }
   };
-  const uploadFileHandler = async (e) => {
+  const uploadFileHandler = async (e, forImages) => {
     const file = e.target.files[0];
     const bodyFormData = new FormData();
     bodyFormData.append("file", file);
@@ -122,12 +126,32 @@ export default function ProductEditPage() {
         },
       });
       dispatch({ type: "UPLOAD_SUCCESS" });
+      // ctxDispatch(setSnackbar(true, "success", "Image uploaded successfully"));
+      // setImage(data.secure_url);
+
+      if (forImages) {
+        setImages([...images, data.secure_url]);
+      } else {
+        setImage(data.secure_url);
+      }
       ctxDispatch(setSnackbar(true, "success", "Image uploaded successfully"));
-      setImage(data.secure_url);
     } catch (err) {
       ctxDispatch(setSnackbar(true, "error", getError(err)));
       dispatch({ type: "UPLOAD_FAIL", payload: getError(err) });
     }
+  };
+  const deleteFileHandler = async (fileName, f) => {
+    console.log(fileName, f);
+    console.log(images);
+    console.log(images.filter((x) => x !== fileName));
+    setImages(images.filter((x) => x !== fileName));
+    ctxDispatch(
+      setSnackbar(
+        true,
+        "success",
+        "Image removed successfully. click Update to apply it"
+      )
+    );
   };
   return (
     <Box
@@ -222,12 +246,59 @@ export default function ProductEditPage() {
               <TextField
                 sx={{ width: "100%" }}
                 id="outlined-search"
-                // label="Upload File"
+                label="Upload Image"
+                type="file"
+                value={image}
+                onChange={uploadFileHandler}
+                // required
+              />
+              {loadingUpload && <Loading></Loading>}
+            </FormElements>
+
+            <FormElements>
+              <TextField
+                sx={{ width: "100%" }}
+                id="outlined-search"
+                label="Upload File"
                 type="file"
                 onChange={uploadFileHandler}
                 required
               />
               {loadingUpload && <Loading />}
+            </FormElements>
+
+            <FormElements>
+              <TextField
+                sx={{ width: "100%" }}
+                id="outlined-search"
+                label="Additional Images"
+                type="file"
+                onChange={uploadFileHandler}
+                required
+              />
+              {images.length === 0 && <MessageBox>No image</MessageBox>}
+              <List variant="flush">
+                {images.map((x) => (
+                  <ListItem key={x}>
+                    {x}
+                    <Button
+                      variant="light"
+                      onClick={() => deleteFileHandler(x)}
+                    >
+                      <i className="fa fa-times-circle"></i>
+                    </Button>
+                  </ListItem>
+                ))}
+              </List>
+            </FormElements>
+
+            <FormElements className="mb-3" controlId="additionalImageFile">
+              <FormLabel>Upload Aditional Image</FormLabel>
+              <FormControl
+                type="file"
+                onChange={(e) => uploadFileHandler(e, true)}
+              />
+              {loadingUpload && <Loading></Loading>}
             </FormElements>
 
             <FormElements>

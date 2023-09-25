@@ -61,6 +61,7 @@ export default function ProductPage() {
 
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
 
   const navigate = useNavigate();
   const params = useParams();
@@ -150,7 +151,8 @@ export default function ProductPage() {
       <Grid container spacing={6}>
         <Grid item md={4} xs={12}>
           <img
-            src={product.image}
+            // src={product.image}
+            src={selectedImage || product.image}
             alt={product.name}
             style={{ maxWidth: "100%" }}
           ></img>
@@ -188,6 +190,27 @@ export default function ProductPage() {
                     <Grid item> {product.price}</Grid>
                   </Grid>
                 </ListItem>
+
+                <Divider />
+                <List>
+                  <Grid container xs={1} md={2} className="g-2">
+                    {[product.image, ...product.images].map((x) => (
+                      <Grid item key={x}>
+                        <Card>
+                          <Button
+                            className="thumbnail"
+                            type="button"
+                            variant="light"
+                            onClick={() => setSelectedImage(x)}
+                          >
+                            <Card.Img variant="top" src={x} alt="product" />
+                          </Button>
+                        </Card>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </List>
+
                 <Divider />
                 <ListItem>
                   <Grid container>
@@ -261,7 +284,7 @@ export default function ProductPage() {
             </List>
           </Grid>
 
-          <Grid item md={6} xs={12}>
+          <Grid item md={rating === 0 ? 12 : 6} xs={12}>
             <div>
               {userInfo ? (
                 <form onSubmit={submitHandler}>
@@ -270,7 +293,7 @@ export default function ProductPage() {
                     sx={{
                       marginBottom: "1rem",
                     }}
-                    controlId="rating"
+                    // controlId="rating"
                   >
                     <FormLabel>Rating</FormLabel>
                     <Select
