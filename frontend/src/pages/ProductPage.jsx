@@ -35,7 +35,6 @@ import {
   TextField,
 } from "@mui/material";
 
-
 const reducer = (state, action) => {
   switch (action.type) {
     case "REFRESH_PRODUCT":
@@ -150,7 +149,7 @@ export default function ProductPage() {
     <MessageBox severity="error">{error}</MessageBox>
   ) : (
     <Box sx={{ marginTop: "10rem", minHeight: "100vh" }}>
-      <Grid container spacing={6} >
+      <Grid container spacing={6}>
         <Grid item md={4} xs={12}>
           <img
             src={selectedImage || product.image}
@@ -175,6 +174,33 @@ export default function ProductPage() {
             <Divider />
             <ListItemText>${product.price}</ListItemText>
             <Divider />
+
+            <ListItem>
+              <Grid container>
+                {[product.image, ...product.images].map((x) => (
+                  <Grid item key={x} md={4}>
+                    <Card>
+                      <CardContent>
+                        <Button
+                          type="button"
+                          onClick={() => setSelectedImage(x)}
+                          sx={{ padding: "0" }}
+                        >
+                          <CardMedia
+                            height="50"
+                            component="img"
+                            src={x}
+                            alt="product"
+                          />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            </ListItem>
+            <Divider />
+
             <ListItemText>
               Description : {product.detailedDescription}
             </ListItemText>
@@ -191,26 +217,6 @@ export default function ProductPage() {
                     <Grid item> {product.price}</Grid>
                   </Grid>
                 </ListItem>
-                <ListItem>
-                  <Grid container  >
-                    {[product.image, ...product.images].map((x) => (
-                      <Grid item key={x}>
-                        <Card>
-                          <Button
-                            className="thumbnail"
-                            type="button"
-                            variant="light"
-                            onClick={() => setSelectedImage(x)}
-                          >
-                            <CardMedia variant="top" src={x} alt="product" />
-                          </Button>
-                        </Card>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </ListItem>
-                <Divider />
-              
 
                 <Divider />
                 <ListItem>
@@ -294,7 +300,6 @@ export default function ProductPage() {
                     sx={{
                       marginBottom: "1rem",
                     }}
-                    
                   >
                     <FormLabel>Rating</FormLabel>
                     <Select
@@ -328,7 +333,6 @@ export default function ProductPage() {
                       rows={5}
                       multiline
                       id="fullWidth"
-                      
                       label="Leave a comment here"
                       variant="outlined"
                       sx={{

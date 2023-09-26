@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -8,17 +7,24 @@ import { Helmet } from "react-helmet-async";
 import MessageBox from "../components/MessageBox";
 import Loading from "../components/Loading";
 import FormElements from "../ui/formElements/FormElements";
-import { Box, Button, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  FormGroup,
+  FormLabel,
+  List,
+  ListItem,
+  TextField,
+} from "@mui/material";
 
 import StyledH1 from "../ui/pageTitle/PageTitle";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import StyledButton from "../ui/button/Button";
 
-
-
-
+import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -44,18 +50,17 @@ const reducer = (state, action) => {
       return state;
   }
 };
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
   height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
+  overflow: "hidden",
+  position: "absolute",
   bottom: 0,
   left: 0,
-  whiteSpace: 'nowrap',
+  whiteSpace: "nowrap",
   width: 1,
 });
-
 
 export default function ProductEditPage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -85,12 +90,12 @@ export default function ProductEditPage() {
       try {
         dispatch({ type: "FETCH_REUQEST" });
         const { data } = await axios.get(`/api/products/${productId}`);
-        console.log(data)
+        console.log(data);
         setName(data.name);
         setDesc(data.desc);
         setPrice(data.price);
         setImage(data.image);
-        setImages(data.images)
+        setImages(data.images);
         setCategory(data.category);
         setCountInStock(data.countInStock);
         setBrand(data.brand);
@@ -101,13 +106,12 @@ export default function ProductEditPage() {
       }
     };
     fetchData();
-   
   }, [productId]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      dispatch({ type: 'UPDATE_REQUEST' });
+      dispatch({ type: "UPDATE_REQUEST" });
       await axios.put(
         `/api/products/${productId}`,
         {
@@ -176,7 +180,7 @@ export default function ProductEditPage() {
   return (
     <Box
       sx={{
-        minHeight: "100%",
+        minHeight: "100vh",
         maxWidth: "100%",
         display: "flex",
         flexDirection: "column",
@@ -191,7 +195,7 @@ export default function ProductEditPage() {
           Edit Product {productId}
         </StyledH1>
       </div>
-      
+
       {loading ? (
         <Loading />
       ) : error ? (
@@ -248,27 +252,82 @@ export default function ProductEditPage() {
             </FormElements>
 
             <FormElements>
-              <TextField   label="Image File" sx={{ width: "100%" }} value={image} onChange={(e) => setImage(e.target.value)}
-              required>
-              </TextField>
+              <TextField
+                label="Image File"
+                sx={{ width: "100%" }}
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+                required
+              ></TextField>
             </FormElements>
 
-            <FormElements >
-            <TextField type="file" onChange={uploadFileHandler} />
-            {loadingUpload && <Loading></Loading>}
-          </FormElements>
+            <FormElements>
+              <TextField type="file" onChange={uploadFileHandler} />
+              {loadingUpload && <Loading></Loading>}
+            </FormElements>
 
-       
+            <FormElements className="mb-3">
+              {images.length === 0 ? null : (
+                <div>
+                  <span>Additional Image </span>
+                  <Box component="span">
+                    <Button
+                      component="label"
+                      startIcon={<CloudUploadIcon />}
+                      onChange={(e) => uploadFileHandler(e, true)}
+                    >
+                      <VisuallyHiddenInput type="file" />
+                    </Button>
+                  </Box>
+                </div>
+              )}
+              {images.length === 0 && (
+                <MessageBox>
+                  <span>No other image</span>
 
-            <FormElements >
-              <div style={{ width:'60%', display:'flex', justifyContent:'flex-start'}}>
-              <Button  component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-                  Upload Image
-                  <VisuallyHiddenInput  type="file" onChange={uploadFileHandler}/>
-                  {loadingUpload && <Loading></Loading>}
-              </Button>
+                  <Box component="span">
+                    <Button
+                      component="label"
+                      startIcon={<CloudUploadIcon />}
+                      onChange={(e) => uploadFileHandler(e, true)}
+                    >
+                      <VisuallyHiddenInput type="file" />
+                    </Button>
+                  </Box>
+                </MessageBox>
+              )}
+              <List>
+                {images.map((x) => (
+                  <ListItem key={x}>
+                    {x}
+                    <Button onClick={() => deleteFileHandler(x)}>
+                      <DisabledByDefaultIcon />
+                    </Button>
+                  </ListItem>
+                ))}
+              </List>
+            </FormElements>
+
+            {/* <FormElements className="mb-3" controlId="additionalImageFile">
+              <div
+                style={{
+                  width: "50%",
+                  border: "1px solid white",
+                  marginBottom: "1rem",
+                }}
+              >
+                <Button
+                  component="label"
+                  variant="outlined"
+                  startIcon={<CloudUploadIcon />}
+                  onChange={(e) => uploadFileHandler(e, true)}
+                >
+                  <span>Upload Additional Image</span>
+                  <VisuallyHiddenInput type="file" />
+                </Button>
               </div>
-            </FormElements>
+              {loadingUpload && <Loading></Loading>}
+            </FormElements> */}
 
             <FormElements>
               <TextField
