@@ -1,4 +1,4 @@
-import { Container } from "@mui/system";
+
 import axios from "axios";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -8,9 +8,16 @@ import { Helmet } from "react-helmet-async";
 import MessageBox from "../components/MessageBox";
 import Loading from "../components/Loading";
 import FormElements from "../ui/formElements/FormElements";
-import { Box, FormControl, FormLabel, List, ListItem, TextField } from "@mui/material";
-import Button from "../ui/button/Button";
+import { Box, Button, TextField } from "@mui/material";
+
 import StyledH1 from "../ui/pageTitle/PageTitle";
+import { styled } from '@mui/material/styles';
+
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import StyledButton from "../ui/button/Button";
+
+
+
 
 
 const reducer = (state, action) => {
@@ -37,6 +44,18 @@ const reducer = (state, action) => {
       return state;
   }
 };
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
+
 
 export default function ProductEditPage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -229,65 +248,26 @@ export default function ProductEditPage() {
             </FormElements>
 
             <FormElements>
-              <TextField
-                sx={{ width: "100%" }}
-                id="outlined-search"
-                label="Image"
-                type="image"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                required
-              />
+              <TextField   label="Image File" sx={{ width: "100%" }} value={image} onChange={(e) => setImage(e.target.value)}
+              required>
+              </TextField>
             </FormElements>
 
             <FormElements >
-              <FormLabel>Upload Image</FormLabel>
-              <FormControl
-                sx={{ width: "100%" }}
-                type="file"
-                // value={image}
-                onChange={uploadFileHandler}
-              ></FormControl>
-              {loadingUpload && <Loading></Loading>}
-            </FormElements>
+            <TextField type="file" onChange={uploadFileHandler} />
+            {loadingUpload && <Loading></Loading>}
+          </FormElements>
 
-            {/* <FormElements>
-              <TextField
-                sx={{ width: "100%" }}
-                id="outlined-search"
-                label="Upload File"
-                type="file"
-                onChange={uploadFileHandler}
-                required
-              />
-              {loadingUpload && <Loading />}
-            </FormElements> */}
+       
 
-            <FormElements controlId="additionalImage">
-               <FormLabel>Aditional Image</FormLabel>
-              { images.length === 0 && <MessageBox>No image</MessageBox>} 
-              <List variant="flush">
-                {images.map((x) => (
-                  <ListItem key={x}>
-                    {x}
-                    <Button
-                      variant="light"
-                      onClick={(x) => deleteFileHandler(x)}
-                    >
-                      <i className="fa fa-times-circle"></i>
-                    </Button>
-                  </ListItem>
-                ))}
-              </List>
-            </FormElements>
-
-            <FormElements className="mb-3" controlId="additionalImageFile">
-              <FormLabel>Upload Aditional Image</FormLabel>
-              <FormControl
-                type="file"
-                onChange={(e) => uploadFileHandler(e, true)}
-              />
-              {loadingUpload && <Loading></Loading>}
+            <FormElements >
+              <div style={{ width:'60%', display:'flex', justifyContent:'flex-start'}}>
+              <Button  component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+                  Upload Image
+                  <VisuallyHiddenInput  type="file" onChange={uploadFileHandler}/>
+                  {loadingUpload && <Loading></Loading>}
+              </Button>
+              </div>
             </FormElements>
 
             <FormElements>
@@ -335,9 +315,9 @@ export default function ProductEditPage() {
               />
             </FormElements>
             <FormElements>
-              <Button disabled={loadingUpdate} type="submit">
+              <StyledButton disabled={loadingUpdate} type="submit">
                 Update
-              </Button>
+              </StyledButton>
               {loadingUpdate && <Loading />}
             </FormElements>
           </form>

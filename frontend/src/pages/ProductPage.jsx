@@ -26,6 +26,7 @@ import StyledButton from "../ui/button/Button";
 import Rating from "../components/Rating";
 import {
   Badge,
+  CardMedia,
   FormControl,
   FormGroup,
   FormLabel,
@@ -149,10 +150,9 @@ export default function ProductPage() {
     <MessageBox severity="error">{error}</MessageBox>
   ) : (
     <Box sx={{ marginTop: "10rem", minHeight: "100vh" }}>
-      <Grid container spacing={6}>
+      <Grid container spacing={6} >
         <Grid item md={4} xs={12}>
           <img
-            // src={product.image}
             src={selectedImage || product.image}
             alt={product.name}
             style={{ maxWidth: "100%" }}
@@ -191,10 +191,8 @@ export default function ProductPage() {
                     <Grid item> {product.price}</Grid>
                   </Grid>
                 </ListItem>
-
-                <Divider />
-                <List>
-                  <Grid container xs={1} md={2} className="g-2">
+                <ListItem>
+                  <Grid container  >
                     {[product.image, ...product.images].map((x) => (
                       <Grid item key={x}>
                         <Card>
@@ -204,13 +202,15 @@ export default function ProductPage() {
                             variant="light"
                             onClick={() => setSelectedImage(x)}
                           >
-                            <Card.Img variant="top" src={x} alt="product" />
+                            <CardMedia variant="top" src={x} alt="product" />
                           </Button>
                         </Card>
                       </Grid>
                     ))}
                   </Grid>
-                </List>
+                </ListItem>
+                <Divider />
+              
 
                 <Divider />
                 <ListItem>
@@ -294,7 +294,7 @@ export default function ProductPage() {
                     sx={{
                       marginBottom: "1rem",
                     }}
-                    // controlId="rating"
+                    
                   >
                     <FormLabel>Rating</FormLabel>
                     <Select
@@ -328,7 +328,7 @@ export default function ProductPage() {
                       rows={5}
                       multiline
                       id="fullWidth"
-                      controlId="floatingTextarea"
+                      
                       label="Leave a comment here"
                       variant="outlined"
                       sx={{

@@ -13,9 +13,13 @@ productRouter.post(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
+    const dt = new Date(Date.now())
     const newProduct = new Product({
+      
       name: "sample name " + Date.now(),
+      // name: "sample name " + dt.toDateString(),
       desc: "sample name-" + Date.now(),
+      // desc: "sample name-" + dt.toDateString(),
       image: "/images/p1.jpg",
       price: 0,
       category: "sample category",
