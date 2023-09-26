@@ -176,7 +176,7 @@ export default function ProductPage() {
             <Divider />
 
             <ListItem>
-              <Grid container>
+              <Grid container spacing={1}>
                 {[product.image, ...product.images].map((x) => (
                   <Grid item key={x} md={4}>
                     <Card>
@@ -187,7 +187,8 @@ export default function ProductPage() {
                           sx={{ padding: "0" }}
                         >
                           <CardMedia
-                            height="50"
+                            height="100"
+                            width="100"
                             component="img"
                             src={x}
                             alt="product"
