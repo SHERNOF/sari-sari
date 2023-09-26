@@ -8,10 +8,10 @@ import { Helmet } from "react-helmet-async";
 import MessageBox from "../components/MessageBox";
 import Loading from "../components/Loading";
 import FormElements from "../ui/formElements/FormElements";
-import { Box, FormLabel, List, ListItem, TextField } from "@mui/material";
+import { Box, FormControl, FormLabel, List, ListItem, TextField } from "@mui/material";
 import Button from "../ui/button/Button";
 import StyledH1 from "../ui/pageTitle/PageTitle";
-import { FormControl } from "@mui/base";
+
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -62,15 +62,16 @@ export default function ProductEditPage() {
   const [detailedDescription, setDetailedDescription] = useState("");
 
   useEffect(() => {
-    const fetchData = async (req, res) => {
+    const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REUQEST" });
         const { data } = await axios.get(`/api/products/${productId}`);
+        console.log(data)
         setName(data.name);
         setDesc(data.desc);
         setPrice(data.price);
         setImage(data.image);
-        setImages(data.images);
+        setImages(data.images)
         setCategory(data.category);
         setCountInStock(data.countInStock);
         setBrand(data.brand);
@@ -81,10 +82,13 @@ export default function ProductEditPage() {
       }
     };
     fetchData();
+   
   }, [productId]);
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      dispatch({ type: 'UPDATE_REQUEST' });
       await axios.put(
         `/api/products/${productId}`,
         {
@@ -103,7 +107,7 @@ export default function ProductEditPage() {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         }
       );
-      dispatch({ type: "UPDATE_REQUEST" });
+      dispatch({ type: "UPDATE_SUCCESS" });
       ctxDispatch(
         setSnackbar(true, "success", "Product successfully updated...")
       );
@@ -126,9 +130,6 @@ export default function ProductEditPage() {
         },
       });
       dispatch({ type: "UPLOAD_SUCCESS" });
-      // ctxDispatch(setSnackbar(true, "success", "Image uploaded successfully"));
-      // setImage(data.secure_url);
-
       if (forImages) {
         setImages([...images, data.secure_url]);
       } else {
@@ -163,15 +164,15 @@ export default function ProductEditPage() {
         alignItems: "center",
       }}
     >
-      {/* <Container> */}
       <Helmet>
         <title>Edit Product ${productId}</title>
       </Helmet>
       <div style={{ width: "100%" }}>
         <StyledH1 style={{ textAlign: "left", width: "100%" }}>
-          Edit Product
+          Edit Product {productId}
         </StyledH1>
       </div>
+      
       {loading ? (
         <Loading />
       ) : error ? (
@@ -199,7 +200,6 @@ export default function ProductEditPage() {
             <FormElements>
               <TextField
                 sx={{ width: "100%" }}
-                id="outlined-search"
                 label="Name"
                 type="text"
                 value={name}
@@ -210,7 +210,6 @@ export default function ProductEditPage() {
             <FormElements>
               <TextField
                 sx={{ width: "100%" }}
-                id="outlined-search"
                 label="desc"
                 type="text"
                 value={desc}
@@ -221,7 +220,6 @@ export default function ProductEditPage() {
             <FormElements>
               <TextField
                 sx={{ width: "100%" }}
-                id="outlined-search"
                 label="Price"
                 type="text"
                 value={price}
@@ -242,20 +240,18 @@ export default function ProductEditPage() {
               />
             </FormElements>
 
-            <FormElements>
-              <TextField
+            <FormElements >
+              <FormLabel>Upload Image</FormLabel>
+              <FormControl
                 sx={{ width: "100%" }}
-                id="outlined-search"
-                label="Upload Image"
                 type="file"
-                value={image}
+                // value={image}
                 onChange={uploadFileHandler}
-                // required
-              />
+              ></FormControl>
               {loadingUpload && <Loading></Loading>}
             </FormElements>
 
-            <FormElements>
+            {/* <FormElements>
               <TextField
                 sx={{ width: "100%" }}
                 id="outlined-search"
@@ -265,25 +261,18 @@ export default function ProductEditPage() {
                 required
               />
               {loadingUpload && <Loading />}
-            </FormElements>
+            </FormElements> */}
 
-            <FormElements>
-              <TextField
-                sx={{ width: "100%" }}
-                id="outlined-search"
-                label="Additional Images"
-                type="file"
-                onChange={uploadFileHandler}
-                required
-              />
-              {images.length === 0 && <MessageBox>No image</MessageBox>}
+            <FormElements controlId="additionalImage">
+               <FormLabel>Aditional Image</FormLabel>
+              { images.length === 0 && <MessageBox>No image</MessageBox>} 
               <List variant="flush">
                 {images.map((x) => (
                   <ListItem key={x}>
                     {x}
                     <Button
                       variant="light"
-                      onClick={() => deleteFileHandler(x)}
+                      onClick={(x) => deleteFileHandler(x)}
                     >
                       <i className="fa fa-times-circle"></i>
                     </Button>

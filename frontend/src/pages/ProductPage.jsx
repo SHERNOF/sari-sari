@@ -25,6 +25,7 @@ import { setSnackbar, Store } from "../store";
 import StyledButton from "../ui/button/Button";
 import Rating from "../components/Rating";
 import {
+  Badge,
   FormControl,
   FormGroup,
   FormLabel,
@@ -32,7 +33,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { Badge } from "@mui/base";
+
 
 const reducer = (state, action) => {
   switch (action.type) {
