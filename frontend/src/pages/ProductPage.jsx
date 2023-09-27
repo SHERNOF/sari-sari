@@ -181,11 +181,11 @@ export default function ProductPage() {
                   <Grid item key={x} md={4}>
                     <Card onClick={() => setSelectedImage(x)} sx={{':hover': {cursor:'pointer'}}}>
                       {/* <CardContent > */}
-                        {/* <Button 
+                        <Button 
                           type="button"
                           onClick={() => setSelectedImage(x)}
                           
-                        > */}
+                        >
                           {/* <Box sx={{height:'80%', width:'100%', display:'flex', alignItems:'center', justifyContent:'center', }}> */}
                           <CardMedia
                             
@@ -197,7 +197,7 @@ export default function ProductPage() {
                              />
                            
                           {/* </Box> */}
-                        {/* </Button> */}
+                        </Button>
                       {/* </CardContent> */}
                     </Card>
                   </Grid>
