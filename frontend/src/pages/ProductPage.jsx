@@ -179,22 +179,26 @@ export default function ProductPage() {
               <Grid container spacing={1}>
                 {[product.image, ...product.images].map((x) => (
                   <Grid item key={x} md={4}>
-                    <Card>
-                      <CardContent>
-                        <Button
+                    <Card onClick={() => setSelectedImage(x)} sx={{':hover': {cursor:'pointer'}}}>
+                      {/* <CardContent > */}
+                        {/* <Button 
                           type="button"
                           onClick={() => setSelectedImage(x)}
-                          sx={{ padding: "0" }}
-                        >
+                          
+                        > */}
+                          {/* <Box sx={{height:'80%', width:'100%', display:'flex', alignItems:'center', justifyContent:'center', }}> */}
                           <CardMedia
-                            height="100"
-                            width="100"
+                            
+                            height='120'
+                            padding='2'
                             component="img"
                             src={x}
-                            alt="product"
-                          />
-                        </Button>
-                      </CardContent>
+                            alt="product" 
+                             />
+                           
+                          {/* </Box> */}
+                        {/* </Button> */}
+                      {/* </CardContent> */}
                     </Card>
                   </Grid>
                 ))}
