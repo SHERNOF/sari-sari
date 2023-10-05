@@ -3387,6 +3387,11 @@ H. Finish off the <CartPage /> and add the followng functionalities
         2. get images in edit screen
         3. show images in product screen
 
+12. Multi Vendors
+
+    15.1 Implement Seller View
+    15.2 Create S
+
 -
 -
 -

@@ -11,7 +11,6 @@ import { Typography } from "@mui/material";
 import StyledLink from "../ui/links/StyledLink";
 import { Box } from "@mui/system";
 import StyledButton from "../ui/button/Button";
-import Button from "../ui/button/Button";
 import Rating from "./Rating";
 
 export default function Product({ product }) {
@@ -49,6 +48,7 @@ export default function Product({ product }) {
                   src={product.image}
                   alt={product.name}
                   style={{ minHeight: "100%" }}
+                  loading="lazy"
                 />
               </Box>
             </StyledLink>
