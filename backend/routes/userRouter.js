@@ -40,6 +40,7 @@ userRouter.put(
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
       user.isAdmin = Boolean(req.body.isAdmin);
+      user.isAdmin1 = Boolean(req.body.isAdmin1 || user.isAdmin1);
       const updatedUser = await user.save();
       res.send({ message: "User Updated", user: updatedUser });
     } else {

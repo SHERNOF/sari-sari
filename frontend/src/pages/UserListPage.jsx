@@ -70,7 +70,7 @@ const reducer = (state, action) => {
   }
 };
 
-export default function UserListScreen() {
+export default function UserListScreen(props) {
   const navigate = useNavigate();
   const [{ loading, error, users, loadingDelete, successDelete }, dispatch] =
     useReducer(reducer, {
@@ -142,6 +142,7 @@ export default function UserListScreen() {
               <StyledTableCell>NAME</StyledTableCell>
               <StyledTableCell>EMAIL</StyledTableCell>
               <StyledTableCell>IS ADMIN</StyledTableCell>
+              <StyledTableCell>IS Admin1</StyledTableCell>
               <StyledTableCell>ACTIONS</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -152,6 +153,7 @@ export default function UserListScreen() {
                 <StyledTableCell>{user.name}</StyledTableCell>
                 <StyledTableCell>{user.email}</StyledTableCell>
                 <StyledTableCell>{user.isAdmin ? "YES" : "NO"}</StyledTableCell>
+                <StyledTableCell>{user.isAdmin1 ? "YES" : "NO"}</StyledTableCell>
                 <StyledTableCell>
                   <StyledButton
                     type="button"

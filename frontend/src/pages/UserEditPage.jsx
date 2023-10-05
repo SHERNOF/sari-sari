@@ -49,6 +49,7 @@ export default function UserEditPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin1, setIsAdmin1] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,6 +61,7 @@ export default function UserEditPage() {
         setName(data.name);
         setEmail(data.email);
         setIsAdmin(data.isAdmin);
+        setIsAdmin1(data.isAdmin1);
         dispatch({ type: "FETCH_SUCCESS" });
       } catch (err) {
         dispatch({
@@ -77,7 +79,7 @@ export default function UserEditPage() {
       dispatch({ type: "UPDATE_REQUEST" });
       await axios.put(
         `/api/users/${userId}`,
-        { _id: userId, name, email, isAdmin },
+        { _id: userId, name, email, isAdmin, isAdmin1 },
         {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         }
@@ -163,6 +165,19 @@ export default function UserEditPage() {
                       name="isAdmin"
                       checked={isAdmin}
                       onChange={(e) => setIsAdmin(e.target.checked)}
+                    />
+                  }
+                ></FormControlLabel>
+                       <FormControlLabel
+                  sx={{ marginLeft: ".2rem" }}
+                  aria-label="position"
+                  label="isAdmin1?"
+                  control={
+                    <Checkbox
+                      id="isAdmin1"
+                      name="isAdmin1"
+                      checked={isAdmin1}
+                      onChange={(e) => setIsAdmin1(e.target.checked)}
                     />
                   }
                 ></FormControlLabel>
