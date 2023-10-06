@@ -141,8 +141,8 @@ export default function UserListScreen(props) {
               <StyledTableCell>ID</StyledTableCell>
               <StyledTableCell>NAME</StyledTableCell>
               <StyledTableCell>EMAIL</StyledTableCell>
-              <StyledTableCell>IS ADMIN</StyledTableCell>
-              <StyledTableCell>IS Admin1</StyledTableCell>
+              <StyledTableCell>Admin</StyledTableCell>
+              <StyledTableCell>Seller</StyledTableCell>
               <StyledTableCell>ACTIONS</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -153,7 +153,7 @@ export default function UserListScreen(props) {
                 <StyledTableCell>{user.name}</StyledTableCell>
                 <StyledTableCell>{user.email}</StyledTableCell>
                 <StyledTableCell>{user.isAdmin ? "YES" : "NO"}</StyledTableCell>
-                <StyledTableCell>{user.isAdmin1 ? "YES" : "NO"}</StyledTableCell>
+                <StyledTableCell>{user.isSeller ? "YES" : "NO"}</StyledTableCell>
                 <StyledTableCell>
                   <StyledButton
                     type="button"

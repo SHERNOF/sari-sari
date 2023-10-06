@@ -3390,7 +3390,33 @@ H. Finish off the <CartPage /> and add the followng functionalities
 12. Multi Vendors
 
     15.1 Implement Seller View
-    15.2 Create S
+
+        1. add seller menu
+            - in Header.js
+                {userInfo && userInfo.isSeller && (
+                <div className="dropdown">
+                    <Link to="#admin">
+                    Seller <i className="fa fa-caret-down"></i>
+                    </Link>
+                    <ul className="dropdown-content">
+                    <li>
+                        <Link to="/productlist/seller">Products</Link>
+                    </li>
+                    <li>
+                        <Link to="/orderlist/seller">Orders</Link>
+                    </li>
+                    </ul>
+                </div>
+                )}
+        2. create seller route
+        3. list products for seller
+        4. list orders for seller
+        5. add Seller to Product List and Details Screen
+
+    15.2 Create Seller page
+    15.3 Add Caerousel for Top Sellers
+    15.4 Force order items from one seller
+
 
 -
 -

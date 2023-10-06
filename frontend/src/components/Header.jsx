@@ -32,18 +32,10 @@ function Header(props) {
   );
 }
 
-// Header.propTypes = {
-//   children: PropTypes.element.isRequired,
-//   /**
-//    * Injected by the documentation to work in an iframe.
-//    * You won't need it on your project.
-//    */
-//   window: PropTypes.func,
-// };
-
 export default function HideAppBar(props) {
   const { state, dispatch: ctxDispatch } = React.useContext(Store);
   const { cart, userInfo, sideBarIsOpen } = state;
+  console.log(userInfo)
   return (
     <React.Fragment>
       <Header {...props} sx={{ top: "0" }}>
@@ -105,6 +97,8 @@ export default function HideAppBar(props) {
                   </Stack>
                 )}
               </Link>
+
+
               {userInfo ? (
                 <Dropdown />
               ) : (
@@ -113,19 +107,22 @@ export default function HideAppBar(props) {
                 </Link>
               )}
 
-              {
-                userInfo && userInfo.isAdmin && <Admin />
-                //  :
-                //   <Link
-                //     to="/signin"
-                //     style={{
-                //       marginLeft: "1rem",
-                //       color: "white",
-                //     }}
-                //   >
-                //     Sign In
-                //   </Link>
-              }
+              {userInfo && userInfo.isSeller ? (
+              <div className="dropdown">
+                <Link to="#admin">
+                  <span style={{color:'black'}}>Seller</span> <i className="fa fa-caret-down"></i>
+                </Link>
+                <ul className="dropdown-content">
+                  <li>
+                    <Link to="/productlist/seller">Products</Link>
+                  </li>
+                  <li>
+                    <Link to="/orderlist/seller">Orders</Link>
+                  </li>
+                </ul>
+              </div> 
+            ) : 'not' }
+              {userInfo && userInfo.isAdmin && <Admin />}
             </div>
           </Container>
         </AppBar>
