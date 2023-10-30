@@ -3417,7 +3417,6 @@ H. Finish off the <CartPage /> and add the followng functionalities
     15.3 Add Caerousel for Top Sellers
     15.4 Force order items from one seller
 
-
 -
 -
 -

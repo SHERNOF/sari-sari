@@ -35,7 +35,7 @@ function Header(props) {
 export default function HideAppBar(props) {
   const { state, dispatch: ctxDispatch } = React.useContext(Store);
   const { cart, userInfo, sideBarIsOpen } = state;
-  console.log(userInfo)
+  console.log(userInfo);
   return (
     <React.Fragment>
       <Header {...props} sx={{ top: "0" }}>
@@ -98,7 +98,6 @@ export default function HideAppBar(props) {
                 )}
               </Link>
 
-
               {userInfo ? (
                 <Dropdown />
               ) : (
@@ -108,20 +107,21 @@ export default function HideAppBar(props) {
               )}
 
               {userInfo && userInfo.isSeller ? (
-              <div className="dropdown">
-                <Link to="#admin">
-                  <span style={{color:'black'}}>Seller</span> <i className="fa fa-caret-down"></i>
-                </Link>
-                <ul className="dropdown-content">
-                  <li>
-                    <Link to="/productlist/seller">Products</Link>
-                  </li>
-                  <li>
-                    <Link to="/orderlist/seller">Orders</Link>
-                  </li>
-                </ul>
-              </div> 
-            ) : 'not' }
+                <div className="dropdown">
+                  <Link to="#admin">
+                    <span style={{ color: "black" }}>Seller</span>{" "}
+                    <i className="fa fa-caret-down"></i>
+                  </Link>
+                  <ul className="dropdown-content">
+                    <li>
+                      <Link to="/productlist/seller">Products</Link>
+                    </li>
+                    <li>
+                      <Link to="/orderlist/seller">Orders</Link>
+                    </li>
+                  </ul>
+                </div>
+              ) : null}
               {userInfo && userInfo.isAdmin && <Admin />}
             </div>
           </Container>
