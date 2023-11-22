@@ -18,7 +18,6 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { styled } from "@mui/material/styles";
 import StyledButton from "../ui/button/Button";
 import StyledH1 from "../ui/pageTitle/PageTitle";
-import CreateIcon from "@mui/icons-material/Create";
 import AddIcon from "@mui/icons-material/Add";
 
 const reducer = (state, action) => {
@@ -101,7 +100,6 @@ export default function ProductListPage() {
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const page = sp.get("page") || 1;
-  console.log(sp);
 
   const navigate = useNavigate();
 

@@ -90,7 +90,6 @@ export default function ProductEditPage() {
       try {
         dispatch({ type: "FETCH_REUQEST" });
         const { data } = await axios.get(`/api/products/${productId}`);
-        console.log(data);
         setName(data.name);
         setDesc(data.desc);
         setPrice(data.price);
